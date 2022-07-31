@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   formBox: {
     flex: 1,
-    padding: 40,
+    paddingHorizontal: 40,
     marginTop: 30,
     marginBottom: 0,
     bottom: 0,
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     fontFamily: 'raleway-700',
     fontSize: 18,
     marginBottom: 30,
+    marginTop: 40,
   },
   formLabel: {
     display: 'flex',
@@ -154,6 +155,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderBottomWidth: 1,
     paddingHorizontal: 0,
+    borderColor: '#C9C9C9',
     fontFamily: 'raleway-600',
     fontSize: 17,
   },
@@ -165,8 +167,9 @@ const styles = StyleSheet.create({
   },
   resetText: {
     fontFamily: 'raleway-600',
-    fontSize: 16,
-    color: '#ABBAC7',
+    fontSize: 12,
+    color: '#41A4FF',
+    opacity: 0.5,
     marginBottom: 30,
   },
   loginText: {
@@ -180,7 +183,7 @@ const styles = StyleSheet.create({
     // bottom: 30,
     backgroundColor: '#24116A',
     borderRadius: 10,
-    padding: 20,
+    padding: 15,
     width: '100%',
   },
   registerText: {
@@ -188,7 +191,7 @@ const styles = StyleSheet.create({
     // bottom: 0,
     color: '#150A42',
     fontFamily: 'raleway-600',
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center',
     marginTop: 10,
   },

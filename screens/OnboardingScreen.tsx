@@ -75,12 +75,12 @@ const styles = StyleSheet.create({
     width: '70%',
     backgroundColor: '#FFFFFF',
     marginHorizontal: 50,
-    padding: 20,
+    padding: 15,
     borderRadius: 10,
     alignSelf: 'center',
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'raleway-700',
     color: '#150A42',
     textAlign: 'center',
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   nextText: {
     color: '#FFFFFF',
     fontFamily: 'raleway-700',
-    fontSize: 18,
+    fontSize: 16,
   },
   link: {
     position: 'absolute',

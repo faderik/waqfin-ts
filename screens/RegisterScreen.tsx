@@ -15,8 +15,12 @@ import { RootStackScreenProps } from '../types';
 
 export default function RegisterScreen({ navigation }: RootStackScreenProps<'Register'>) {
   const [showPwd, setShowPwd] = useState(false);
-  const [password, setPassword] = useState('');
+  const [showConfirmPwd, setShowConfirmPwd] = useState(false);
+
+  const [namaLengkap, setNamaLengkap] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
     <View style={styles.wrapper}>
@@ -25,65 +29,95 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
         style={styles.imageBg}
         resizeMode="cover">
         <View style={styles.container}>
-          <Image source={require('../assets/images/logo-notext.png')} style={styles.logo} />
-          <Text style={styles.title}>Wakaf amal jariyah hingga surga</Text>
+          <Text style={styles.title}>Set Up Your Account</Text>
+          <Text style={styles.subTitle}>Get ready to explore</Text>
           <View style={styles.formBox}>
             <ScrollView
               style={{ display: 'flex', flex: 1, backgroundColor: 'transparent' }}
               showsVerticalScrollIndicator={false}
               keyboardShouldPersistTaps="handled">
-              <Text style={styles.formTitle}>Register</Text>
-              <View style={styles.formLabel}>
-                <Image
-                  source={require('../assets/icons/mail.png')}
-                  style={{ width: 20, height: 20, marginRight: 10 }}
-                />
-                <Text style={{ fontFamily: 'raleway-600', fontSize: 15, color: '#868686' }}>
-                  Email
-                </Text>
-              </View>
-              <TextInput
-                style={styles.textInput}
-                keyboardType="email-address"
-                placeholder="myemail@mail.com"
-                value={email}
-                onChangeText={(text) => setEmail(text)}
-              />
-              <View style={styles.formLabel}>
-                <Image
-                  source={require('../assets/icons/password.png')}
-                  style={{ width: 20, height: 20, marginRight: 10 }}
-                />
-                <Text style={{ fontFamily: 'raleway-600', fontSize: 15, color: '#868686' }}>
-                  Password
-                </Text>
-              </View>
-              <View style={styles.formPwd}>
+              <Text style={styles.formTitle}>Create Account</Text>
+
+              <>
+                <Text style={styles.textLabel}>Nama Lengkap</Text>
                 <TextInput
                   style={styles.textInput}
-                  placeholder="password"
-                  secureTextEntry={!showPwd}
-                  placeholderTextColor="#bababa"
-                  value={password}
-                  onChangeText={(text) => setPassword(text)}
+                  keyboardType="default"
+                  placeholder="Budi Santoso"
+                  value={namaLengkap}
+                  onChangeText={(text) => setNamaLengkap(text)}
                 />
-                <Entypo
-                  name={showPwd ? 'eye-with-line' : 'eye'}
-                  size={20}
-                  style={{ marginLeft: 10, bottom: 30, right: 10, position: 'absolute' }}
-                  onPress={() => setShowPwd(!showPwd)}
+              </>
+              <>
+                <Text style={styles.textLabel}>Email</Text>
+                <TextInput
+                  style={styles.textInput}
+                  keyboardType="email-address"
+                  placeholder="mymail@mail.com"
+                  value={email}
+                  onChangeText={(text) => setEmail(text)}
                 />
-              </View>
-
-              <TouchableOpacity>
-                <Text style={styles.resetText}>Reset Password</Text>
-              </TouchableOpacity>
+              </>
+              <>
+                <Text style={styles.textLabel}>Password</Text>
+                <View style={styles.formPwd}>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="password"
+                    secureTextEntry={!showPwd}
+                    placeholderTextColor="#bababa"
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
+                  />
+                  <Entypo
+                    name={showPwd ? 'eye-with-line' : 'eye'}
+                    size={20}
+                    style={styles.eyeIcon}
+                    onPress={() => setShowPwd(!showPwd)}
+                  />
+                </View>
+                <Text style={styles.hint}>Must be at least 8 characters.</Text>
+              </>
+              <>
+                <Text style={styles.textLabel}>Confirm Password</Text>
+                <View style={styles.formPwd}>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="password"
+                    secureTextEntry={!showConfirmPwd}
+                    placeholderTextColor="#bababa"
+                    value={confirmPassword}
+                    onChangeText={(text) => setConfirmPassword(text)}
+                  />
+                  <Entypo
+                    name={showConfirmPwd ? 'eye-with-line' : 'eye'}
+                    size={20}
+                    style={styles.eyeIcon}
+                    onPress={() => setShowConfirmPwd(!showConfirmPwd)}
+                  />
+                </View>
+                <Text style={styles.hint}>Must be at least 8 characters.</Text>
+              </>
 
               <View style={styles.buttons}>
-                <TouchableOpacity style={styles.loginBtn}>
-                  <Text style={styles.loginText}>Login</Text>
+                <TouchableOpacity style={styles.createBtn}>
+                  <Text
+                    style={styles.createText}
+                    onPress={() => {
+                      console.log('Creating account...');
+                    }}>
+                    Create
+                  </Text>
                 </TouchableOpacity>
-                <Text style={styles.registerText}>Create Account</Text>
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={styles.loginText}>Already a user? </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.replace('Login');
+                    }}>
+                    <Text style={{ ...styles.loginText, color: '#41A4FF' }}>Log In</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </ScrollView>
           </View>
@@ -110,6 +144,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#FFFFFF',
     paddingHorizontal: '10%',
+    marginTop: 120,
+  },
+  subTitle: {
+    fontFamily: 'raleway-400',
+    fontSize: 14,
+    color: '#FFFFFF',
+    paddingHorizontal: '10%',
   },
   logo: {
     marginTop: 80,
@@ -118,7 +159,7 @@ const styles = StyleSheet.create({
   },
   formBox: {
     flex: 1,
-    padding: 40,
+    paddingHorizontal: 40,
     marginTop: 30,
     marginBottom: 0,
     bottom: 0,
@@ -131,20 +172,30 @@ const styles = StyleSheet.create({
   formTitle: {
     fontFamily: 'raleway-700',
     fontSize: 18,
-    marginBottom: 30,
+    marginBottom: 15,
+    marginTop: 40,
+  },
+  textLabel: {
+    fontFamily: 'raleway-600',
+    fontSize: 12,
+    color: '#868686',
+    marginTop: 5,
   },
   formLabel: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
+    marginTop: 15,
   },
   textInput: {
     flex: 1,
-    maxHeight: 50,
-    minHeight: 50,
-    marginBottom: 20,
-    borderBottomWidth: 1,
-    paddingHorizontal: 0,
+    marginTop: 5,
+    borderRadius: 5,
+    borderColor: '#D1D1D1',
+    backgroundColor: '#F7F7F7',
+    borderWidth: 1.5,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
     fontFamily: 'raleway-600',
     fontSize: 17,
   },
@@ -154,32 +205,40 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  eyeIcon: {
+    marginLeft: 10,
+    bottom: 10,
+    right: 10,
+    position: 'absolute',
+    color: '#959595',
+  },
   resetText: {
     fontFamily: 'raleway-600',
     fontSize: 16,
     color: '#ABBAC7',
     marginBottom: 30,
   },
-  loginText: {
+  createText: {
     fontFamily: 'raleway-700',
     fontSize: 18,
     color: '#FFFFFF',
     alignSelf: 'center',
   },
-  loginBtn: {
+  createBtn: {
     // position: 'absolute',
     // bottom: 30,
+    marginTop: 25,
     backgroundColor: '#24116A',
     borderRadius: 10,
-    padding: 20,
+    padding: 15,
     width: '100%',
   },
-  registerText: {
+  loginText: {
     // position: 'absolute',
     // bottom: 0,
     color: '#150A42',
     fontFamily: 'raleway-600',
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center',
     marginTop: 10,
   },
@@ -191,5 +250,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     // backgroundColor: 'red',
+  },
+  hint: {
+    fontFamily: 'raleway-400',
+    fontSize: 10,
+    color: '#959595',
+    marginTop: 5,
   },
 });
