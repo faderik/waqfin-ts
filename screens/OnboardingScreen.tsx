@@ -25,7 +25,7 @@ export default function OnboardingScreen({ navigation }: RootStackScreenProps<'O
           style={styles.button}>
           <Text style={styles.buttonText}>Enable Location</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.replace('Root')} style={styles.link}>
+        <TouchableOpacity onPress={() => navigation.replace('Login')} style={styles.link}>
           <Text style={styles.nextText}>Selanjutnya</Text>
         </TouchableOpacity>
       </ImageBackground>
