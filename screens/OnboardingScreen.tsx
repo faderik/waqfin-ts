@@ -1,4 +1,5 @@
 import { StyleSheet, TouchableOpacity, ImageBackground, Platform } from 'react-native';
+import * as Location from 'expo-location';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
@@ -17,7 +18,11 @@ export default function OnboardingScreen({ navigation }: RootStackScreenProps<'O
             indikator lahan
           </Text>
         </View>
-        <TouchableOpacity onPress={() => {}} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => {
+            requestLocationPermission();
+          }}
+          style={styles.button}>
           <Text style={styles.buttonText}>Enable Location</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.replace('Root')} style={styles.link}>
@@ -27,6 +32,17 @@ export default function OnboardingScreen({ navigation }: RootStackScreenProps<'O
     </View>
   );
 }
+
+const requestLocationPermission = async () => {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== 'granted') {
+    console.error('Error: Location permission not granted');
+    return;
+  }
+
+  let location = await Location.getCurrentPositionAsync({});
+  // setLocation(location);
+};
 
 const styles = StyleSheet.create({
   wrapper: {
