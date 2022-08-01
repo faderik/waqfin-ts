@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
@@ -6,9 +6,15 @@ import { RootStackScreenProps } from '../types';
 export default function NotFoundScreen({ navigation }: RootStackScreenProps<'NotFound'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>This screen doesn't exist.</Text>
-      <TouchableOpacity onPress={() => navigation.replace('Root')} style={styles.link}>
-        <Text style={styles.linkText}>Go to home screen!</Text>
+      <Text style={styles.title}>Sorry, This screen is under maintanance !</Text>
+      <Image source={require('../assets/images/404.png')} style={styles.notFoundImg} />
+      <TouchableOpacity
+        style={styles.homeBtn}
+        onPress={() => {
+          console.log('Navigating to Beranda...');
+          navigation.replace('Root');
+        }}>
+        <Text style={styles.homeText}>Back To Home</Text>
       </TouchableOpacity>
     </View>
   );
@@ -17,20 +23,36 @@ export default function NotFoundScreen({ navigation }: RootStackScreenProps<'Not
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#150A42',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    paddingBottom: 60,
+    paddingHorizontal: 40,
   },
   title: {
+    fontFamily: 'poppins-600',
     fontSize: 20,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    maxWidth: '80%',
+    textAlign: 'center',
   },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
+  notFoundImg: {
+    width: '100%',
+    height: '50%',
+    resizeMode: 'cover',
   },
-  linkText: {
-    fontSize: 14,
-    color: '#2e78b7',
+  homeBtn: {
+    marginTop: 20,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 5,
+    padding: 10,
+    width: '60%',
+    alignSelf: 'center',
+  },
+  homeText: {
+    fontFamily: 'raleway-700',
+    fontSize: 12,
+    color: '#000000',
+    alignSelf: 'center',
   },
 });
