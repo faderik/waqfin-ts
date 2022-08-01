@@ -35,6 +35,7 @@ import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../typ
 import LinkingConfiguration from './LinkingConfiguration';
 import DonasiScreen from '../screens/DonasiScreen';
 import PatunganScreen from '../screens/PatunganScreen';
+import DetailLahanScreen from '../screens/DetailLahanScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -86,6 +87,11 @@ function RootNavigator() {
           options={{ headerShown: true }}
         />
       </Stack.Group>
+      <Stack.Screen
+        name="DetailLahan"
+        component={DetailLahanScreen}
+        options={{ headerShown: true }}
+      />
     </Stack.Navigator>
   );
 }

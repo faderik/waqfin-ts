@@ -181,31 +181,40 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
       </ScrollView>
     </View>
   );
-}
 
-function _topPatunganRenderItem({
-  item,
-  index,
-}: {
-  item: { lokasi: string; image: string; deskripsi: string };
-  index: number;
-}) {
-  return (
-    <View style={styles.topItem}>
-      {/* <Image source={{ uri: 'https://placeimg.com/150/150/nature' }} style={styles.topItemImg} /> */}
-      <Image source={require('../assets/images/lahan-img.png')} style={styles.topItemImg} />
-      <View style={styles.topItemBox}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Entypo name={'location-pin'} size={15} style={{ color: '#150A42', marginBottom: -2 }} />
-          <Text style={styles.topItemTitle}>{item.lokasi}</Text>
+  function _topPatunganRenderItem({
+    item,
+    index,
+  }: {
+    item: { lokasi: string; image: string; deskripsi: string };
+    index: number;
+  }) {
+    return (
+      <View style={styles.topItem}>
+        {/* <Image source={{ uri: 'https://placeimg.com/150/150/nature' }} style={styles.topItemImg} /> */}
+        <Image source={require('../assets/images/lahan-img.png')} style={styles.topItemImg} />
+        <View style={styles.topItemBox}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Entypo
+              name={'location-pin'}
+              size={15}
+              style={{ color: '#150A42', marginBottom: -2 }}
+            />
+            <Text style={styles.topItemTitle}>{item.lokasi}</Text>
+          </View>
+          <Text style={styles.topItemDesc}>{item.deskripsi}</Text>
+          <TouchableOpacity
+            style={styles.topExploreBtn}
+            onPress={() => {
+              console.log('Navigating to Detail Lahan...');
+              navigation.navigate('DetailLahan');
+            }}>
+            <Text style={styles.topExploreText}>Explore Now</Text>
+          </TouchableOpacity>
         </View>
-        <Text style={styles.topItemDesc}>{item.deskripsi}</Text>
-        <TouchableOpacity style={styles.topExploreBtn}>
-          <Text style={styles.topExploreText}>Explore Now</Text>
-        </TouchableOpacity>
       </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({

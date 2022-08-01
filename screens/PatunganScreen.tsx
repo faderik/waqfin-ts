@@ -80,7 +80,8 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
           <TouchableOpacity
             style={styles.patunganLinker}
             onPress={() => {
-              console.log('Navigating to Detail page...');
+              console.log('Navigating to Detail Lahan...');
+              navigation.navigate('DetailLahan');
             }}>
             <Image source={require('../assets/icons/linker.png')} />
           </TouchableOpacity>
