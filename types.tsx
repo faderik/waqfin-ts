@@ -44,3 +44,12 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   BottomTabScreenProps<RootTabParamList, Screen>,
   NativeStackScreenProps<RootStackParamList>
 >;
+
+export type Patungan = {
+  progress: number;
+  wakif: number;
+  current: string;
+  lokasi: { main: string; detail: string };
+  luas: string;
+  owner: string;
+};

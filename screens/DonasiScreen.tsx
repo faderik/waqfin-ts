@@ -4,7 +4,7 @@ import { FontAwesome, Entypo } from '@expo/vector-icons';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
-export default function BerandaScreen({ navigation }: RootTabScreenProps<'Beranda'>) {
+export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'>) {
   return (
     <View style={styles.wrapper}>
       <ScrollView

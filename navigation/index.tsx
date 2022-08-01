@@ -34,6 +34,7 @@ import TabTwoScreen from '../screens/DonasiScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import DonasiScreen from '../screens/DonasiScreen';
+import PatunganScreen from '../screens/PatunganScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -194,7 +195,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Patungan"
-        component={TabTwoScreen}
+        component={PatunganScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <View
