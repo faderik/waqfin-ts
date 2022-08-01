@@ -28,6 +28,7 @@ import DonasiScreen from '../screens/DonasiScreen';
 import PatunganScreen from '../screens/PatunganScreen';
 import DetailLahanScreen from '../screens/DetailLahanScreen';
 import WakafSuksesScreen from '../screens/WakafSuksesScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -89,6 +90,7 @@ function RootNavigator() {
         component={WakafSuksesScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: true }} />
     </Stack.Navigator>
   );
 }

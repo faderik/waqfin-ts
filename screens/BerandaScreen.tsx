@@ -49,8 +49,12 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
           <Text style={styles.title}>Let's</Text>
           <Text style={styles.subtitle}>Share Happiness!</Text>
         </View>
-        <TouchableOpacity>
-          <Image source={{ uri: 'https://placeimg.com/80/80/people' }} style={styles.profileImg} />
+        <TouchableOpacity
+          onPress={() => {
+            console.log('Navigating to Profile...');
+            navigation.navigate('Profile');
+          }}>
+          <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
         </TouchableOpacity>
       </View>
       <View style={styles.balanceBox}>
