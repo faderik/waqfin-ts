@@ -1,7 +1,10 @@
 import { StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function GetStartedScreen({ navigation }: RootStackScreenProps<'GetStarted'>) {
   return (

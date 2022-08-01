@@ -75,7 +75,10 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
                 />
               </View>
 
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.push('ResetPassword');
+                }}>
                 <Text style={styles.resetText}>Reset Password</Text>
               </TouchableOpacity>
 
@@ -84,6 +87,7 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
                   style={styles.loginBtn}
                   onPress={() => {
                     console.log('Logging In...');
+                    navigation.replace('Root');
                   }}>
                   <Text style={styles.loginText}>Login</Text>
                 </TouchableOpacity>

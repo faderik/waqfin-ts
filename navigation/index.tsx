@@ -21,11 +21,14 @@ import { View } from '../components/Themed';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import CheckEmailScreen from '../screens/CheckEmailScreen';
+import CreatePasswordScreen from '../screens/CreatePasswordScreen';
 import GetStartedScreen from '../screens/GetStartedScreen';
 import LoginScreen from '../screens/LoginScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
@@ -62,8 +65,25 @@ function RootNavigator() {
         component={OnboardingScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
+      <Stack.Group>
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPasswordScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="CheckEmail"
+          component={CheckEmailScreen}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="CreatePassword"
+          component={CreatePasswordScreen}
+          options={{ headerShown: true }}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   );
 }

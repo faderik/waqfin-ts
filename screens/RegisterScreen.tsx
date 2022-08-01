@@ -65,7 +65,6 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
                     style={styles.textInput}
                     placeholder="password"
                     secureTextEntry={!showPwd}
-                    placeholderTextColor="#bababa"
                     value={password}
                     onChangeText={(text) => setPassword(text)}
                   />
@@ -85,7 +84,6 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
                     style={styles.textInput}
                     placeholder="password"
                     secureTextEntry={!showConfirmPwd}
-                    placeholderTextColor="#bababa"
                     value={confirmPassword}
                     onChangeText={(text) => setConfirmPassword(text)}
                   />
@@ -96,7 +94,7 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
                     onPress={() => setShowConfirmPwd(!showConfirmPwd)}
                   />
                 </View>
-                <Text style={styles.hint}>Must be at least 8 characters.</Text>
+                <Text style={styles.hint}>Both passsword must match</Text>
               </>
 
               <View style={styles.buttons}>
@@ -225,8 +223,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   createBtn: {
-    // position: 'absolute',
-    // bottom: 30,
     marginTop: 25,
     backgroundColor: '#24116A',
     borderRadius: 10,
@@ -234,8 +230,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   loginText: {
-    // position: 'absolute',
-    // bottom: 0,
     color: '#150A42',
     fontFamily: 'raleway-600',
     fontSize: 14,
