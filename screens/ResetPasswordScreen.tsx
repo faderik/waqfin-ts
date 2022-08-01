@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ImageBackground, Image, TextInput } from 'react-native';
 
 import { Text, View } from '../components/Themed';
@@ -7,24 +7,26 @@ import { RootStackScreenProps } from '../types';
 export default function ResetPasswordScreen({ navigation }: RootStackScreenProps<'ResetPassword'>) {
   const [email, setEmail] = useState('');
 
-  navigation.setOptions({
-    headerTitle: 'Reset Password',
-    headerTitleStyle: {
-      fontFamily: 'raleway-700',
-      fontSize: 20,
-    },
-    headerShadowVisible: false,
-    // headerLeft: () => (
-    //   <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 20, bottom: 0 }}>
-    //     <Image source={require('../assets/icons/back.png')} style={{ height: 12 }} />
-    //   </TouchableOpacity>
-    // ),
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Reset Password',
+      headerTitleStyle: {
+        fontFamily: 'raleway-700',
+        fontSize: 20,
+      },
+      headerShadowVisible: false,
+      // headerLeft: () => (
+      //   <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 20, bottom: 0 }}>
+      //     <Image source={require('../assets/icons/back.png')} style={{ height: 12 }} />
+      //   </TouchableOpacity>
+      // ),
+    });
+  }, []);
 
   return (
     <View style={styles.wrapper}>
       <Text style={styles.description}>
-        Enter the email associated with your account and we’ll send an email with instructions to
+        Enter the email associated with your account and we will send an email with instructions to
         reset your password.
       </Text>
       <>
@@ -41,7 +43,7 @@ export default function ResetPasswordScreen({ navigation }: RootStackScreenProps
         style={styles.sendBtn}
         onPress={() => {
           console.log('Sending email...');
-          navigation.push('CheckEmail');
+          navigation.navigate('CheckEmail');
         }}>
         <Text style={styles.sendText}>Send Instructions</Text>
       </TouchableOpacity>

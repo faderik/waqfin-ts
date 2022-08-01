@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ImageBackground, Image, TextInput } from 'react-native';
 
 import { Text, View } from '../components/Themed';
@@ -7,19 +7,21 @@ import { RootStackScreenProps } from '../types';
 export default function CheckEmailScreen({ navigation }: RootStackScreenProps<'CheckEmail'>) {
   const [email, setEmail] = useState('');
 
-  navigation.setOptions({
-    headerTitle: '',
-    headerTitleStyle: {
-      fontFamily: 'raleway-700',
-      fontSize: 20,
-    },
-    headerShadowVisible: false,
-    // headerLeft: () => (
-    //   <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 20, bottom: 0 }}>
-    //     <Image source={require('../assets/icons/back.png')} style={{ height: 12 }} />
-    //   </TouchableOpacity>
-    // ),
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: '',
+      headerTitleStyle: {
+        fontFamily: 'raleway-700',
+        fontSize: 20,
+      },
+      headerShadowVisible: false,
+      // headerLeft: () => (
+      //   <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 20, bottom: 0 }}>
+      //     <Image source={require('../assets/icons/back.png')} style={{ height: 12 }} />
+      //   </TouchableOpacity>
+      // ),
+    });
+  }, []);
 
   return (
     <View style={styles.wrapper}>

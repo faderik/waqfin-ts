@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ImageBackground, Image, TextInput } from 'react-native';
 import { FontAwesome, Entypo } from '@expo/vector-icons';
 
@@ -14,19 +14,21 @@ export default function CreatePasswordScreen({
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  navigation.setOptions({
-    headerTitle: 'Create new password',
-    headerTitleStyle: {
-      fontFamily: 'raleway-700',
-      fontSize: 20,
-    },
-    headerShadowVisible: false,
-    // headerLeft: () => (
-    //   <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 20, bottom: 0 }}>
-    //     <Image source={require('../assets/icons/back.png')} style={{ height: 12 }} />
-    //   </TouchableOpacity>
-    // ),
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'Create new Password',
+      headerTitleStyle: {
+        fontFamily: 'raleway-700',
+        fontSize: 20,
+      },
+      headerShadowVisible: false,
+      // headerLeft: () => (
+      //   <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 20, bottom: 0 }}>
+      //     <Image source={require('../assets/icons/back.png')} style={{ height: 12 }} />
+      //   </TouchableOpacity>
+      // ),
+    });
+  }, []);
 
   return (
     <View style={styles.wrapper}>

@@ -1,5 +1,5 @@
 import { Entypo } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -23,14 +23,21 @@ export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'
   ]);
   const [activeImg, setActiveImg] = useState(0);
 
-  navigation.setOptions({
-    headerTitle: '',
-    headerTitleStyle: {
-      fontFamily: 'raleway-700',
-      fontSize: 20,
-    },
-    headerShadowVisible: false,
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: '',
+      headerTitleStyle: {
+        fontFamily: 'raleway-700',
+        fontSize: 20,
+      },
+      headerShadowVisible: false,
+      // headerLeft: () => (
+      //   <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 20, bottom: 0 }}>
+      //     <Image source={require('../assets/icons/back.png')} style={{ height: 12 }} />
+      //   </TouchableOpacity>
+      // ),
+    });
+  }, []);
 
   return (
     <View style={styles.wrapper}>
@@ -116,7 +123,7 @@ export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'
           style={styles.publishBtn}
           onPress={() => {
             console.log('Publishing...');
-            // navigation.push('CreatePassword');
+            navigation.push('WakafSukses');
           }}>
           <Text style={styles.publishText}>Publish</Text>
         </TouchableOpacity>
