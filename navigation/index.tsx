@@ -30,9 +30,10 @@ import OnboardingScreen from '../screens/OnboardingScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import BerandaScreen from '../screens/BerandaScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import TabTwoScreen from '../screens/DonasiScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import DonasiScreen from '../screens/DonasiScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -178,7 +179,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Donasi"
-        component={TabTwoScreen}
+        component={DonasiScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <Image
