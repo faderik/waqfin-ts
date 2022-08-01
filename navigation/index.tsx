@@ -8,15 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import {
-  ColorSchemeName,
-  Platform,
-  Image,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  GestureResponderEvent,
-} from 'react-native';
+import { ColorSchemeName, Platform, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { View } from '../components/Themed';
 
 import Colors from '../constants/Colors';
@@ -30,12 +22,12 @@ import OnboardingScreen from '../screens/OnboardingScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import BerandaScreen from '../screens/BerandaScreen';
-import TabTwoScreen from '../screens/DonasiScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import DonasiScreen from '../screens/DonasiScreen';
 import PatunganScreen from '../screens/PatunganScreen';
 import DetailLahanScreen from '../screens/DetailLahanScreen';
+import WakafSuksesScreen from '../screens/WakafSuksesScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -92,6 +84,11 @@ function RootNavigator() {
         component={DetailLahanScreen}
         options={{ headerShown: true }}
       />
+      <Stack.Screen
+        name="WakafSukses"
+        component={WakafSuksesScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -106,19 +103,7 @@ const DonasiButton = ({ children, onPress }: any) => (
   <TouchableOpacity style={{ top: -35 }} onPress={onPress} activeOpacity={1}>
     <View
       style={{ backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center' }}>
-      <View
-        style={{
-          backgroundColor: '#30216C',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: 70,
-          height: 70,
-          borderRadius: 35,
-          borderColor: '#FFFFFF',
-          borderWidth: 3,
-        }}>
-        {children}
-      </View>
+      <View style={styles.donasiBtn}>{children}</View>
       <Text style={{ color: '#FFFFFF', fontSize: 12, fontFamily: 'poppins-500', bottom: -6 }}>
         DONASI
       </Text>
@@ -145,12 +130,7 @@ function BottomTabNavigator() {
         component={BerandaScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <View
-              style={{
-                backgroundColor: 'transparent',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+            <View style={styles.tabBarGroup}>
               <Image
                 source={require('../assets/icons/beranda.png')}
                 resizeMode="contain"
@@ -164,15 +144,10 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Peta"
-        component={TabTwoScreen}
+        component={NotFoundScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <View
-              style={{
-                backgroundColor: 'transparent',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+            <View style={styles.tabBarGroup}>
               <Image
                 source={require('../assets/icons/peta.png')}
                 resizeMode="contain"
@@ -204,12 +179,7 @@ function BottomTabNavigator() {
         component={PatunganScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <View
-              style={{
-                backgroundColor: 'transparent',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+            <View style={styles.tabBarGroup}>
               <Image
                 source={require('../assets/icons/patungan.png')}
                 resizeMode="contain"
@@ -225,15 +195,10 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Kasus"
-        component={TabTwoScreen}
+        component={NotFoundScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <View
-              style={{
-                backgroundColor: 'transparent',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
+            <View style={styles.tabBarGroup}>
               <Image
                 source={require('../assets/icons/kasus.png')}
                 resizeMode="contain"
@@ -260,6 +225,21 @@ function TabBarIcon(props: {
 }
 
 const styles = StyleSheet.create({
+  donasiBtn: {
+    backgroundColor: '#30216C',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    borderColor: '#FFFFFF',
+    borderWidth: 3,
+  },
+  tabBarGroup: {
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   tabBar: {
     position: 'absolute',
     bottom: Platform.OS == 'ios' ? 25 : 15,

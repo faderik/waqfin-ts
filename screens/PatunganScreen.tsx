@@ -26,45 +26,67 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         main: 'Keputih, Sukolilo',
         detail: 'Jl. Keputih Gg.IIB No.52, Surabaya, Jawa Timur, 66151',
       },
-      luas: '590M2',
+      luas: '122 M2',
       owner: 'Bpk. Aldi Saputra',
       wakif: 68,
+    },
+    {
+      progress: 21,
+      current: 'Rp.211.110.000',
+      lokasi: {
+        main: 'Gebang, Sukolilo',
+        detail: 'Jl. Gebang Gg.IIIC No.96, Surabaya, Jawa Timur, 66132',
+      },
+      luas: '564 M2',
+      owner: 'Bpk. Yoga Maulana',
+      wakif: 200,
+    },
+    {
+      progress: 34,
+      current: 'Rp.21.110.000',
+      lokasi: {
+        main: 'Mulyosari, Sukolilo',
+        detail: 'Jl. Mulyosari Gg.IA No.31, Surabaya, Jawa Timur, 66340',
+      },
+      luas: '123 M2',
+      owner: 'Bpk. Deni Sumargo',
+      wakif: 90,
     },
   ]);
 
   return (
     <View style={styles.wrapper}>
-      <ScrollView
+      {/* <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        style={{ flex: 1 }}>
-        <Text style={styles.title}>Bersama peduli sesama</Text>
-        {/* Option Box */}
-        <View style={styles.optionBox}>
-          <TouchableOpacity style={styles.optionItem}>
-            <Image source={require('../assets/icons/category.png')} style={styles.optionIcon} />
-            <Text style={styles.optionText}>Category</Text>
-            <Entypo size={10} color="#FFF" name="chevron-down" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.optionItem}>
-            <Image source={require('../assets/icons/sortby.png')} style={styles.optionIcon} />
-            <Text style={styles.optionText}>Sort By</Text>
-            <Entypo size={10} color="#FFF" name="chevron-down" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.optionItem}>
-            <Image source={require('../assets/icons/filter.png')} style={styles.optionIcon} />
-            <Text style={styles.optionText}>Filter</Text>
-            <Entypo size={10} color="#FFF" name="chevron-down" />
-          </TouchableOpacity>
-        </View>
-        {/* List Patungan */}
-        <FlatList
-          data={patungan}
-          renderItem={_patunganRenderItem}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-        />
-      </ScrollView>
+        style={{ flex: 1 }}> */}
+      <Text style={styles.title}>Bersama peduli sesama</Text>
+      {/* Option Box */}
+      <View style={styles.optionBox}>
+        <TouchableOpacity style={styles.optionItem}>
+          <Image source={require('../assets/icons/category.png')} style={styles.optionIcon} />
+          <Text style={styles.optionText}>Category</Text>
+          <Entypo size={10} color="#FFF" name="chevron-down" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.optionItem}>
+          <Image source={require('../assets/icons/sortby.png')} style={styles.optionIcon} />
+          <Text style={styles.optionText}>Sort By</Text>
+          <Entypo size={10} color="#FFF" name="chevron-down" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.optionItem}>
+          <Image source={require('../assets/icons/filter.png')} style={styles.optionIcon} />
+          <Text style={styles.optionText}>Filter</Text>
+          <Entypo size={10} color="#FFF" name="chevron-down" />
+        </TouchableOpacity>
+      </View>
+      {/* List Patungan */}
+      <FlatList
+        data={patungan}
+        renderItem={_patunganRenderItem}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      />
+      {/* </ScrollView> */}
     </View>
   );
 

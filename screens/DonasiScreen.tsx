@@ -79,7 +79,12 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
           <TextInput style={styles.textInput} />
         </View>
         {/* Button Donate */}
-        <TouchableOpacity style={styles.donateBtn}>
+        <TouchableOpacity
+          style={styles.donateBtn}
+          onPress={() => {
+            console.log('Donating...');
+            navigation.navigate('WakafSukses');
+          }}>
           <Image source={require('../assets/icons/donate.png')} style={styles.donateIcon} />
           <Text style={styles.donateText}>Donate</Text>
         </TouchableOpacity>
