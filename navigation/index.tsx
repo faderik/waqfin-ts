@@ -29,7 +29,7 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
-import TabOneScreen from '../screens/TabOneScreen';
+import BerandaScreen from '../screens/BerandaScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -100,7 +100,7 @@ const DonasiButton = ({ children, onPress }: any) => (
       style={{ backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center' }}>
       <View
         style={{
-          backgroundColor: '#150A42',
+          backgroundColor: '#30216C',
           alignItems: 'center',
           justifyContent: 'center',
           width: 70,
@@ -130,10 +130,11 @@ function BottomTabNavigator() {
           ...styles.tabBar,
           ...styles.tabBarShadow,
         },
+        tabBarHideOnKeyboard: true,
       }}>
       <BottomTab.Screen
         name="Beranda"
-        component={TabOneScreen}
+        component={BerandaScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <View
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
     minHeight: 70,
     paddingHorizontal: 10,
     paddingVertical: Platform.OS == 'ios' ? 17 : 0,
-    backgroundColor: '#150A42',
+    backgroundColor: '#30216C',
   },
   tabBarShadow: {
     shadowColor: '#000',
