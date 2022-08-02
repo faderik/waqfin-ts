@@ -1,5 +1,6 @@
 import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } from 'react-native';
 import { FontAwesome, Entypo, Feather } from '@expo/vector-icons';
+import * as DocumentPicker from 'expo-document-picker';
 
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
@@ -56,8 +57,11 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
         <View style={styles.footer}>
           <TouchableOpacity
             style={styles.panduanGroup}
-            onPress={() => {
+            onPress={async () => {
               console.log('Opening file uploader...');
+              await DocumentPicker.getDocumentAsync().then((result) => {
+                console.log(result);
+              });
             }}>
             <Feather name="file-plus" size={20} color="#FFFFFF" />
             <Entypo name="dot-single" size={15} color="#FF0000" style={styles.badgeIcon} />
