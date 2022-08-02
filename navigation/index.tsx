@@ -29,6 +29,7 @@ import PatunganScreen from '../screens/PatunganScreen';
 import DetailLahanScreen from '../screens/DetailLahanScreen';
 import WakafSuksesScreen from '../screens/WakafSuksesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import PengaduanKasusScreen from '../screens/PengaduanKasusScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -197,7 +198,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Kasus"
-        component={NotFoundScreen}
+        component={PengaduanKasusScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <View style={styles.tabBarGroup}>
