@@ -159,6 +159,7 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
           style={styles.donateBtn}
           onPress={() => {
             console.log('Navigating to Donate page...');
+            navigation.push('DetailDonasiPatungan');
           }}>
           <Text style={styles.donateText}>Donate</Text>
           <Image source={require('../assets/icons/donate.png')} style={styles.donateIcon} />

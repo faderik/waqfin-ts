@@ -29,6 +29,7 @@ export type RootStackParamList = {
   WakafSukses: undefined;
   Profile: undefined;
   PanduanKasus: undefined;
+  DetailDonasiPatungan: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<

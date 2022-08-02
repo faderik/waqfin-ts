@@ -31,6 +31,7 @@ import WakafSuksesScreen from '../screens/WakafSuksesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import PengaduanKasusScreen from '../screens/PengaduanKasusScreen';
 import PanduanKasusScreen from '../screens/PanduanKasusScreen';
+import DetailDonasiPatunganScreen from '../screens/DetailDonasiPatunganScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -96,6 +97,11 @@ function RootNavigator() {
       <Stack.Screen
         name="PanduanKasus"
         component={PanduanKasusScreen}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen
+        name="DetailDonasiPatungan"
+        component={DetailDonasiPatunganScreen}
         options={{ headerShown: true }}
       />
     </Stack.Navigator>
