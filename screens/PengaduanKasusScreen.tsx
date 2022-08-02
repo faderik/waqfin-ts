@@ -28,7 +28,7 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
           style={styles.panduanGroup}
           onPress={() => {
             console.log('Navigating to PanduanKasus...');
-            // navigation.navigate('PanduanKasus')
+            navigation.navigate('PanduanKasus');
           }}>
           <Text style={styles.panduanText}>
             Perhatikan Cara Menyampaikan Pengaduan Yang Baik dan Benar

@@ -30,6 +30,7 @@ import DetailLahanScreen from '../screens/DetailLahanScreen';
 import WakafSuksesScreen from '../screens/WakafSuksesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import PengaduanKasusScreen from '../screens/PengaduanKasusScreen';
+import PanduanKasusScreen from '../screens/PanduanKasusScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -92,6 +93,11 @@ function RootNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: true }} />
+      <Stack.Screen
+        name="PanduanKasus"
+        component={PanduanKasusScreen}
+        options={{ headerShown: true }}
+      />
     </Stack.Navigator>
   );
 }
