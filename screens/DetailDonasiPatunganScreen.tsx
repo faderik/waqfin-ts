@@ -26,6 +26,8 @@ export default function DetailDonasiPatunganScreen({
         fontSize: 20,
       },
       headerShadowVisible: false,
+      headerTintColor: '#000000',
+      headerStyle: { backgroundColor: 'transparent' },
     });
   }, []);
 
@@ -81,9 +83,12 @@ export default function DetailDonasiPatunganScreen({
 
     return (
       <View style={styles.pilihGroup}>
-        {pilihanJumlah.map((terpilih) => {
+        {pilihanJumlah.map((terpilih, index) => {
           return (
-            <TouchableOpacity style={styles.pilihItem} onPress={() => setJumlahDonasi(terpilih)}>
+            <TouchableOpacity
+              key={index}
+              style={styles.pilihItem}
+              onPress={() => setJumlahDonasi(terpilih)}>
               <Text style={styles.pilihText}>{terpilih}</Text>
             </TouchableOpacity>
           );
