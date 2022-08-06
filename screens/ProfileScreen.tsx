@@ -14,6 +14,8 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
         fontSize: 20,
       },
       headerShadowVisible: false,
+      headerTintColor: '#000000',
+      headerStyle: { backgroundColor: 'transparent' },
     });
   }, []);
 

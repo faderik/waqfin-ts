@@ -13,6 +13,8 @@ export default function PanduanKasusScreen({ navigation }: RootStackScreenProps<
         fontFamily: 'raleway-700',
         fontSize: 20,
       },
+      headerTintColor: '#000000',
+      headerStyle: { backgroundColor: 'transparent' },
       headerShadowVisible: false,
     });
   }, []);

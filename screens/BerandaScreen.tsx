@@ -198,7 +198,8 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
         {/* <Image source={{ uri: 'https://placeimg.com/150/150/nature' }} style={styles.topItemImg} /> */}
         <Image source={require('../assets/images/lahan-img.png')} style={styles.topItemImg} />
         <View style={styles.topItemBox}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View
+            style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'transparent' }}>
             <Entypo
               name={'location-pin'}
               size={15}
@@ -294,11 +295,13 @@ const styles = StyleSheet.create({
     padding: 5,
     marginHorizontal: 5,
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   addText: {
     marginLeft: 5,
     fontFamily: 'poppins-500',
     fontSize: 8,
+    color: '#000000',
   },
   searchSection: {
     flexDirection: 'row',
@@ -400,7 +403,7 @@ const styles = StyleSheet.create({
     maxWidth: 150,
     borderRadius: 10,
     marginRight: 8,
-    // backgroundColor: 'transparent',
+    backgroundColor: '#FFFFFF',
   },
   topItemImg: {
     resizeMode: 'cover',
@@ -414,6 +417,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     // left: 50,
+    backgroundColor: 'transparent',
   },
   topItemTitle: {
     fontFamily: 'raleway-700',
@@ -425,6 +429,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontFamily: 'raleway-500',
     fontSize: 8,
+    color: '#000000',
   },
   topExploreBtn: {
     backgroundColor: '#150A42',

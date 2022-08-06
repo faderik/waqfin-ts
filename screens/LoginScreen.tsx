@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   formLabel: {
+    backgroundColor: 'transparent',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -161,13 +162,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     borderColor: '#C9C9C9',
     fontFamily: 'raleway-600',
-    fontSize: 17,
+    fontSize: 14,
   },
   formPwd: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: 'transparent',
+    fontSize: 14,
   },
   resetText: {
     fontFamily: 'raleway-600',
@@ -206,6 +209,6 @@ const styles = StyleSheet.create({
     minHeight: 200,
     flex: 1,
     width: '100%',
-    // backgroundColor: 'red',
+    backgroundColor: 'transparent',
   },
 });

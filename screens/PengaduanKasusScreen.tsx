@@ -102,6 +102,7 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
             alignItems: 'center',
             justifyContent: 'center',
             marginRight: 10,
+            backgroundColor: 'transparent',
           }}>
           {isSelected ? (
             <View
@@ -120,6 +121,7 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
             fontSize: 12,
             lineHeight: 18,
             paddingVertical: 2,
+            color: '#000000',
             // backgroundColor: 'red',
           }}>
           {props.label}
@@ -138,10 +140,11 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
             width: 16,
             borderRadius: 8,
             borderWidth: 2,
-            borderColor: '#000',
+            borderColor: '#FFFFFF',
             alignItems: 'center',
             justifyContent: 'center',
-            marginRight: 2,
+            marginRight: 5,
+            backgroundColor: 'transparent',
           }}>
           {isAnonim ? (
             <View
@@ -149,7 +152,7 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
                 height: 8,
                 width: 8,
                 borderRadius: 4,
-                backgroundColor: '#000',
+                backgroundColor: '#FFFFFF',
               }}
             />
           ) : null}
@@ -227,6 +230,7 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'space-evenly',
     borderRadius: 5,
+    backgroundColor: '#FFFFFF',
   },
   panduanGroup: {
     flexDirection: 'row',

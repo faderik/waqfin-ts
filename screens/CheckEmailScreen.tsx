@@ -15,11 +15,8 @@ export default function CheckEmailScreen({ navigation }: RootStackScreenProps<'C
         fontSize: 20,
       },
       headerShadowVisible: false,
-      // headerLeft: () => (
-      //   <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 20, bottom: 0 }}>
-      //     <Image source={require('../assets/icons/back.png')} style={{ height: 12 }} />
-      //   </TouchableOpacity>
-      // ),
+      headerTintColor: '#000000',
+      headerStyle: { backgroundColor: 'transparent' },
     });
   }, []);
 
@@ -58,11 +55,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 40,
     paddingVertical: 20,
+    backgroundColor: '#FFFFFF',
   },
   title: {
     fontFamily: 'raleway-700',
     fontSize: 22,
     textAlign: 'center',
+    color: '#000000',
   },
   description: {
     fontSize: 12,

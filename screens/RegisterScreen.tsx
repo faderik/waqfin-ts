@@ -107,7 +107,7 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
                     Create
                   </Text>
                 </TouchableOpacity>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
                   <Text style={styles.loginText}>Already a user? </Text>
                   <TouchableOpacity
                     onPress={() => {
@@ -195,13 +195,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
     fontFamily: 'raleway-600',
-    fontSize: 17,
+    fontSize: 14,
   },
   formPwd: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: 'transparent',
+    fontSize: 14,
   },
   eyeIcon: {
     marginLeft: 10,
@@ -209,12 +211,6 @@ const styles = StyleSheet.create({
     right: 10,
     position: 'absolute',
     color: '#959595',
-  },
-  resetText: {
-    fontFamily: 'raleway-600',
-    fontSize: 16,
-    color: '#ABBAC7',
-    marginBottom: 30,
   },
   createText: {
     fontFamily: 'raleway-700',
@@ -243,7 +239,7 @@ const styles = StyleSheet.create({
     minHeight: 200,
     flex: 1,
     width: '100%',
-    // backgroundColor: 'red',
+    backgroundColor: 'transparent',
   },
   hint: {
     fontFamily: 'raleway-400',
