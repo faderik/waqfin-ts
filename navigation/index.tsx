@@ -32,6 +32,8 @@ import ProfileScreen from '../screens/ProfileScreen';
 import PengaduanKasusScreen from '../screens/PengaduanKasusScreen';
 import PanduanKasusScreen from '../screens/PanduanKasusScreen';
 import DetailDonasiPatunganScreen from '../screens/DetailDonasiPatunganScreen';
+import PetaScreen from '../screens/PetaScreen';
+import DetailPetaScreen from '../screens/DetailPetaScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -51,7 +53,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator initialRouteName="GetStarted">
+    <Stack.Navigator initialRouteName="Root">
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen
@@ -104,6 +106,11 @@ function RootNavigator() {
         component={DetailDonasiPatunganScreen}
         options={{ headerShown: true }}
       />
+      <Stack.Screen
+        name="DetailPeta"
+        component={DetailPetaScreen}
+        options={{ headerShown: true }}
+      />
     </Stack.Navigator>
   );
 }
@@ -129,7 +136,7 @@ const DonasiButton = ({ children, onPress }: any) => (
 function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
-      initialRouteName="Beranda"
+      initialRouteName="Peta"
       screenOptions={{
         tabBarActiveTintColor: '#DBEC73',
         tabBarInactiveTintColor: '#FFFFFF',
@@ -159,7 +166,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Peta"
-        component={NotFoundScreen}
+        component={PetaScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <View style={styles.tabBarGroup}>
