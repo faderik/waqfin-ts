@@ -3,6 +3,8 @@ import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 
+SplashScreen.preventAutoHideAsync();
+
 export default function useCachedResources() {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
@@ -10,8 +12,6 @@ export default function useCachedResources() {
   useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
-        SplashScreen.preventAutoHideAsync();
-
         // Load fonts
         await Font.loadAsync({
           ...FontAwesome.font,
