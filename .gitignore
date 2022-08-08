@@ -15,4 +15,4 @@ web-build/
 # macOS
 .DS_Store
 
-constants/index.ts
+# constants/index.ts
