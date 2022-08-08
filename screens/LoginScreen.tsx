@@ -6,17 +6,22 @@ import {
   TextInput,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
-import { useState } from 'react';
-import { FontAwesome, Entypo } from '@expo/vector-icons';
+import { useContext, useState } from 'react';
+import { Entypo } from '@expo/vector-icons';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
+import { AuthContext } from '../context';
+import * as constants from '../constants';
 
 export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'>) {
   const [showPwd, setShowPwd] = useState(false);
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(constants.email);
+  const [password, setPassword] = useState(constants.pwd);
+
+  const { signIn } = useContext(AuthContext);
 
   return (
     <View style={styles.wrapper}>
@@ -85,9 +90,15 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
               <View style={styles.buttons}>
                 <TouchableOpacity
                   style={styles.loginBtn}
-                  onPress={() => {
+                  onPress={async () => {
                     console.log('Logging In...');
-                    navigation.replace('Root');
+
+                    const res = await signIn(email, password);
+                    if (res.code == 200) {
+                      navigation.replace('Root');
+                    } else {
+                      Alert.alert('Login failed', res.message);
+                    }
                   }}>
                   <Text style={styles.loginText}>Login</Text>
                 </TouchableOpacity>

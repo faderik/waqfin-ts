@@ -2,7 +2,6 @@ import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } 
 import { useState } from 'react';
 import { FontAwesome, Entypo } from '@expo/vector-icons';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
@@ -149,31 +148,7 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
               />
             </TouchableOpacity>
           </View>
-          {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View style={styles.topItem}>
-              <Image
-                source={{ uri: 'https://placeimg.com/150/150/nature' }}
-                style={styles.topItemImg}
-              />
-              <View style={styles.topItemBox}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Entypo
-                    name={'location-pin'}
-                    size={15}
-                    style={{ color: '#150A42', marginBottom: -2 }}
-                  />
-                  <Text style={styles.topItemTitle}>Gebang, Kudus</Text>
-                </View>
-                <Text style={styles.topItemDesc}>
-                  lahan wakaf yang sangat strategis di samping jalan, cocok untuk dijadikan sekolah
-                  ataupun pondok pesantren
-                </Text>
-                <TouchableOpacity style={styles.topExploreBtn}>
-                  <Text style={styles.topExploreText}>Explore Now</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView> */}
+
           <FlatList
             data={topPatungan}
             renderItem={_topPatunganRenderItem}

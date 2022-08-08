@@ -59,3 +59,9 @@ export type Patungan = {
   luas: string;
   owner: string;
 };
+
+export type StoreState = {
+  userToken: string | null;
+  isLoading: boolean;
+  isSignOut: boolean;
+};

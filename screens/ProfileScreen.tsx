@@ -1,11 +1,41 @@
 import { Entypo } from '@expo/vector-icons';
-import { useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, ImageBackground, Image, TextInput } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
+import { host } from '../constants';
+import { AuthContext } from '../context';
 import { RootStackScreenProps } from '../types';
 
 export default function ProfileScreen({ navigation }: RootStackScreenProps<'Profile'>) {
+  const { signOut } = useContext(AuthContext);
+  const [profile, setProfile] = useState<any>({});
+
+  const getProfile = async () => {
+    let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
+
+    fetch(host + '/profile', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + userToken,
+      },
+    })
+      .then((response) => response.json())
+      .then(async (response) => {
+        if (response.code != 200) {
+          console.log('ERR| ', response.message);
+          return response;
+        }
+
+        console.log('PROFILE| ', response.data);
+        setProfile(response.data);
+        return response;
+      });
+  };
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: '',
@@ -17,6 +47,8 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
       headerTintColor: '#000000',
       headerStyle: { backgroundColor: 'transparent' },
     });
+
+    getProfile();
   }, []);
 
   return (
@@ -25,7 +57,7 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
 
       <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
       <View style={styles.profileBox}>
-        <Text style={styles.nameText}>Aldi Kurniawan</Text>
+        <Text style={styles.nameText}>{profile.name}</Text>
         <Text style={styles.alamatText}>
           Jl. Lkr. Utara, Kayuapu Kulon, Gondangmanis, Kec. Bae, Kabupaten Kudus, Jawa Tengah 59327
         </Text>
@@ -54,8 +86,9 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
       {/* Logout */}
       <TouchableOpacity
         style={styles.logoutBtn}
-        onPress={() => {
+        onPress={async () => {
           console.log('Loging out...');
+          let res = await signOut();
           navigation.replace('Login');
         }}>
         <Text style={styles.logoutText}>Logout</Text>

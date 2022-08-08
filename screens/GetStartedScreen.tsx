@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
+import * as SecureStore from 'expo-secure-store';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
@@ -7,6 +10,34 @@ import { RootStackScreenProps } from '../types';
 SplashScreen.preventAutoHideAsync();
 
 export default function GetStartedScreen({ navigation }: RootStackScreenProps<'GetStarted'>) {
+  const dispatch = useDispatch();
+
+  const checkTokenAsync = async () => {
+    let userToken;
+
+    try {
+      userToken = await SecureStore.getItemAsync('USERTOKEN');
+      console.log('TokenExist: ', userToken);
+    } catch (e) {
+      console.log("Token doesn't exist!");
+    }
+
+    // TODO: After restoring token, we may need to validate it HERE
+
+    if (userToken && userToken !== null) {
+      dispatch({ type: 'RESTORE_TOKEN', payload: { userToken } });
+      navigation.navigate('Root');
+    } else {
+      navigation.navigate('Login');
+    }
+
+    // navigation.navigate('Login');
+  };
+
+  useEffect(() => {
+    // checkTokenAsync();
+  }, []);
+
   return (
     <View style={styles.wrapper}>
       <ImageBackground
@@ -20,7 +51,12 @@ export default function GetStartedScreen({ navigation }: RootStackScreenProps<'G
             blockchain dengan pemetaan lahan sehingga tingkat transparansi dan keamanan yang tinggi
           </Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.replace('Onboarding')} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => {
+            checkTokenAsync();
+            // navigation.replace('Onboarding');
+          }}
+          style={styles.button}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
       </ImageBackground>

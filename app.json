@@ -24,7 +24,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.faderik.waqfints"
+      "package": "com.faderik.waqfints",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAV2JmgUYCJJlg92lK-4GoKjzvZC70YEX0"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

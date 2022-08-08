@@ -154,6 +154,7 @@ let styles = StyleSheet.create({
     fontFamily: 'poppins-500',
     fontSize: 12,
     marginLeft: 10,
+    color: '#FFF',
   },
   callout: {
     maxWidth: 220,

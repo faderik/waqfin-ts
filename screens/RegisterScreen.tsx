@@ -2,25 +2,29 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
-  Image,
   TextInput,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { FontAwesome, Entypo } from '@expo/vector-icons';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
+import { AuthContext } from '../context';
+import * as constants from '../constants';
 
 export default function RegisterScreen({ navigation }: RootStackScreenProps<'Register'>) {
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirmPwd, setShowConfirmPwd] = useState(false);
 
-  const [namaLengkap, setNamaLengkap] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [namaLengkap, setNamaLengkap] = useState(constants.name);
+  const [email, setEmail] = useState(constants.email);
+  const [password, setPassword] = useState(constants.pwd);
+  const [confirmPassword, setConfirmPassword] = useState(constants.pwd);
+
+  const { signUp } = useContext(AuthContext);
 
   return (
     <View style={styles.wrapper}>
@@ -98,14 +102,19 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
               </>
 
               <View style={styles.buttons}>
-                <TouchableOpacity style={styles.createBtn}>
-                  <Text
-                    style={styles.createText}
-                    onPress={() => {
-                      console.log('Creating account...');
-                    }}>
-                    Create
-                  </Text>
+                <TouchableOpacity
+                  style={styles.createBtn}
+                  onPress={async () => {
+                    console.log('Creating account...');
+
+                    const res = await signUp(namaLengkap, email, password, confirmPassword);
+                    if (res.code == 200) {
+                      navigation.replace('Root');
+                    } else {
+                      Alert.alert('Register failed', res.message);
+                    }
+                  }}>
+                  <Text style={styles.createText}>Create</Text>
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
                   <Text style={styles.loginText}>Already a user? </Text>

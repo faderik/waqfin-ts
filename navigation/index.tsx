@@ -9,10 +9,10 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Platform, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { View } from '../components/Themed';
+import { useDispatch } from 'react-redux';
+import * as SecureStore from 'expo-secure-store';
+import { useMemo } from 'react';
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
 import CheckEmailScreen from '../screens/CheckEmailScreen';
 import CreatePasswordScreen from '../screens/CreatePasswordScreen';
 import GetStartedScreen from '../screens/GetStartedScreen';
@@ -22,7 +22,7 @@ import OnboardingScreen from '../screens/OnboardingScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import BerandaScreen from '../screens/BerandaScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import DonasiScreen from '../screens/DonasiScreen';
 import PatunganScreen from '../screens/PatunganScreen';
@@ -34,14 +34,131 @@ import PanduanKasusScreen from '../screens/PanduanKasusScreen';
 import DetailDonasiPatunganScreen from '../screens/DetailDonasiPatunganScreen';
 import PetaScreen from '../screens/PetaScreen';
 import DetailPetaScreen from '../screens/DetailPetaScreen';
+import { AuthContext } from '../context';
+import { View } from '../components/Themed';
+import { host } from '../constants';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+  const dispatch = useDispatch();
+
+  const authContext = useMemo(
+    () => ({
+      signIn: async (email: string, password: string) => {
+        return fetch(host + '/login', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+          redirect: 'follow',
+        })
+          .then((response) => response.json())
+          .then(async (response) => {
+            if (response.code != 200) {
+              console.log('ERR| ', response.message);
+              return response;
+            } else {
+              console.log('TOKEN| ', response.data.token);
+            }
+
+            let userToken = response.data.token;
+            // Add error handler HERE
+            dispatch({
+              type: 'SIGN_IN',
+              payload: { userToken: userToken },
+            });
+
+            // Persist the token using `SecureStore`
+            await SecureStore.setItemAsync('USERTOKEN', userToken);
+
+            return response;
+          })
+          .catch((err) => {
+            // Add exception handler HERE
+            console.error(err);
+          });
+      },
+      signOut: async () => {
+        let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
+
+        dispatch({ type: 'SIGN_OUT' });
+        SecureStore.deleteItemAsync('USERTOKEN');
+
+        if (!userToken) {
+          return -1;
+        }
+
+        const bearer = 'Bearer ' + userToken;
+
+        return fetch(host + '/logout', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: bearer,
+          },
+        })
+          .then((response) => response.json())
+          .then(async (response) => {
+            if (response.code != 200) {
+              console.log('ERR| ', response.message);
+              return response;
+            } else {
+              console.log('OUT| ', response.message);
+            }
+
+            return response;
+          });
+      },
+      signUp: async (name: string, email: string, password: string, confirmPassword: string) => {
+        return fetch(host + '/register', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, email, password, confirm_password: confirmPassword }),
+          redirect: 'follow',
+        })
+          .then((response) => response.json())
+          .then(async (response) => {
+            if (response.code != 200) {
+              console.log('ERR| ', response.message);
+              return response;
+            } else {
+              console.log('TOKEN| ', response.data.token);
+            }
+
+            let userToken = response.data.token;
+            // Add error handler HERE
+            dispatch({
+              type: 'SIGN_UP',
+              payload: { userToken: userToken },
+            });
+
+            // Persist the token using `SecureStore`
+            await SecureStore.setItemAsync('USERTOKEN', userToken);
+
+            return response;
+          })
+          .catch((err) => {
+            // Add exception handler HERE
+            console.error(err);
+          });
+      },
+    }),
+    []
+  );
+
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
-    </NavigationContainer>
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <RootNavigator />
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 }
 
@@ -53,7 +170,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Root">
+    <Stack.Navigator initialRouteName="GetStarted">
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen
@@ -136,7 +253,7 @@ const DonasiButton = ({ children, onPress }: any) => (
 function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
-      initialRouteName="Peta"
+      initialRouteName="Beranda"
       screenOptions={{
         tabBarActiveTintColor: '#DBEC73',
         tabBarInactiveTintColor: '#FFFFFF',
