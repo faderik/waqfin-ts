@@ -1,15 +1,18 @@
 import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } from 'react-native';
 import { FontAwesome, Entypo, Feather, FontAwesome5 } from '@expo/vector-icons';
-import MapView, { Callout, Marker } from 'react-native-maps';
+import MapView, { Callout, Camera, Marker } from 'react-native-maps';
 import { WebView } from 'react-native-webview';
 
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
+import { RootTabScreenProps, WakafLoc } from '../types';
 import { SetStateAction, useEffect, useState } from 'react';
 
 export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Peta'>) {
-  const [markers, setMarkers] = useState([
+  const [mapRef, setMapRef] = useState<any>();
+  const [searchResult, setSearchResult] = useState<WakafLoc[]>([]);
+  const [markers, setMarkers] = useState<WakafLoc[]>([
     {
+      id: 1,
       latlng: { latitude: -6.802867, longitude: 110.82681 },
       img: require('../assets/images/lahan-patungan-2.png'),
       address: {
@@ -19,11 +22,39 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
       },
     },
     {
-      latlng: { latitude: -6.806813, longitude: 110.824218 },
+      id: 2,
+      latlng: { latitude: -7.291057, longitude: 112.797651 },
       img: require('../assets/images/lahan-patungan-1.png'),
       address: {
         main: 'Keputih, Surabaya',
-        detail: 'Jl. Ir Soekarno No.52B, Kec. Sukolilo, Kota Surabaya Jawa Timur 66111',
+        detail: 'Surabaya, Keputih, Sukolilo, Surabaya City, East Java 60111',
+      },
+    },
+    {
+      id: 3,
+      latlng: { latitude: -7.194648, longitude: 107.666763 },
+      img: require('../assets/images/lahan-patungan-1.png'),
+      address: {
+        main: 'Kertasari, Bandung',
+        detail: 'Cibeureum, Kertasari, Bandung Regency, West Java',
+      },
+    },
+    {
+      id: 4,
+      latlng: { latitude: -7.001907, longitude: 113.201079 },
+      img: require('../assets/images/lahan-patungan-1.png'),
+      address: {
+        main: 'Banyuates, Madura',
+        detail: 'Tengginah Laok, Tolang, Banyuates, Sampang Regency, East Java',
+      },
+    },
+    {
+      id: 5,
+      latlng: { latitude: -7.154826, longitude: 107.003365 },
+      img: require('../assets/images/lahan-patungan-1.png'),
+      address: {
+        main: 'Takokak, Cianjur',
+        detail: 'Simpang, Takokak, Cianjur Regency, West Java',
       },
     },
   ]);
@@ -44,28 +75,27 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
   }, []);
 
   return (
+    // Tidak perlu dikasi SafeAreaView karena Full Screen Map
     <View style={styles.wrapper}>
       {/* Map */}
       <MapView
+        ref={(ref) => setMapRef(ref)}
         style={styles.map}
-        initialRegion={{
-          latitude: -6.80153, // till -6.801599
-          longitude: 110.82383,
-          latitudeDelta: 0.0101,
-          longitudeDelta: 0.0102,
+        initialCamera={{
+          center: {
+            latitude: -6.802867,
+            longitude: 110.82681,
+          },
+          pitch: 1,
+          heading: 1,
+          altitude: 1,
+          zoom: 16,
         }}
         mapType={'satellite'}>
         {markers.map((marker, index) => (
           <Marker key={index} coordinate={marker.latlng}>
             <Callout tooltip={true}>
               <View style={styles.callout}>
-                {/* <Text style={styles.imageWrapperAndroid}>
-                  <Image
-                    source={require('../assets/images/bca.png')}
-                    resizeMode="cover"
-                    style={styles.calloutImg}
-                  />
-                </Text> */}
                 <WebView
                   style={styles.webview}
                   source={{ uri: 'https://placeimg.com/230/100/nature' }}
@@ -78,11 +108,32 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
           </Marker>
         ))}
       </MapView>
-      {/* Peta Button */}
-      <TouchableOpacity style={styles.back} onPress={() => navigation.popToTop()}>
-        <Entypo name={'chevron-left'} size={20} color={'#FFF'} />
-        <Text style={styles.petaText}>Peta</Text>
-      </TouchableOpacity>
+
+      {/* Header Section */}
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
+          <Entypo name={'chevron-left'} size={20} color={'#000'} />
+        </TouchableOpacity>
+
+        <View style={styles.formSearch}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Cari lahan wakaf !"
+            onChangeText={(text) => {
+              searchLocation(text, markers);
+            }}
+          />
+          <FontAwesome name={'search'} size={15} style={styles.searchIcon} />
+        </View>
+      </View>
+      <FlatList
+        style={styles.flatList}
+        data={searchResult}
+        renderItem={_searchRenderItem}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      />
+
       {/* Detail Section */}
       <View style={styles.detailSection}>
         <View style={styles.detailItem}>
@@ -100,6 +151,76 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
       </View>
     </View>
   );
+
+  function searchLocation(txt: string, locations: WakafLoc[]) {
+    const searchResults = locations.filter((loc) => {
+      return loc.address.main.toLowerCase().includes(txt.toLowerCase());
+    });
+
+    setSearchResult(searchResults);
+    if (txt === '') {
+      setSearchResult([]);
+    }
+  }
+
+  function _searchRenderItem({ item, index }: { item: WakafLoc; index: number }) {
+    return (
+      <TouchableOpacity
+        style={{
+          borderRadius: 5,
+          padding: '2%',
+          marginTop: 5,
+          display: 'flex',
+          flexDirection: 'row',
+          backgroundColor: '#FFF',
+          alignItems: 'center',
+        }}
+        onPress={async () => {
+          await mapRef.animateCamera({
+            center: { latitude: item.latlng.latitude, longitude: item.latlng.longitude },
+            zoom: 16,
+          });
+          setSearchResult([]);
+        }}>
+        <View
+          style={{
+            alignSelf: 'center',
+            overflow: 'hidden',
+            maxWidth: '80%',
+            backgroundColor: 'transparent',
+          }}>
+          <Text
+            style={{
+              marginLeft: 8,
+              textAlignVertical: 'center',
+              fontSize: 12,
+              fontFamily: 'poppins-600',
+            }}>
+            {item.address.main}
+          </Text>
+          <Text
+            style={{
+              marginLeft: 8,
+              textAlignVertical: 'center',
+              fontSize: 10,
+              fontFamily: 'poppins-400',
+            }}>
+            {item.address.detail}
+          </Text>
+        </View>
+        <View
+          style={{
+            backgroundColor: 'transparent',
+            alignItems: 'center',
+            right: 10,
+            marginRight: 0,
+            marginLeft: 'auto',
+          }}>
+          <Entypo name="location" size={20} color="#150A42" />
+        </View>
+      </TouchableOpacity>
+    );
+  }
 }
 
 let styles = StyleSheet.create({
@@ -114,23 +235,6 @@ let styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignSelf: 'center',
-  },
-  back: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'absolute',
-    top: 40,
-    left: 20,
-    borderRadius: 10,
-    backgroundColor: '#00000080',
-    padding: 10,
-  },
-  petaText: {
-    fontFamily: 'poppins-700',
-    color: '#FFFFFF',
-    fontSize: 12,
-    marginTop: 3,
-    marginRight: 10,
   },
   // Detail Section
   detailSection: {
@@ -197,5 +301,57 @@ let styles = StyleSheet.create({
     position: 'absolute',
     bottom: -20,
     alignSelf: 'center',
+  },
+
+  // Header Section
+  header: {
+    position: 'absolute',
+    top: 60,
+    width: '100%',
+    maxHeight: 40,
+    paddingHorizontal: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+  back: {
+    alignItems: 'center',
+    borderRadius: 10,
+    backgroundColor: '#FFF',
+    padding: 10,
+    height: '100%',
+  },
+  formSearch: {
+    backgroundColor: 'transparent',
+    height: '100%',
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  textInput: {
+    flex: 1,
+    height: '100%',
+    borderRadius: 10,
+    backgroundColor: '#FFF',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    fontFamily: 'raleway-500',
+    fontSize: 12,
+    marginLeft: 10,
+  },
+  searchIcon: {
+    marginHorizontal: 5,
+    bottom: 13,
+    right: 10,
+    position: 'absolute',
+    color: '#959595',
+  },
+  flatList: {
+    width: '100%',
+    position: 'absolute',
+    top: 60 + 50,
+    paddingHorizontal: 25,
   },
 });

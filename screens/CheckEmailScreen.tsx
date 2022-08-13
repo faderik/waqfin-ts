@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ImageBackground, Image, TextInput } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
@@ -21,7 +22,7 @@ export default function CheckEmailScreen({ navigation }: RootStackScreenProps<'C
   }, []);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Image
         source={require('../assets/images/checkemail.png')}
         style={{ alignSelf: 'center', marginBottom: 20 }}
@@ -46,7 +47,7 @@ export default function CheckEmailScreen({ navigation }: RootStackScreenProps<'C
         }}>
         <Text style={styles.description}>Skip, I’ll confirm later</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 

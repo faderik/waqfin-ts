@@ -15,6 +15,7 @@ import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import { AuthContext } from '../context';
 import * as constants from '../constants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'>) {
   const [showPwd, setShowPwd] = useState(false);
@@ -24,11 +25,11 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
   const { signIn } = useContext(AuthContext);
 
   return (
-    <View style={styles.wrapper}>
-      <ImageBackground
-        source={require('../assets/images/login-bg.png')}
-        style={styles.imageBg}
-        resizeMode="cover">
+    <ImageBackground
+      source={require('../assets/images/login-bg.png')}
+      style={styles.imageBg}
+      resizeMode="cover">
+      <SafeAreaView style={styles.wrapper}>
         <View style={styles.container}>
           <Image source={require('../assets/images/logo-notext.png')} style={styles.logo} />
           <Text style={styles.title}>Wakaf amal jariyah hingga surga</Text>
@@ -112,8 +113,8 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
             </ScrollView>
           </View>
         </View>
-      </ImageBackground>
-    </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 

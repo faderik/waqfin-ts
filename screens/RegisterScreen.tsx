@@ -14,6 +14,7 @@ import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 import { AuthContext } from '../context';
 import * as constants from '../constants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function RegisterScreen({ navigation }: RootStackScreenProps<'Register'>) {
   const [showPwd, setShowPwd] = useState(false);
@@ -27,11 +28,11 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
   const { signUp } = useContext(AuthContext);
 
   return (
-    <View style={styles.wrapper}>
-      <ImageBackground
-        source={require('../assets/images/login-bg.png')}
-        style={styles.imageBg}
-        resizeMode="cover">
+    <ImageBackground
+      source={require('../assets/images/login-bg.png')}
+      style={styles.imageBg}
+      resizeMode="cover">
+      <SafeAreaView style={styles.wrapper}>
         <View style={styles.container}>
           <Text style={styles.title}>Set Up Your Account</Text>
           <Text style={styles.subTitle}>Get ready to explore</Text>
@@ -129,8 +130,8 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
             </ScrollView>
           </View>
         </View>
-      </ImageBackground>
-    </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 

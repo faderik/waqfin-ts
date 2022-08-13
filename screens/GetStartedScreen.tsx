@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as SecureStore from 'expo-secure-store';
@@ -6,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -30,20 +30,14 @@ export default function GetStartedScreen({ navigation }: RootStackScreenProps<'G
     } else {
       navigation.navigate('Login');
     }
-
-    // navigation.navigate('Login');
   };
 
-  useEffect(() => {
-    // checkTokenAsync();
-  }, []);
-
   return (
-    <View style={styles.wrapper}>
-      <ImageBackground
-        source={require('../assets/images/getstarted-bg.png')}
-        style={styles.imageBg}
-        resizeMode="cover">
+    <ImageBackground
+      source={require('../assets/images/getstarted-bg.png')}
+      style={styles.imageBg}
+      resizeMode="cover">
+      <SafeAreaView style={styles.wrapper}>
         <View style={styles.textContainer}>
           <Text style={styles.title}>Waqf.in</Text>
           <Text style={styles.description}>
@@ -59,8 +53,8 @@ export default function GetStartedScreen({ navigation }: RootStackScreenProps<'G
           style={styles.button}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
-      </ImageBackground>
-    </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 

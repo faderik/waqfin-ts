@@ -1,11 +1,12 @@
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 
 export default function NotFoundScreen({ navigation }: RootStackScreenProps<'NotFound'>) {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Sorry, This screen is under maintanance !</Text>
       <Image source={require('../assets/images/404.png')} style={styles.notFoundImg} />
       <TouchableOpacity
@@ -16,7 +17,7 @@ export default function NotFoundScreen({ navigation }: RootStackScreenProps<'Not
         }}>
         <Text style={styles.homeText}>Back To Home</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -4,6 +4,7 @@ import { FontAwesome, Entypo } from '@expo/vector-icons';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function CreatePasswordScreen({
   navigation,
@@ -28,7 +29,7 @@ export default function CreatePasswordScreen({
   }, []);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Text style={styles.description}>
         Your new password must be different from previous used passwords
       </Text>
@@ -79,7 +80,7 @@ export default function CreatePasswordScreen({
         }}>
         <Text style={styles.sendText}>Reset Password</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 

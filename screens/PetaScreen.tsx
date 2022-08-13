@@ -1,15 +1,18 @@
-import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } from 'react-native';
-import { FontAwesome, Entypo, Feather } from '@expo/vector-icons';
+import { StyleSheet } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 import MapView, { Callout, Marker } from 'react-native-maps';
 
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
-import { SetStateAction, useState } from 'react';
+import { RootTabScreenProps, WakafLoc } from '../types';
+import { useState } from 'react';
 import WebView from 'react-native-webview';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function PetaScreen({ navigation }: RootTabScreenProps<'Peta'>) {
-  const [markers, setMarkers] = useState([
+  const [mapRef, setMapRef] = useState<any>();
+  const [markers, setMarkers] = useState<WakafLoc[]>([
     {
+      id: 1,
       latlng: { latitude: -6.802867, longitude: 110.82681 },
       img: require('../assets/images/lahan-patungan-2.png'),
       address: {
@@ -19,34 +22,65 @@ export default function PetaScreen({ navigation }: RootTabScreenProps<'Peta'>) {
       },
     },
     {
-      latlng: { latitude: -6.806813, longitude: 110.824218 },
+      id: 2,
+      latlng: { latitude: -7.291057, longitude: 112.797651 },
       img: require('../assets/images/lahan-patungan-1.png'),
       address: {
         main: 'Keputih, Surabaya',
-        detail: 'Jl. Ir Soekarno No.52B, Kec. Sukolilo, Kota Surabaya Jawa Timur 66111',
+        detail: 'Surabaya, Keputih, Sukolilo, Surabaya City, East Java 60111',
+      },
+    },
+    {
+      id: 3,
+      latlng: { latitude: -7.194648, longitude: 107.666763 },
+      img: require('../assets/images/lahan-patungan-1.png'),
+      address: {
+        main: 'Kertasari, Bandung',
+        detail: 'Cibeureum, Kertasari, Bandung Regency, West Java',
+      },
+    },
+    {
+      id: 4,
+      latlng: { latitude: -7.001907, longitude: 113.201079 },
+      img: require('../assets/images/lahan-patungan-1.png'),
+      address: {
+        main: 'Banyuates, Madura',
+        detail: 'Tengginah Laok, Tolang, Banyuates, Sampang Regency, East Java',
+      },
+    },
+    {
+      id: 5,
+      latlng: { latitude: -7.154826, longitude: 107.003365 },
+      img: require('../assets/images/lahan-patungan-1.png'),
+      address: {
+        main: 'Takokak, Cianjur',
+        detail: 'Simpang, Takokak, Cianjur Regency, West Java',
       },
     },
   ]);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Text style={styles.title}>We make it easy for you</Text>
-      <View style={styles.searchSection}>
-        <View style={styles.formSearch}>
-          <TextInput style={styles.textInput} placeholder="Cari lahan wakaf !" />
-          <FontAwesome name={'search'} size={12} style={styles.searchIcon} />
-        </View>
-      </View>
       {/* Map */}
 
       <MapView
+        ref={(ref) => {
+          setMapRef(ref);
+        }}
         onPress={() => navigation.navigate('DetailPeta')}
         style={styles.map}
-        initialRegion={{
-          latitude: -6.80153, // till -6.801599
-          longitude: 110.82383,
-          latitudeDelta: 0.0101,
-          longitudeDelta: 0.0102,
+        initialCamera={{
+          center: {
+            latitude: -6.802867,
+            longitude: 110.82681,
+          },
+          pitch: 1,
+          heading: 1,
+          // Only on iOS MapKit, in meters. The property is ignored by Google Maps.
+          altitude: 1,
+          // Only when using Google Maps.
+          zoom: 15,
         }}
         mapType={'satellite'}>
         {markers.map((marker, index) => (
@@ -72,29 +106,22 @@ export default function PetaScreen({ navigation }: RootTabScreenProps<'Peta'>) {
           </Marker>
         ))}
       </MapView>
-    </View>
+    </SafeAreaView>
   );
-
-  function setFullscreen() {
-    styles.map.height = '100%';
-    styles.map.width = '100%';
-  }
 }
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     paddingVertical: 40,
     paddingHorizontal: 25,
     backgroundColor: '#180950',
-    paddingBottom: 100,
   },
   // Before Map
   title: {
     fontFamily: 'raleway-700',
     marginHorizontal: 60,
     marginBottom: 20,
-    marginTop: 40,
     fontSize: 22,
     color: '#FFFFFF',
     textAlign: 'center',

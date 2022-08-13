@@ -3,14 +3,15 @@ import * as Location from 'expo-location';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function OnboardingScreen({ navigation }: RootStackScreenProps<'Onboarding'>) {
   return (
-    <View style={styles.wrapper}>
-      <ImageBackground
-        source={require('../assets/images/onboarding-bg.png')}
-        style={styles.imageBg}
-        resizeMode="cover">
+    <ImageBackground
+      source={require('../assets/images/onboarding-bg.png')}
+      style={styles.imageBg}
+      resizeMode="cover">
+      <SafeAreaView style={styles.wrapper}>
         <View style={styles.textContainer}>
           <Text style={styles.title}>Temukan lokasi strategis lahan wakaf !</Text>
           <Text style={styles.description}>
@@ -28,8 +29,8 @@ export default function OnboardingScreen({ navigation }: RootStackScreenProps<'O
         <TouchableOpacity onPress={() => navigation.replace('Login')} style={styles.link}>
           <Text style={styles.nextText}>Selanjutnya</Text>
         </TouchableOpacity>
-      </ImageBackground>
-    </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 

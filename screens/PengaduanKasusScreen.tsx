@@ -5,13 +5,14 @@ import * as DocumentPicker from 'expo-document-picker';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import { SetStateAction, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<'Kasus'>) {
   const [typeKasus, setTypeKasus] = useState(0);
   const [isAnonim, setIsAnonim] = useState(false);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
@@ -83,7 +84,7 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 
   function RadioButton(props: any) {
@@ -129,6 +130,7 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
       </TouchableOpacity>
     );
   }
+
   function RadioButtonAnonim(props: any) {
     return (
       <TouchableOpacity
@@ -179,7 +181,6 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     paddingHorizontal: 25,
     backgroundColor: '#180950',
-    paddingBottom: 100,
   },
   title: {
     fontFamily: 'raleway-700',
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingVertical: 15,
+    paddingVertical: 20,
   },
   panduanText: {
     textAlign: 'right',
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     fontFamily: 'poppins-500',
     fontSize: 10,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   isi: {
     backgroundColor: '#FFF',
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontFamily: 'poppins-500',
     fontSize: 10,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   deskripsi: {
     backgroundColor: '#FFF',
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontFamily: 'poppins-500',
     fontSize: 10,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   tanggal: {
     backgroundColor: '#FFF',
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     fontFamily: 'poppins-500',
     fontSize: 10,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   lokasi: {
     backgroundColor: '#FFF',
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     fontFamily: 'poppins-500',
     fontSize: 10,
-    marginBottom: 5,
+    marginBottom: 10,
   },
   footer: {
     backgroundColor: 'transparent',

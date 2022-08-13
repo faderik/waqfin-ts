@@ -1,6 +1,7 @@
 import { Entypo } from '@expo/vector-icons';
 import { useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ImageBackground, Image, TextInput } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
@@ -20,14 +21,14 @@ export default function PanduanKasusScreen({ navigation }: RootStackScreenProps<
   }, []);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Text style={styles.title}>Panduan Pengaduan Kasus</Text>
       <Text style={styles.deskripsi}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Magna quisque a augue.
       </Text>
 
       <Image source={require('../assets/images/panduan-img.png')} style={styles.panduanImg} />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -65,3 +65,10 @@ export type StoreState = {
   isLoading: boolean;
   isSignOut: boolean;
 };
+
+export type WakafLoc = {
+  id: number;
+  img: string;
+  latlng: { latitude: number; longitude: number };
+  address: { main: string; detail: string };
+};

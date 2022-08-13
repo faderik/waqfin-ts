@@ -4,6 +4,15 @@ import { FontAwesome, Entypo } from '@expo/vector-icons';
 
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+function formatRupiah(nominal: number) {
+  const format = nominal.toString().split('').reverse().join('');
+  const convert = format.match(/\d{1,3}/g);
+  const rupiah = 'Rp ' + convert?.join('.').split('').reverse().join('');
+
+  return rupiah;
+}
 
 export default function BerandaScreen({ navigation }: RootTabScreenProps<'Beranda'>) {
   const [topPatungan, setTopPatungan] = useState<
@@ -40,9 +49,10 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
         'lahan wakaf yang sangat strategis di samping jalan, cocok untuk dijadikan sekolah ataupun pondok pesantren',
     },
   ]);
+  const balance = Math.floor(Math.random() * 11300000);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <View style={styles.header}>
         <View style={styles.headerText}>
           <Text style={styles.title}>Let's</Text>
@@ -56,39 +66,41 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
           <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
         </TouchableOpacity>
       </View>
-      <View style={styles.balanceBox}>
-        <FontAwesome
-          size={20}
-          style={{ color: '#8C959B' }}
-          name="qrcode"
-          onPress={() => {
-            console.log('Opening QR Scanner');
-          }}
-        />
-        <View style={styles.line} />
-        <Entypo size={20} style={{ color: '#8CA068' }} name="wallet" />
-        <Text style={styles.balanceText}>Rp 4.640.000</Text>
-        <View style={styles.addBtn}>
-          <FontAwesome size={10} style={{ color: '#50B8E7' }} name="bank" />
-          <Text style={styles.addText}>Transfer</Text>
+      <ScrollView style={{ marginTop: 20 }} showsVerticalScrollIndicator={false}>
+        <View style={styles.balanceBox}>
+          <FontAwesome
+            size={20}
+            style={{ color: '#8C959B' }}
+            name="qrcode"
+            onPress={() => {
+              console.log('Opening QR Scanner');
+            }}
+          />
+          <View style={styles.line} />
+          <Entypo size={20} style={{ color: '#8CA068' }} name="wallet" />
+          <Text style={styles.balanceText}>{formatRupiah(balance)}</Text>
+          <View style={styles.addBtn}>
+            <FontAwesome size={10} style={{ color: '#50B8E7' }} name="bank" />
+            <Text style={styles.addText}>Transfer</Text>
+          </View>
+          <View style={styles.addBtn}>
+            <FontAwesome size={10} style={{ color: '#50B8E7' }} name="plus" />
+            <Text style={styles.addText}>Top Up</Text>
+          </View>
         </View>
-        <View style={styles.addBtn}>
-          <FontAwesome size={10} style={{ color: '#50B8E7' }} name="plus" />
-          <Text style={styles.addText}>Top Up</Text>
+        <View style={styles.searchSection}>
+          <Image
+            source={require('../assets/images/logo-notext.png')}
+            style={{ width: 40, height: 40, marginRight: 10 }}
+            resizeMode="contain"
+          />
+          <View style={styles.formSearch}>
+            <TextInput style={styles.textInput} placeholder="Cari lahan wakaf" />
+            <FontAwesome name={'search'} size={12} style={styles.searchIcon} />
+          </View>
         </View>
-      </View>
-      <View style={styles.searchSection}>
-        <Image
-          source={require('../assets/images/logo-notext.png')}
-          style={{ width: 40, height: 40, marginRight: 10 }}
-          resizeMode="contain"
-        />
-        <View style={styles.formSearch}>
-          <TextInput style={styles.textInput} placeholder="Cari lahan wakaf" />
-          <FontAwesome name={'search'} size={12} style={styles.searchIcon} />
-        </View>
-      </View>
-      <ScrollView style={{ marginTop: 8 }} showsVerticalScrollIndicator={false}>
+
+        {/* Dibawah Search Box */}
         <View style={styles.exploreBox}>
           <Image
             source={require('../assets/images/patungan-img.png')}
@@ -155,10 +167,11 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             horizontal={true}
+            style={{ marginBottom: 100 }}
           />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 
   function _topPatunganRenderItem({
@@ -200,10 +213,10 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    paddingVertical: 40,
+    paddingVertical: 20,
     paddingHorizontal: 25,
     backgroundColor: '#180950',
-    paddingBottom: 100,
+    // paddingBottom: 100,
   },
   header: {
     display: 'flex',
@@ -239,7 +252,6 @@ const styles = StyleSheet.create({
     borderColor: '#FFFFFF',
   },
   balanceBox: {
-    marginTop: 20,
     flexDirection: 'row',
     padding: 10,
     backgroundColor: '#FFFFFF',
@@ -282,6 +294,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'transparent',
     alignItems: 'center',
+    marginVertical: 10,
   },
   textInput: {
     flex: 1,
@@ -314,7 +327,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 10,
     borderRadius: 5,
-    marginVertical: 4,
+    marginVertical: 6,
   },
   exploreImg: {
     height: '100%',
@@ -372,6 +385,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'transparent',
+    marginBottom: 10,
   },
   topItem: {
     flex: 1,

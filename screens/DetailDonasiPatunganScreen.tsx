@@ -1,13 +1,7 @@
 import { Entypo } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
-  Image,
-  TextInput,
-  ScrollView,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
@@ -32,7 +26,7 @@ export default function DetailDonasiPatunganScreen({
   }, []);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <ScrollView style={{ flex: 1, width: '100%', height: '100%' }}>
         {/* Sumary */}
         <View style={styles.sumaryBox}>
@@ -68,7 +62,7 @@ export default function DetailDonasiPatunganScreen({
           <PilihPembayaran />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 
   function PilihJumlah(props: any) {
@@ -127,42 +121,66 @@ export default function DetailDonasiPatunganScreen({
     let isSelected = props.pembayaranId == props.selected ? true : false;
     return (
       <TouchableOpacity
-        onPress={() => setPembayaran(props.pembayaranId)}
+        onPress={async () => {
+          let norp = jumlahDonasi.replace('Rp.', '');
+          let notitik = norp.replace('.', '');
+          let intDonasi = parseInt(notitik);
+
+          console.log('Jumlah Donasi:', intDonasi);
+
+          if (intDonasi < 50000) {
+            console.log('Minimum donasi adalah Rp.50.000');
+            return alert('Minimum donasi adalah Rp.50.000');
+          }
+
+          if (pembayaran != '') navigation.navigate('WakafSukses');
+          else {
+            console.log('Pilih metode pembayaran dulu');
+            return alert('Pilih metode pembayaran dulu');
+          }
+        }}
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          paddingVertical: 5,
+          paddingVertical: 10,
+          paddingHorizontal: 10,
           justifyContent: 'space-between',
+          borderWidth: 1,
+          borderColor: '#e6e6e6',
+          borderRadius: 5,
+          marginVertical: 5,
         }}>
-        <View
-          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <TouchableOpacity onPress={() => setPembayaran(props.pembayaranId)}>
           <View
-            style={{
-              height: 16,
-              width: 16,
-              borderRadius: 8,
-              borderWidth: 2,
-              borderColor: '#000',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginRight: 10,
-            }}>
-            {isSelected ? (
-              <View
-                style={{
-                  height: 8,
-                  width: 8,
-                  borderRadius: 4,
-                  backgroundColor: '#000',
-                }}
-              />
-            ) : null}
+            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View
+              style={{
+                height: 16,
+                width: 16,
+                borderRadius: 8,
+                borderWidth: 2,
+                borderColor: '#000',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: 10,
+              }}>
+              {isSelected ? (
+                <View
+                  style={{
+                    height: 8,
+                    width: 8,
+                    borderRadius: 4,
+                    backgroundColor: '#000',
+                  }}
+                />
+              ) : null}
+            </View>
+            <Image
+              source={props.logo}
+              style={{ alignSelf: 'flex-end', width: 50, resizeMode: 'contain' }}
+            />
           </View>
-          <Image
-            source={props.logo}
-            style={{ alignSelf: 'flex-end', width: 50, resizeMode: 'contain' }}
-          />
-        </View>
+        </TouchableOpacity>
         <Text style={{ fontFamily: 'poppins-600', fontSize: 12 }}>{props.jumlah}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text
@@ -180,22 +198,14 @@ export default function DetailDonasiPatunganScreen({
       </TouchableOpacity>
     );
   }
-
-  // function hasNumber(myString: string) {
-  //   return /\d/.test(myString);
-  // }
-
-  // // function addRp(value: string) {
-  // //   if (hasNumber(value))
-  // //     return value.includes('Rp.') ? setJumlahDonasi(value) : setJumlahDonasi('Rp.' + value);
-  // // }
 }
 
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    // paddingVertical: 20,
+    backgroundColor: '#FFF',
   },
   description: {
     fontSize: 12,

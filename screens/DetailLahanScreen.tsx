@@ -8,6 +8,7 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 import { Text, View } from '../components/Themed';
@@ -37,7 +38,7 @@ export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'
   }, []);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
@@ -116,16 +117,16 @@ export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'
           </View>
         </View>
         {/* Button */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.publishBtn}
           onPress={() => {
             console.log('Publishing...');
             navigation.push('WakafSukses');
           }}>
           <Text style={styles.publishText}>Publish</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 
   function _imgLahanRenderItem({ item, index }: { item: string; index: number }) {
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     paddingHorizontal: 30,
-    paddingVertical: 20,
+    // paddingVertical: 20,
     backgroundColor: '#FFF',
   },
   title: {

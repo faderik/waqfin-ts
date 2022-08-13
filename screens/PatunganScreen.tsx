@@ -4,6 +4,7 @@ import { FontAwesome, Entypo } from '@expo/vector-icons';
 import { Text, View } from '../components/Themed';
 import { Patungan, RootTabScreenProps } from '../types';
 import { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patungan'>) {
   const [patungan, setPatungan] = useState<Patungan[]>([
@@ -55,27 +56,24 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
   ]);
 
   return (
-    <View style={styles.wrapper}>
-      {/* <ScrollView
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        style={{ flex: 1 }}> */}
+    <SafeAreaView style={styles.wrapper}>
       <Text style={styles.title}>Bersama peduli sesama</Text>
       {/* Option Box */}
       <View style={styles.optionBox}>
-        <TouchableOpacity style={styles.optionItem}>
+        {/* <TouchableOpacity style={styles.optionItem}>
           <Image source={require('../assets/icons/category.png')} style={styles.optionIcon} />
           <Text style={styles.optionText}>Category</Text>
+          <Entypo size={10} color="#FFF" name="chevron-down" />
+        </TouchableOpacity> */}
+
+        <TouchableOpacity style={styles.optionItem}>
+          <Image source={require('../assets/icons/filter.png')} style={styles.optionIcon} />
+          <Text style={styles.optionText}>Filter</Text>
           <Entypo size={10} color="#FFF" name="chevron-down" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.optionItem}>
           <Image source={require('../assets/icons/sortby.png')} style={styles.optionIcon} />
           <Text style={styles.optionText}>Sort By</Text>
-          <Entypo size={10} color="#FFF" name="chevron-down" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.optionItem}>
-          <Image source={require('../assets/icons/filter.png')} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Filter</Text>
           <Entypo size={10} color="#FFF" name="chevron-down" />
         </TouchableOpacity>
       </View>
@@ -87,7 +85,7 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         showsVerticalScrollIndicator={false}
       />
       {/* </ScrollView> */}
-    </View>
+    </SafeAreaView>
   );
 
   function _patunganRenderItem({ item, index }: { item: Patungan; index: number }) {

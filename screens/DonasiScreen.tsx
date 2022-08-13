@@ -1,12 +1,14 @@
 import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } from 'react-native';
-import { FontAwesome, Entypo } from '@expo/vector-icons';
+import { FontAwesome, Entypo, Feather } from '@expo/vector-icons';
 
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as DocumentPicker from 'expo-document-picker';
 
 export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'>) {
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
@@ -78,16 +80,32 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
           </View>
           <TextInput style={styles.textInput} />
         </View>
-        {/* Button Donate */}
-        <TouchableOpacity
-          style={styles.donateBtn}
-          onPress={() => {
-            console.log('Donating...');
-            navigation.navigate('WakafSukses');
-          }}>
-          <Image source={require('../assets/icons/donate.png')} style={styles.donateIcon} />
-          <Text style={styles.donateText}>Donate</Text>
-        </TouchableOpacity>
+        {/* Buttons */}
+        <View style={styles.buttons}>
+          {/* Insert PIctures */}
+          <TouchableOpacity
+            style={styles.insertPictureGroup}
+            onPress={async () => {
+              console.log('Opening file uploader...');
+              await DocumentPicker.getDocumentAsync().then((result) => {
+                console.log(result);
+              });
+            }}>
+            <Feather name="file-plus" size={20} color="#FFFFFF" />
+            <Entypo name="dot-single" size={15} color="#FF0000" style={styles.badgeIcon} />
+            <Text style={styles.uploadText}>Insert Pictures</Text>
+          </TouchableOpacity>
+          {/* Donate */}
+          <TouchableOpacity
+            style={styles.donateBtn}
+            onPress={() => {
+              console.log('Donating...');
+              navigation.navigate('WakafSukses');
+            }}>
+            <Image source={require('../assets/icons/donate.png')} style={styles.donateIcon} />
+            <Text style={styles.donateText}>Donate</Text>
+          </TouchableOpacity>
+        </View>
         {/* Show Additional Information */}
         <Text style={styles.infoTitle}>[+] Tampilkan informasi tambahan</Text>
         <Text style={styles.infoDesc}>
@@ -96,7 +114,7 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
           kami memelurkan informasi tambahan mengenai profil diri Anda.
         </Text>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -106,7 +124,6 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     paddingHorizontal: 25,
     backgroundColor: '#180950',
-    paddingBottom: 100,
   },
   title: {
     fontFamily: 'raleway-700',
@@ -149,7 +166,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     fontSize: 12,
-    // fontFamily: 'poppins-500',
   },
   donateBtn: {
     marginVertical: 20,
@@ -178,6 +194,31 @@ const styles = StyleSheet.create({
     fontFamily: 'poppins-500',
     fontSize: 10,
     color: '#FFFFFF',
-    marginBottom: 40,
+    marginBottom: 100,
+  },
+  buttons: {
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    paddingVertical: 5,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  insertPictureGroup: {
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingVertical: 20,
+  },
+  badgeIcon: {
+    marginLeft: -10,
+    marginTop: -10,
+    zIndex: 2,
+  },
+  uploadText: {
+    fontFamily: 'poppins-500',
+    fontSize: 11,
+    color: '#FFFFFF',
+    paddingVertical: 2,
   },
 });

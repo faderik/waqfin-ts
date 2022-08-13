@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { StyleSheet, TouchableOpacity, ImageBackground, Image, TextInput } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Clipboard from 'expo-clipboard';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 
 export default function WakafSuksesScreen({ navigation }: RootStackScreenProps<'WakafSukses'>) {
-  const [hash, setHash] = useState('dcd303b042a1a4972fcccdc0c244519ce78cd1f1904');
+  const [hash, setHash] = useState(makeHashCode(30));
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Text style={styles.title}>Wakaf Berhasil !</Text>
       <Text style={styles.description}>
         Terimakasih atas partisipasi anda untuk berwakaf. wakaf sudah tercatat pada sistem
@@ -30,8 +32,10 @@ export default function WakafSuksesScreen({ navigation }: RootStackScreenProps<'
           />
           <TouchableOpacity
             style={styles.copyBtn}
-            onPress={() => {
-              console.log('Copying Hash code...');
+            onPress={async () => {
+              console.log('Hash: ', hash);
+              await Clipboard.setStringAsync(hash);
+              alert('Hash code copied to clipboard');
               // Show litle popup succes copied
             }}>
             <Text style={styles.copyText}>Copy</Text>
@@ -46,24 +50,33 @@ export default function WakafSuksesScreen({ navigation }: RootStackScreenProps<'
         }}>
         <Text style={styles.homeText}>Back To Home</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
+
+  function makeHashCode(length: number) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 }
 
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    paddingVertical: 40,
-    paddingHorizontal: 25,
+    paddingHorizontal: 40,
     backgroundColor: '#180950',
-    paddingBottom: 100,
+    // paddingBottom: 100,
   },
   title: {
     fontFamily: 'raleway-700',
     fontSize: 30,
     color: '#FFFFFF',
     textAlign: 'center',
-    marginTop: 40,
+    marginTop: '20%',
     marginBottom: 10,
   },
   description: {

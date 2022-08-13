@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ImageBackground, Image, TextInput } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Text, View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
@@ -21,7 +22,7 @@ export default function ResetPasswordScreen({ navigation }: RootStackScreenProps
   }, []);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Text style={styles.description}>
         Enter the email associated with your account and we will send an email with instructions to
         reset your password.
@@ -44,7 +45,7 @@ export default function ResetPasswordScreen({ navigation }: RootStackScreenProps
         }}>
         <Text style={styles.sendText}>Send Instructions</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -52,7 +53,6 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     paddingHorizontal: 40,
-    paddingVertical: 20,
     backgroundColor: '#FFFFFF',
   },
   description: {

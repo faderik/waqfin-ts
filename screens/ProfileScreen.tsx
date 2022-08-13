@@ -7,6 +7,7 @@ import { Text, View } from '../components/Themed';
 import { host } from '../constants';
 import { AuthContext } from '../context';
 import { RootStackScreenProps } from '../types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProfileScreen({ navigation }: RootStackScreenProps<'Profile'>) {
   const { signOut } = useContext(AuthContext);
@@ -52,7 +53,7 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
   }, []);
 
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <Text style={styles.title}>My Profile</Text>
 
       <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
@@ -93,7 +94,7 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
         }}>
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
