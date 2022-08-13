@@ -19,10 +19,10 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
   const [showPwd, setShowPwd] = useState(false);
   const [showConfirmPwd, setShowConfirmPwd] = useState(false);
 
-  const [namaLengkap, setNamaLengkap] = useState(constants.name);
-  const [email, setEmail] = useState(constants.email);
-  const [password, setPassword] = useState(constants.pwd);
-  const [confirmPassword, setConfirmPassword] = useState(constants.pwd);
+  const [namaLengkap, setNamaLengkap] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const { signUp } = useContext(AuthContext);
 
