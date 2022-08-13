@@ -42,7 +42,7 @@ export default function CheckEmailScreen({ navigation }: RootStackScreenProps<'C
         style={styles.link}
         onPress={() => {
           console.log('Sending email...');
-          navigation.popToTop();
+          navigation.navigate('Login');
         }}>
         <Text style={styles.description}>Skip, I’ll confirm later</Text>
       </TouchableOpacity>
