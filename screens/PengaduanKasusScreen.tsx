@@ -311,6 +311,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 100,
   },
   uploadText: {
     fontFamily: 'poppins-500',

@@ -3,8 +3,7 @@ import { StoreState } from '../types';
 
 let storeState: StoreState = {
   userToken: null,
-  isLoading: true,
-  isSignOut: true,
+  wakafList: [],
 };
 
 const reducer = (state = storeState, action: PayloadAction<StoreState>) => {
@@ -13,19 +12,21 @@ const reducer = (state = storeState, action: PayloadAction<StoreState>) => {
       return {
         ...state,
         userToken: action.payload.userToken,
-        isLoading: false,
       };
     case 'SIGN_IN':
       return {
         ...state,
-        isSignout: false,
         userToken: action.payload.userToken,
       };
     case 'SIGN_OUT':
       return {
         ...state,
-        isSignout: true,
         userToken: null,
+      };
+    case 'SET_WAKAF_LIST':
+      return {
+        ...state,
+        wakafList: action.payload.wakafList,
       };
   }
 

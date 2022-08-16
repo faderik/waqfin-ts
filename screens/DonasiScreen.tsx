@@ -93,7 +93,7 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
             }}>
             <Feather name="file-plus" size={20} color="#FFFFFF" />
             <Entypo name="dot-single" size={15} color="#FF0000" style={styles.badgeIcon} />
-            <Text style={styles.uploadText}>Insert Pictures</Text>
+            <Text style={styles.uploadText}>Upload Lampiran</Text>
           </TouchableOpacity>
           {/* Donate */}
           <TouchableOpacity

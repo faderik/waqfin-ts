@@ -51,24 +51,51 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   NativeStackScreenProps<RootStackParamList>
 >;
 
-export type Patungan = {
-  progress: number;
-  wakif: number;
-  current: string;
-  lokasi: { main: string; detail: string };
-  luas: string;
-  owner: string;
-};
-
 export type StoreState = {
   userToken: string | null;
-  isLoading: boolean;
-  isSignOut: boolean;
+  wakafList: Wakaf[];
 };
 
 export type WakafLoc = {
   id: number;
   img: string;
+  harga: number | null;
+  luas: number | null;
+  initiator: string | null;
   latlng: { latitude: number; longitude: number };
   address: { main: string; detail: string };
+};
+
+export type Patungan = {
+  progress: number;
+  wakif: number;
+  current: string;
+  lokasi: { main: string; detail: string };
+  luas: number;
+  harga: number;
+  owner: string;
+};
+
+export type Wakaf = {
+  id: number;
+  namaDonatur: string;
+  alamatDonatur: string;
+  emailDonatur: string;
+  telpDonatur: string;
+
+  deskripsi: string;
+  lokasi: string;
+  luas: number;
+  harga: number;
+  keterangan: string;
+  lat: number;
+  lng: number;
+  type: string;
+  images: any;
+};
+
+export type TopPatungan = {
+  id: number;
+  address: { main: string; detail: string };
+  deskripsi: string;
 };

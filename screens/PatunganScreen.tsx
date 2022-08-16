@@ -1,9 +1,9 @@
 import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } from 'react-native';
-import { FontAwesome, Entypo } from '@expo/vector-icons';
+import { FontAwesome, Entypo, Feather, FontAwesome5 } from '@expo/vector-icons';
 
 import { Text, View } from '../components/Themed';
 import { Patungan, RootTabScreenProps } from '../types';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patungan'>) {
@@ -16,7 +16,8 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         detail:
           'Jl. Kampus UMK, Kayuapu Kulon, Gondangmanis, Kec. Bae, Kabupaten Kudus, Jawa Tengah 59327',
       },
-      luas: '590M2',
+      luas: 590,
+      harga: 125000,
       owner: 'Bpk. Parman Solekan',
       wakif: 120,
     },
@@ -27,7 +28,8 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         main: 'Keputih, Sukolilo',
         detail: 'Jl. Keputih Gg.IIB No.52, Surabaya, Jawa Timur, 66151',
       },
-      luas: '122 M2',
+      luas: 122,
+      harga: 280000,
       owner: 'Bpk. Aldi Saputra',
       wakif: 68,
     },
@@ -38,7 +40,8 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         main: 'Gebang, Sukolilo',
         detail: 'Jl. Gebang Gg.IIIC No.96, Surabaya, Jawa Timur, 66132',
       },
-      luas: '564 M2',
+      luas: 564,
+      harga: 10000,
       owner: 'Bpk. Yoga Maulana',
       wakif: 200,
     },
@@ -49,32 +52,65 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         main: 'Mulyosari, Sukolilo',
         detail: 'Jl. Mulyosari Gg.IA No.31, Surabaya, Jawa Timur, 66340',
       },
-      luas: '123 M2',
+      luas: 123,
+      harga: 820000,
       owner: 'Bpk. Deni Sumargo',
       wakif: 90,
     },
   ]);
+
+  const [harga, setHarga] = useState<'asc' | 'desc' | ''>('');
+  const [luas, setLuas] = useState<'asc' | 'desc' | ''>('');
+
+  const sortLuasPatungan = async (type: any) => {
+    setLuas(type);
+    patungan.sort((a, b) => {
+      return type == 'asc' ? a.luas - b.luas : b.luas - a.luas;
+    });
+  };
+  const sortHargaPatungan = async (type: any) => {
+    setHarga(type);
+    patungan.sort((a, b) => {
+      return type == 'asc' ? a.harga - b.harga : b.harga - a.harga;
+    });
+  };
+  const formatRupiah = (nominal: number) => {
+    const format = nominal.toString().split('').reverse().join('');
+    const convert = format.match(/\d{1,3}/g);
+    const rupiah = 'Rp ' + convert?.join('.').split('').reverse().join('');
+
+    return rupiah;
+  };
+  const ArrowIcon = (props: any) => {
+    if (props.type === 'asc' || props.type === 'desc') {
+      return (
+        <Feather name={props.type === 'asc' ? 'arrow-down' : 'arrow-up'} size={10} color={'#fff'} />
+      );
+    } else {
+      return <Entypo name={'select-arrows'} size={10} color={'#fff'} />;
+    }
+  };
 
   return (
     <SafeAreaView style={styles.wrapper}>
       <Text style={styles.title}>Bersama peduli sesama</Text>
       {/* Option Box */}
       <View style={styles.optionBox}>
-        {/* <TouchableOpacity style={styles.optionItem}>
-          <Image source={require('../assets/icons/category.png')} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Category</Text>
-          <Entypo size={10} color="#FFF" name="chevron-down" />
-        </TouchableOpacity> */}
-
-        <TouchableOpacity style={styles.optionItem}>
-          <Image source={require('../assets/icons/filter.png')} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Filter</Text>
-          <Entypo size={10} color="#FFF" name="chevron-down" />
+        <TouchableOpacity
+          style={styles.optionItem}
+          onPress={() => {
+            harga != 'asc' ? sortHargaPatungan('asc') : sortHargaPatungan('desc');
+          }}>
+          <Text style={styles.optionText}>Harga</Text>
+          <ArrowIcon type={harga} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.optionItem}>
-          <Image source={require('../assets/icons/sortby.png')} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Sort By</Text>
-          <Entypo size={10} color="#FFF" name="chevron-down" />
+        <TouchableOpacity
+          style={styles.optionItem}
+          onPress={() => {
+            luas != 'asc' ? sortLuasPatungan('asc') : sortLuasPatungan('desc');
+          }}>
+          <Text style={styles.optionText}>Luas Tanah</Text>
+          <ArrowIcon type={luas} />
         </TouchableOpacity>
       </View>
       {/* List Patungan */}
@@ -127,10 +163,7 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         {/* Detail */}
         <View style={styles.detailPatungan}>
           <View style={styles.detailLeft}>
-            <Image
-              source={require('../assets/icons/lokasi.png')}
-              style={styles.detailPatunganIcon}
-            />
+            <Entypo name="location-pin" size={20} color={'#fff'} />
           </View>
           <View style={styles.lokasi}>
             <Text style={styles.detailTitleText}>{item.lokasi.main}</Text>
@@ -139,16 +172,19 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         </View>
         <View style={styles.detailPatungan}>
           <View style={styles.detailLeft}>
-            <Image source={require('../assets/icons/luas.png')} style={styles.detailPatunganIcon} />
+            <Entypo name="price-tag" size={20} color={'#fff'} />
           </View>
-          <Text style={styles.detailTitleText}>{item.luas}</Text>
+          <Text style={styles.detailTitleText}>{formatRupiah(item.harga)}</Text>
         </View>
         <View style={styles.detailPatungan}>
           <View style={styles.detailLeft}>
-            <Image
-              source={require('../assets/icons/owner.png')}
-              style={styles.detailPatunganIcon}
-            />
+            <Entypo name="area-graph" size={18} color={'#fff'} />
+          </View>
+          <Text style={styles.detailTitleText}>{item.luas} M2</Text>
+        </View>
+        <View style={styles.detailPatungan}>
+          <View style={styles.detailLeft}>
+            <FontAwesome5 name="user-circle" size={20} color={'#fff'} />
           </View>
           <Text style={styles.detailTitleText}>{item.owner}</Text>
         </View>
@@ -186,22 +222,29 @@ const styles = StyleSheet.create({
   optionBox: {
     flexDirection: 'row',
     borderTopColor: '#FFF',
-    borderTopWidth: 1,
+    // borderTopWidth: 1,
     backgroundColor: 'transparent',
     padding: 5,
-    justifyContent: 'space-between',
-    marginBottom: 20,
+    justifyContent: 'space-evenly',
+    marginBottom: 10,
   },
   optionItem: {
     backgroundColor: 'transparenta',
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'center',
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: '#FFF',
+    marginHorizontal: 2,
+    flex: 1,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    justifyContent: 'center',
   },
   optionText: {
     color: '#FFFFFF',
-    fontFamily: 'poppins-500',
-    fontSize: 10,
+    fontFamily: 'poppins-400',
+    fontSize: 12,
     marginHorizontal: 5,
   },
   optionIcon: {
@@ -210,7 +253,7 @@ const styles = StyleSheet.create({
   },
   patunganItem: {
     backgroundColor: 'transparent',
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: '#FFFFFF',
     borderRadius: 10,
     padding: 15,

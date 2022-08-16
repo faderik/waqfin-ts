@@ -244,13 +244,14 @@ const DonasiButton = ({ children, onPress }: any) => (
       style={{ backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center' }}>
       <View style={styles.donasiBtn}>{children}</View>
       <Text style={{ color: '#FFFFFF', fontSize: 12, fontFamily: 'poppins-500', bottom: -6 }}>
-        DONASI
+        Donasi
       </Text>
     </View>
   </TouchableOpacity>
 );
 
 function BottomTabNavigator() {
+  const [bottomFontSize, setBottomFontSize] = React.useState(12);
   return (
     <BottomTab.Navigator
       initialRouteName="Beranda"
@@ -275,7 +276,12 @@ function BottomTabNavigator() {
                 resizeMode="contain"
                 style={{ width: 23, height: 23, tintColor: color, marginBottom: 0 }}
               />
-              <Text style={{ color: color, fontSize: 12, fontFamily: 'poppins-500' }}>Beranda</Text>
+              <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
+                style={{ color: color, fontSize: bottomFontSize, fontFamily: 'poppins-500' }}>
+                Beranda
+              </Text>
             </View>
           ),
           headerShown: false,
@@ -292,7 +298,12 @@ function BottomTabNavigator() {
                 resizeMode="contain"
                 style={{ width: 23, height: 23, tintColor: color, marginBottom: 0 }}
               />
-              <Text style={{ color: color, fontSize: 12, fontFamily: 'poppins-500' }}>Peta</Text>
+              <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
+                style={{ color: color, fontSize: bottomFontSize, fontFamily: 'poppins-500' }}>
+                Peta
+              </Text>
             </View>
           ),
           headerShown: false,
@@ -324,7 +335,13 @@ function BottomTabNavigator() {
                 resizeMode="contain"
                 style={{ width: 23, height: 23, tintColor: color, marginBottom: 0 }}
               />
-              <Text style={{ color: color, fontSize: 12, fontFamily: 'poppins-500' }}>
+              <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
+                onLayout={(e) => {
+                  setBottomFontSize((e.nativeEvent.layout.height / 20) * 12);
+                }}
+                style={{ color: color, fontSize: bottomFontSize, fontFamily: 'poppins-500' }}>
                 Patungan
               </Text>
             </View>
@@ -343,7 +360,12 @@ function BottomTabNavigator() {
                 resizeMode="contain"
                 style={{ width: 23, height: 23, tintColor: color, marginBottom: 0 }}
               />
-              <Text style={{ color: color, fontSize: 12, fontFamily: 'poppins-500' }}>Kasus</Text>
+              <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
+                style={{ color: color, fontSize: bottomFontSize, fontFamily: 'poppins-500' }}>
+                Kasus
+              </Text>
             </View>
           ),
           headerShown: false,

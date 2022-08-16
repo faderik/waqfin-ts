@@ -49,7 +49,7 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
         'lahan wakaf yang sangat strategis di samping jalan, cocok untuk dijadikan sekolah ataupun pondok pesantren',
     },
   ]);
-  const balance = Math.floor(Math.random() * 11300000);
+  const balance = Math.floor(Math.random() * 1234567890);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -68,25 +68,31 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
       </View>
       <ScrollView style={{ marginTop: 20 }} showsVerticalScrollIndicator={false}>
         <View style={styles.balanceBox}>
-          <FontAwesome
-            size={20}
-            style={{ color: '#8C959B' }}
-            name="qrcode"
-            onPress={() => {
-              console.log('Opening QR Scanner');
-            }}
-          />
-          <View style={styles.line} />
-          <Entypo size={20} style={{ color: '#8CA068' }} name="wallet" />
-          <Text style={styles.balanceText}>{formatRupiah(balance)}</Text>
-          <View style={styles.addBtn}>
-            <FontAwesome size={10} style={{ color: '#50B8E7' }} name="bank" />
-            <Text style={styles.addText}>Transfer</Text>
+          {/* <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1}}> */}
+          {/* <FontAwesome
+              size={20}
+              style={{ color: '#8C959B' }}
+              name="qrcode"
+              onPress={() => {
+                console.log('Opening QR Scanner');
+              }}
+            />
+            <View style={styles.line} /> */}
+          <View style={{ flexDirection: 'row' }}>
+            <Entypo size={20} style={{ color: '#8CA068' }} name="wallet" />
+            <Text style={styles.balanceText}>{formatRupiah(balance)}</Text>
           </View>
-          <View style={styles.addBtn}>
-            <FontAwesome size={10} style={{ color: '#50B8E7' }} name="plus" />
-            <Text style={styles.addText}>Top Up</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={styles.addBtn}>
+              <FontAwesome size={10} style={{ color: '#50B8E7' }} name="bank" />
+              <Text style={styles.addText}>Transfer</Text>
+            </View>
+            <View style={styles.addBtn}>
+              <FontAwesome size={10} style={{ color: '#50B8E7' }} name="plus" />
+              <Text style={styles.addText}>Top Up</Text>
+            </View>
           </View>
+          {/* </ScrollView> */}
         </View>
         <View style={styles.searchSection}>
           <Image
@@ -253,7 +259,7 @@ const styles = StyleSheet.create({
   },
   balanceBox: {
     flexDirection: 'row',
-    padding: 10,
+    padding: 8,
     backgroundColor: '#FFFFFF',
     borderRadius: 5,
     alignContent: 'center',
@@ -273,6 +279,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#000000',
     lineHeight: 20,
+    alignSelf: 'center',
   },
   addBtn: {
     flexDirection: 'row',
@@ -280,7 +287,7 @@ const styles = StyleSheet.create({
     borderColor: '#50B8E7',
     borderRadius: 5,
     padding: 5,
-    marginHorizontal: 5,
+    marginHorizontal: 2,
     alignItems: 'center',
     backgroundColor: 'transparent',
   },

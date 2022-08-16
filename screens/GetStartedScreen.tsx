@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { StyleSheet, TouchableOpacity, ImageBackground, Dimensions } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as SecureStore from 'expo-secure-store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function GetStartedScreen({ navigation }: RootStackScreenProps<'GetStarted'>) {
   const dispatch = useDispatch();
+  // console.log(Dimensions.get('screen').width, Dimensions.get('screen').height);
 
   const checkTokenAsync = async () => {
     let userToken;

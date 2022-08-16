@@ -1,6 +1,6 @@
 import { Entypo } from '@expo/vector-icons';
 import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
@@ -54,46 +54,52 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <Text style={styles.title}>My Profile</Text>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}>
+        <Text style={styles.title}>My Profile</Text>
 
-      <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
-      <View style={styles.profileBox}>
-        <Text style={styles.nameText}>{profile.name}</Text>
-        <Text style={styles.alamatText}>
-          Jl. Lkr. Utara, Kayuapu Kulon, Gondangmanis, Kec. Bae, Kabupaten Kudus, Jawa Tengah 59327
-        </Text>
-      </View>
+        <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
+        <View style={styles.profileBox}>
+          <Text style={styles.nameText}>{profile.name}</Text>
+          <Text style={styles.alamatText}>
+            Jl. Lkr. Utara, Kayuapu Kulon, Gondangmanis, Kec. Bae, Kabupaten Kudus, Jawa Tengah
+            59327
+          </Text>
+        </View>
 
-      {/* Buttons */}
-      <TouchableOpacity
-        style={styles.linkBtn}
-        onPress={() => {
-          console.log('Navigating to EditProfile');
-          // navigation.replace('EditProfile');
-        }}>
-        <Text style={styles.linkText}>Edit Profile</Text>
-        <Entypo name="chevron-right" size={10} color={'#FFF'} />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.linkBtn}
-        onPress={() => {
-          console.log('Navigating to Notifications');
-          // navigation.replace('Notifications');
-        }}>
-        <Text style={styles.linkText}>Notifications</Text>
-        <Entypo name="chevron-right" size={10} color={'#FFF'} />
-      </TouchableOpacity>
+        {/* Buttons */}
+        <TouchableOpacity
+          style={styles.linkBtn}
+          onPress={() => {
+            console.log('Navigating to EditProfile');
+            // navigation.replace('EditProfile');
+          }}>
+          <Text style={styles.linkText}>Edit Profile</Text>
+          <Entypo name="chevron-right" size={10} color={'#FFF'} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.linkBtn}
+          onPress={() => {
+            console.log('Navigating to Notifications');
+            // navigation.replace('Notifications');
+          }}>
+          <Text style={styles.linkText}>Notifications</Text>
+          <Entypo name="chevron-right" size={10} color={'#FFF'} />
+        </TouchableOpacity>
 
-      {/* Logout */}
-      <TouchableOpacity
-        style={styles.logoutBtn}
-        onPress={async () => {
-          console.log('Loging out...');
-          let res = await signOut();
-          navigation.replace('Login');
-        }}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
+        {/* Logout */}
+        <TouchableOpacity
+          style={styles.logoutBtn}
+          onPress={async () => {
+            console.log('Loging out...');
+            let res = await signOut();
+            navigation.replace('Login');
+          }}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -102,8 +108,9 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     paddingHorizontal: 40,
+    // paddingVertical: 40,
     backgroundColor: '#FFFFFF',
-    paddingBottom: 100,
+    // paddingBottom: 100,
   },
   title: {
     fontFamily: 'raleway-700',
@@ -164,6 +171,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '60%',
     alignSelf: 'center',
+    marginBottom: 100,
   },
   logoutText: {
     fontFamily: 'raleway-700',
