@@ -1,10 +1,12 @@
 import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesome, Entypo } from '@expo/vector-icons';
+import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
+import { RootTabScreenProps, TopPatungan } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { host } from '../constants';
 
 function formatRupiah(nominal: number) {
   const format = nominal.toString().split('').reverse().join('');
@@ -15,41 +17,50 @@ function formatRupiah(nominal: number) {
 }
 
 export default function BerandaScreen({ navigation }: RootTabScreenProps<'Beranda'>) {
-  const [topPatungan, setTopPatungan] = useState<
-    { lokasi: string; image: string; deskripsi: string }[]
-  >([
-    {
-      lokasi: 'Gebog',
-      image: 'https://placeimg.com/150/150/nature',
-      deskripsi:
-        'lahan wakaf yang sangat strategis di samping jalan, cocok untuk dijadikan sekolah ataupun pondok pesantren',
-    },
-    {
-      lokasi: 'Kaliwungu, Kudus',
-      image: 'https://placeimg.com/150/150/nature',
-      deskripsi:
-        'lahan dengan seluas 500 m@ yang berada pada pusat permukiman bisa menjadi solusi untuk pembangunan masjid',
-    },
-    {
-      lokasi: 'Keputih, Surabaya',
-      image: 'https://placeimg.com/150/150/nature',
-      deskripsi:
-        'lahan wakaf yang sangat strategis di samping jalan, cocok untuk dijadikan sekolah ataupun pondok pesantren',
-    },
-    {
-      lokasi: 'Pakuwon, Mulyosari',
-      image: 'https://placeimg.com/150/150/nature',
-      deskripsi:
-        'lahan dengan seluas 500 m@ yang berada pada pusat permukiman bisa menjadi solusi untuk pembangunan masjid',
-    },
-    {
-      lokasi: 'Deyeng, Kediri',
-      image: 'https://placeimg.com/150/150/nature',
-      deskripsi:
-        'lahan wakaf yang sangat strategis di samping jalan, cocok untuk dijadikan sekolah ataupun pondok pesantren',
-    },
-  ]);
+  const [topPatungan, setTopPatungan] = useState<TopPatungan[]>([]);
   const balance = Math.floor(Math.random() * 1234567890);
+
+  let wakafList: TopPatungan[] = [];
+
+  const getAllWakaf = async () => {
+    let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
+
+    fetch(host + '/wakaf', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + userToken,
+      },
+    })
+      .then((response) => response.json())
+      .then(async (response) => {
+        if (response.code != 200) {
+          console.log('ERR| ', response.message);
+        }
+
+        // console.log('WAKAFLIST| ', response.data);
+        let arr = response.data as [];
+        arr.forEach((wakaf: any) => {
+          if (wakaf.payments_count >= 2) {
+            wakafList.push({
+              deskripsi: wakaf.deskripsi,
+              image:
+                wakaf.images[0] ??
+                'https://placehold.jp/30/bbbbbb/000000/400x180.png?text=Picture+Not+Found',
+              lokasi: wakaf.lokasi,
+            });
+          }
+        });
+
+        console.log('DATA WAKAF LIST READY');
+        setTopPatungan(wakafList);
+      });
+  };
+
+  useEffect(() => {
+    getAllWakaf();
+  }, []);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -180,17 +191,19 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
     </SafeAreaView>
   );
 
-  function _topPatunganRenderItem({
-    item,
-    index,
-  }: {
-    item: { lokasi: string; image: string; deskripsi: string };
-    index: number;
-  }) {
+  function _topPatunganRenderItem({ item, index }: { item: TopPatungan; index: number }) {
     return (
       <View style={styles.topItem}>
         {/* <Image source={{ uri: 'https://placeimg.com/150/150/nature' }} style={styles.topItemImg} /> */}
-        <Image source={require('../assets/images/lahan-img.png')} style={styles.topItemImg} />
+        <Image
+          source={
+            { uri: item.image }
+            // item.image
+            //   ? { uri: item.image, width: 100, height: 100 }
+            //   : require('../assets/images/lahan-img.png')
+          }
+          style={styles.topItemImg}
+        />
         <View style={styles.topItemBox}>
           <View
             style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'transparent' }}>
@@ -404,6 +417,8 @@ const styles = StyleSheet.create({
   topItemImg: {
     resizeMode: 'cover',
     width: '100%',
+    maxHeight: 200,
+    minHeight: 200,
     flex: 1,
     borderRadius: 10,
   },
@@ -419,6 +434,7 @@ const styles = StyleSheet.create({
     fontFamily: 'raleway-700',
     fontSize: 12,
     color: '#150A42',
+    maxWidth: '85%',
   },
   topItemDesc: {
     flex: 1,

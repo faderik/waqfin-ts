@@ -1,63 +1,17 @@
 import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } from 'react-native';
 import { FontAwesome, Entypo, Feather, FontAwesome5 } from '@expo/vector-icons';
+import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
-import { Patungan, RootTabScreenProps } from '../types';
-import { ReactNode, useState } from 'react';
+import { Patungan, RootTabScreenProps, Wakaf } from '../types';
+import { ReactNode, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { host } from '../constants';
 
 export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patungan'>) {
-  const [patungan, setPatungan] = useState<Patungan[]>([
-    {
-      progress: 90,
-      current: 'Rp.955.670.200',
-      lokasi: {
-        main: 'Bae, Kudus',
-        detail:
-          'Jl. Kampus UMK, Kayuapu Kulon, Gondangmanis, Kec. Bae, Kabupaten Kudus, Jawa Tengah 59327',
-      },
-      luas: 590,
-      harga: 125000,
-      owner: 'Bpk. Parman Solekan',
-      wakif: 120,
-    },
-    {
-      progress: 65,
-      current: 'Rp.850.110.000',
-      lokasi: {
-        main: 'Keputih, Sukolilo',
-        detail: 'Jl. Keputih Gg.IIB No.52, Surabaya, Jawa Timur, 66151',
-      },
-      luas: 122,
-      harga: 280000,
-      owner: 'Bpk. Aldi Saputra',
-      wakif: 68,
-    },
-    {
-      progress: 21,
-      current: 'Rp.211.110.000',
-      lokasi: {
-        main: 'Gebang, Sukolilo',
-        detail: 'Jl. Gebang Gg.IIIC No.96, Surabaya, Jawa Timur, 66132',
-      },
-      luas: 564,
-      harga: 10000,
-      owner: 'Bpk. Yoga Maulana',
-      wakif: 200,
-    },
-    {
-      progress: 34,
-      current: 'Rp.21.110.000',
-      lokasi: {
-        main: 'Mulyosari, Sukolilo',
-        detail: 'Jl. Mulyosari Gg.IA No.31, Surabaya, Jawa Timur, 66340',
-      },
-      luas: 123,
-      harga: 820000,
-      owner: 'Bpk. Deni Sumargo',
-      wakif: 90,
-    },
-  ]);
+  const [patungan, setPatungan] = useState<Patungan[]>([]);
+
+  let wakafList: Patungan[] = [];
 
   const [harga, setHarga] = useState<'asc' | 'desc' | ''>('');
   const [luas, setLuas] = useState<'asc' | 'desc' | ''>('');
@@ -90,6 +44,49 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
       return <Entypo name={'select-arrows'} size={10} color={'#fff'} />;
     }
   };
+  const getAllWakaf = async () => {
+    let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
+
+    fetch(host + '/wakaf', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + userToken,
+      },
+    })
+      .then((response) => response.json())
+      .then(async (response) => {
+        if (response.code != 200) {
+          console.log('ERR| ', response.message);
+        }
+
+        // console.log('WAKAFLIST| ', response.data);
+        let arr = response.data as [];
+        arr.forEach((wakaf: any) => {
+          wakafList.push({
+            progress: Math.floor(wakaf.payments_count / wakaf.luas),
+            current: formatRupiah(wakaf.payments_count * wakaf.harga),
+            lokasi: {
+              main: 'Alamat',
+              detail: wakaf.lokasi,
+            },
+            luas: wakaf.luas,
+            harga: wakaf.harga,
+            owner: wakaf.nama_donatur,
+            wakif: wakaf.payments_count,
+            img: wakaf.images[0] ? wakaf.images[0] : '',
+          });
+        });
+
+        console.log('DATA WAKAF LIST READY');
+        setPatungan(wakafList);
+      });
+  };
+
+  useEffect(() => {
+    getAllWakaf();
+  }, []);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -130,7 +127,11 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         {/* <Image source={{ uri: 'https://placeimg.com/150/150/nature' }} style={styles.topItemImg} /> */}
         <View style={{ backgroundColor: 'transparent' }}>
           <Image
-            source={require('../assets/images/lahan-patungan-1.png')}
+            source={
+              item.img
+                ? { uri: item.img, width: 200, height: 100 }
+                : require('../assets/images/lahan-patungan-1.png')
+            }
             style={styles.patunganImg}
           />
           <TouchableOpacity
@@ -265,6 +266,8 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 10,
     marginBottom: 5,
+    minHeight: 150,
+    maxHeight: 150,
   },
   patunganLinker: {
     position: 'absolute',

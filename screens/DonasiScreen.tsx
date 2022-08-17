@@ -1,12 +1,42 @@
 import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } from 'react-native';
 import { FontAwesome, Entypo, Feather } from '@expo/vector-icons';
+import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
+import { RootTabScreenProps, Wakaf } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
+import { useState } from 'react';
+import { host } from '../constants';
 
 export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'>) {
+  const [typeDonasi, setTypeDonasi] = useState<'crowdfunding' | 'mandiri'>('crowdfunding');
+
+  const [nama, setNama] = useState('');
+  const [alamat, setAlamat] = useState('');
+  const [email, setEmail] = useState('');
+  const [telp, setTelp] = useState('');
+
+  const [desc, setDesc] = useState('');
+  const [loc, setLoc] = useState('');
+  const [luas, setLuas] = useState('');
+  const [harga, setHarga] = useState('');
+  const [ket, setKet] = useState('--');
+
+  // const [nama, setNama] = useState('Adi');
+  // const [alamat, setAlamat] = useState('Srengat');
+  // const [email, setEmail] = useState('adi@gmail.com');
+  // const [telp, setTelp] = useState('0814123132');
+
+  // const [desc, setDesc] = useState('Buat Pondok Pesantren');
+  // const [loc, setLoc] = useState('Dandong, Srengat, Blitar');
+  // const [luas, setLuas] = useState('123');
+  // const [harga, setHarga] = useState('120.000');
+  // const [ket, setKet] = useState('--');
+
+  const [imgName, setImgName] = useState('');
+  const [image, setImage] = useState<any>(null);
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <ScrollView
@@ -21,29 +51,66 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
             <Text style={styles.textLabel}>Nama Donatur</Text>
             <Entypo size={7} color="#FC2323" name="star" />
           </View>
-          <TextInput style={styles.textInput} />
+          <TextInput style={styles.textInput} value={nama} onChangeText={(text) => setNama(text)} />
         </View>
         <View style={styles.form}>
           <View style={styles.label}>
             <Text style={styles.textLabel}>Alamat</Text>
             <Entypo size={7} color="#FC2323" name="star" />
           </View>
-          <TextInput style={styles.textInput} />
+          <TextInput
+            style={styles.textInput}
+            value={alamat}
+            onChangeText={(text) => setAlamat(text)}
+          />
         </View>
         <View style={styles.form}>
           <View style={styles.label}>
             <Text style={styles.textLabel}>Email</Text>
             <Entypo size={7} color="#FC2323" name="star" />
           </View>
-          <TextInput style={styles.textInput} />
+          <TextInput
+            style={styles.textInput}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+          />
         </View>
         <View style={styles.form}>
           <View style={styles.label}>
             <Text style={styles.textLabel}>Telepon/Hp</Text>
             <Entypo size={7} color="#FC2323" name="star" />
           </View>
-          <TextInput style={styles.textInput} />
+          <TextInput style={styles.textInput} value={telp} onChangeText={(text) => setTelp(text)} />
         </View>
+
+        {/* Tipe Donasi */}
+        <View style={{ ...styles.form, marginTop: 10 }}>
+          <View style={styles.label}>
+            <Text style={styles.textLabel}>Tipe Donasi</Text>
+            <Entypo size={7} color="#FC2323" name="star" />
+          </View>
+          <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
+            <View
+              style={{
+                marginRight: 10,
+                backgroundColor: 'transparent',
+                flexDirection: 'row',
+              }}>
+              <RadioButton radioId={'crowdfunding'} selected={typeDonasi} />
+              <Text style={{ fontSize: 12, color: '#FFF' }}>Crowdfunding</Text>
+            </View>
+            <View
+              style={{
+                marginRight: 10,
+                backgroundColor: 'transparent',
+                flexDirection: 'row',
+              }}>
+              <RadioButton radioId={'mandiri'} selected={typeDonasi} />
+              <Text style={{ fontSize: 12, color: '#FFF' }}>Mandiri</Text>
+            </View>
+          </View>
+        </View>
+
         {/* Detail Wakaf */}
         <Text style={styles.legendText}>Detail Wakaf</Text>
         <View style={styles.form}>
@@ -51,34 +118,44 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
             <Text style={styles.textLabel}>Deskripsi</Text>
             <Entypo size={7} color="#FC2323" name="star" />
           </View>
-          <TextInput style={styles.textInput} />
+          <TextInput style={styles.textInput} value={desc} onChangeText={(text) => setDesc(text)} />
         </View>
         <View style={styles.form}>
           <View style={styles.label}>
             <Text style={styles.textLabel}>Lokasi Lahan</Text>
             <Entypo size={7} color="#FC2323" name="star" />
           </View>
-          <TextInput style={styles.textInput} />
+          <TextInput style={styles.textInput} value={loc} onChangeText={(text) => setLoc(text)} />
         </View>
         <View style={styles.form}>
           <View style={styles.label}>
             <Text style={styles.textLabel}>Luas Lahan</Text>
             <Entypo size={7} color="#FC2323" name="star" />
           </View>
-          <TextInput style={styles.textInput} />
+          <TextInput
+            style={styles.textInput}
+            keyboardType={'numeric'}
+            value={luas}
+            onChangeText={(text) => setLuas(text)}
+          />
         </View>
         <View style={styles.form}>
           <View style={styles.label}>
             <Text style={styles.textLabel}>Harga/m2</Text>
             <Entypo size={7} color="#FC2323" name="star" />
           </View>
-          <TextInput style={styles.textInput} />
+          <TextInput
+            style={styles.textInput}
+            keyboardType={'numeric'}
+            value={harga}
+            onChangeText={(text) => setHarga(text)}
+          />
         </View>
         <View style={styles.form}>
           <View style={styles.label}>
             <Text style={styles.textLabel}>Keterangan</Text>
           </View>
-          <TextInput style={styles.textInput} />
+          <TextInput style={styles.textInput} value={ket} onChangeText={(text) => setKet(text)} />
         </View>
         {/* Buttons */}
         <View style={styles.buttons}>
@@ -86,20 +163,18 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
           <TouchableOpacity
             style={styles.insertPictureGroup}
             onPress={async () => {
-              console.log('Opening file uploader...');
-              await DocumentPicker.getDocumentAsync().then((result) => {
-                console.log(result);
-              });
+              await takePhotoAsync();
             }}>
             <Feather name="file-plus" size={20} color="#FFFFFF" />
             <Entypo name="dot-single" size={15} color="#FF0000" style={styles.badgeIcon} />
-            <Text style={styles.uploadText}>Upload Lampiran</Text>
+            <Text style={styles.uploadText}>{imgName ? imgName : 'Upload Lampiran'}</Text>
           </TouchableOpacity>
           {/* Donate */}
           <TouchableOpacity
             style={styles.donateBtn}
-            onPress={() => {
+            onPress={async () => {
               console.log('Donating...');
+              await submitRequest();
               navigation.navigate('WakafSukses');
             }}>
             <Image source={require('../assets/icons/donate.png')} style={styles.donateIcon} />
@@ -116,6 +191,110 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
       </ScrollView>
     </SafeAreaView>
   );
+
+  function RadioButton(props: any) {
+    let isSelected = props.radioId == props.selected ? true : false;
+    return (
+      <TouchableOpacity
+        onPress={() => setTypeDonasi(props.radioId)}
+        style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View
+          style={{
+            height: 16,
+            width: 16,
+            borderRadius: 8,
+            borderWidth: 2,
+            borderColor: '#FFF',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginRight: 5,
+            backgroundColor: 'transparent',
+          }}>
+          {isSelected ? (
+            <View
+              style={{
+                height: 8,
+                width: 8,
+                borderRadius: 4,
+                backgroundColor: '#FFF',
+              }}
+            />
+          ) : null}
+        </View>
+        <Text
+          style={{
+            fontFamily: 'poppins-700',
+            fontSize: 12,
+            lineHeight: 18,
+            paddingVertical: 2,
+            color: '#000000',
+            // backgroundColor: 'red',
+          }}>
+          {props.label}
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+
+  async function takePhotoAsync() {
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+    });
+
+    if (result.cancelled) {
+      return;
+    }
+
+    // ImagePicker saves the taken photo to disk and returns a local URI to it
+    let localUri = result.uri;
+    let filename = localUri.split('/').pop() as string;
+    setImgName(filename.substring(0, 20) + '...');
+
+    // Infer the type of the image
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    let photo = { uri: localUri, name: filename, type };
+    setImage(photo);
+  }
+
+  async function submitRequest() {
+    const formData = new FormData();
+
+    formData.append('images[]', image);
+
+    formData.append('nama_donatur', nama);
+    formData.append('alamat_donatur', alamat);
+    formData.append('email_donatur', email);
+    formData.append('telp_donatur', telp);
+    formData.append('deskripsi', desc);
+    formData.append('lokasi', loc);
+    formData.append('luas', luas);
+    formData.append('harga', harga);
+    formData.append('keterangan', ket);
+
+    formData.append('type', typeDonasi);
+
+    let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
+
+    await fetch(host + '/wakaf', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization: 'Bearer ' + userToken,
+        Accept: 'application/json',
+        'content-type': 'multipart/form-data',
+      },
+      redirect: 'follow',
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log('Err:', error);
+      });
+  }
 }
 
 const styles = StyleSheet.create({

@@ -10,54 +10,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function PetaScreen({ navigation }: RootTabScreenProps<'Peta'>) {
   const [mapRef, setMapRef] = useState<any>();
-  const [markers, setMarkers] = useState<WakafLoc[]>([
-    {
-      id: 1,
-      latlng: { latitude: -6.802867, longitude: 110.82681 },
-      img: require('../assets/images/lahan-patungan-2.png'),
-      address: {
-        main: 'Getas Pajetan, Kudus',
-        detail:
-          'Jl. Dr. Lukmono Hadi No.1, Getas, Getas Pejaten, Kec. Jati, Kabupaten Kudus, Jawa Tengah 59317',
-      },
-    },
-    {
-      id: 2,
-      latlng: { latitude: -7.291057, longitude: 112.797651 },
-      img: require('../assets/images/lahan-patungan-1.png'),
-      address: {
-        main: 'Keputih, Surabaya',
-        detail: 'Surabaya, Keputih, Sukolilo, Surabaya City, East Java 60111',
-      },
-    },
-    {
-      id: 3,
-      latlng: { latitude: -7.194648, longitude: 107.666763 },
-      img: require('../assets/images/lahan-patungan-1.png'),
-      address: {
-        main: 'Kertasari, Bandung',
-        detail: 'Cibeureum, Kertasari, Bandung Regency, West Java',
-      },
-    },
-    {
-      id: 4,
-      latlng: { latitude: -7.001907, longitude: 113.201079 },
-      img: require('../assets/images/lahan-patungan-1.png'),
-      address: {
-        main: 'Banyuates, Madura',
-        detail: 'Tengginah Laok, Tolang, Banyuates, Sampang Regency, East Java',
-      },
-    },
-    {
-      id: 5,
-      latlng: { latitude: -7.154826, longitude: 107.003365 },
-      img: require('../assets/images/lahan-patungan-1.png'),
-      address: {
-        main: 'Takokak, Cianjur',
-        detail: 'Simpang, Takokak, Cianjur Regency, West Java',
-      },
-    },
-  ]);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -72,40 +24,17 @@ export default function PetaScreen({ navigation }: RootTabScreenProps<'Peta'>) {
         style={styles.map}
         initialCamera={{
           center: {
-            latitude: -6.802867,
-            longitude: 110.82681,
+            latitude: 0.0,
+            longitude: 115.0,
           },
           pitch: 1,
           heading: 1,
           // Only on iOS MapKit, in meters. The property is ignored by Google Maps.
           altitude: 1,
           // Only when using Google Maps.
-          zoom: 15,
+          zoom: 3,
         }}
-        mapType={'satellite'}>
-        {markers.map((marker, index) => (
-          <Marker key={index} coordinate={marker.latlng}>
-            <Callout tooltip={true}>
-              <View style={styles.callout}>
-                {/* <Text style={styles.imageWrapperAndroid}>
-                  <Image
-                    source={require('../assets/images/bca.png')}
-                    resizeMode="cover"
-                    style={styles.calloutImg}
-                  />
-                </Text> */}
-                <WebView
-                  style={styles.webview}
-                  source={{ uri: 'https://placeimg.com/230/100/nature' }}
-                />
-                <Text style={styles.mainAddress}>{marker.address.main}</Text>
-                <Text style={styles.detailAddress}>{marker.address.detail}</Text>
-                <Entypo name="triangle-down" size={30} color="#FFF" style={styles.down} />
-              </View>
-            </Callout>
-          </Marker>
-        ))}
-      </MapView>
+        mapType={'satellite'}></MapView>
     </SafeAreaView>
   );
 }

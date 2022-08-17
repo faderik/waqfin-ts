@@ -63,10 +63,7 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
         <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
         <View style={styles.profileBox}>
           <Text style={styles.nameText}>{profile.name}</Text>
-          <Text style={styles.alamatText}>
-            Jl. Lkr. Utara, Kayuapu Kulon, Gondangmanis, Kec. Bae, Kabupaten Kudus, Jawa Tengah
-            59327
-          </Text>
+          <Text style={styles.alamatText}>{profile.alamat ?? 'Alamat Belum Diatur'}</Text>
         </View>
 
         {/* Buttons */}

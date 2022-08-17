@@ -2,62 +2,26 @@ import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } 
 import { FontAwesome, Entypo, Feather, FontAwesome5 } from '@expo/vector-icons';
 import MapView, { Callout, Camera, Marker } from 'react-native-maps';
 import { WebView } from 'react-native-webview';
+import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps, WakafLoc } from '../types';
 import { SetStateAction, useEffect, useState } from 'react';
+import { host } from '../constants';
+
+function formatRupiah(nominal: number) {
+  const format = nominal.toString().split('').reverse().join('');
+  const convert = format.match(/\d{1,3}/g);
+  const rupiah = 'Rp ' + convert?.join('.').split('').reverse().join('');
+
+  return rupiah;
+}
 
 export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Peta'>) {
   const [mapRef, setMapRef] = useState<any>();
   const [searchResult, setSearchResult] = useState<WakafLoc[]>([]);
-  const [markers, setMarkers] = useState<WakafLoc[]>([
-    {
-      id: 1,
-      latlng: { latitude: -6.802867, longitude: 110.82681 },
-      img: require('../assets/images/lahan-patungan-2.png'),
-      address: {
-        main: 'Getas Pajetan, Kudus',
-        detail:
-          'Jl. Dr. Lukmono Hadi No.1, Getas, Getas Pejaten, Kec. Jati, Kabupaten Kudus, Jawa Tengah 59317',
-      },
-    },
-    {
-      id: 2,
-      latlng: { latitude: -7.291057, longitude: 112.797651 },
-      img: require('../assets/images/lahan-patungan-1.png'),
-      address: {
-        main: 'Keputih, Surabaya',
-        detail: 'Surabaya, Keputih, Sukolilo, Surabaya City, East Java 60111',
-      },
-    },
-    {
-      id: 3,
-      latlng: { latitude: -7.194648, longitude: 107.666763 },
-      img: require('../assets/images/lahan-patungan-1.png'),
-      address: {
-        main: 'Kertasari, Bandung',
-        detail: 'Cibeureum, Kertasari, Bandung Regency, West Java',
-      },
-    },
-    {
-      id: 4,
-      latlng: { latitude: -7.001907, longitude: 113.201079 },
-      img: require('../assets/images/lahan-patungan-1.png'),
-      address: {
-        main: 'Banyuates, Madura',
-        detail: 'Tengginah Laok, Tolang, Banyuates, Sampang Regency, East Java',
-      },
-    },
-    {
-      id: 5,
-      latlng: { latitude: -7.154826, longitude: 107.003365 },
-      img: require('../assets/images/lahan-patungan-1.png'),
-      address: {
-        main: 'Takokak, Cianjur',
-        detail: 'Simpang, Takokak, Cianjur Regency, West Java',
-      },
-    },
-  ]);
+  const [markers, setMarkers] = useState<WakafLoc[]>([]);
+  let wakafList: WakafLoc[] = [];
 
   useEffect(() => {
     navigation.setOptions({
@@ -72,7 +36,53 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
       // OR
       headerShown: false,
     });
+
+    getAllWakaf();
   }, []);
+
+  const getAllWakaf = async () => {
+    let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
+
+    fetch(host + '/wakaf', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + userToken,
+      },
+    })
+      .then((response) => response.json())
+      .then(async (response) => {
+        if (response.code != 200) {
+          console.log('ERR| ', response.message);
+        }
+
+        // console.log('WAKAFLIST| ', response.data);
+        let arr = response.data as [];
+        arr.forEach((wakaf: any) => {
+          wakafList.push({
+            id: wakaf.id,
+            address: {
+              main: 'Alamat',
+              detail: wakaf.lokasi,
+            },
+            harga: wakaf.harga,
+            img:
+              wakaf.images[0] ??
+              'https://placehold.jp/30/bbbbbb/000000/400x180.png?text=Picture+Not+Found',
+            initiator: wakaf.nama_donatur,
+            latlng: {
+              latitude: parseFloat(wakaf.latitude?.toString() ?? '0'),
+              longitude: parseFloat(wakaf.longitude?.toString() ?? '0'),
+            },
+            luas: wakaf.luas,
+          });
+        });
+
+        console.log('DATA WAKAF LIST READY');
+        setMarkers(wakafList);
+      });
+  };
 
   return (
     // Tidak perlu dikasi SafeAreaView karena Full Screen Map
@@ -98,10 +108,25 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
               <View style={styles.callout}>
                 <WebView
                   style={styles.webview}
-                  source={{ uri: 'https://placeimg.com/230/100/nature' }}
+                  source={
+                    { uri: marker.img }
+                    // marker.img ? { uri: marker.img } : require('../assets/images/lahan-img.png')
+                  }
                 />
-                <Text style={styles.mainAddress}>{marker.address.main}</Text>
-                <Text style={styles.detailAddress}>{marker.address.detail}</Text>
+                <Text style={styles.mainAddress}>{marker.initiator}</Text>
+                <View style={styles.groupDetailItem}>
+                  <Entypo style={styles.iconCallout} name="location-pin" size={16} color="#000" />
+                  <Text style={styles.detailAddress}>{marker.address.detail}</Text>
+                </View>
+                <View style={styles.groupDetailItem}>
+                  <Entypo style={styles.iconCallout} name="price-tag" size={16} color="#000" />
+                  <Text style={styles.detailAddress}>{formatRupiah(marker.harga)}</Text>
+                </View>
+                <View style={styles.groupDetailItem}>
+                  <Entypo style={styles.iconCallout} name="area-graph" size={16} color="#000" />
+                  <Text style={styles.detailAddress}>{marker.luas} M2</Text>
+                </View>
+
                 <Entypo name="triangle-down" size={30} color="#FFF" style={styles.down} />
               </View>
             </Callout>
@@ -135,7 +160,7 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
       />
 
       {/* Detail Section */}
-      <View style={styles.detailSection}>
+      {/* <View style={styles.detailSection}>
         <View style={styles.detailItem}>
           <Entypo name={'price-tag'} size={15} color={'#FFF'} />
           <Text style={styles.detailText}>1.500.000/M2</Text>
@@ -148,13 +173,13 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
           <FontAwesome5 name={'user-circle'} size={18} color={'#FFF'} />
           <Text style={styles.detailText}>Bp.Soleman</Text>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 
   function searchLocation(txt: string, locations: WakafLoc[]) {
     const searchResults = locations.filter((loc) => {
-      return loc.address.main.toLowerCase().includes(txt.toLowerCase());
+      return loc.address.detail.toLowerCase().includes(txt.toLowerCase());
     });
 
     setSearchResult(searchResults);
@@ -270,6 +295,9 @@ let styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 10,
   },
+  iconCallout: {
+    paddingRight: 10,
+  },
   calloutImg: {
     height: 200,
     width: 330,
@@ -295,12 +323,21 @@ let styles = StyleSheet.create({
   webview: {
     height: 100,
     width: 230,
+    resizeMode: 'contain',
     borderRadius: 10,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   down: {
     position: 'absolute',
     bottom: -20,
     alignSelf: 'center',
+  },
+  groupDetailItem: {
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
   },
 
   // Header Section

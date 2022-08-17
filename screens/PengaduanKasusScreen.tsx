@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } from 'react-native';
 import { FontAwesome, Entypo, Feather } from '@expo/vector-icons';
-import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
@@ -10,6 +10,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<'Kasus'>) {
   const [typeKasus, setTypeKasus] = useState(0);
   const [isAnonim, setIsAnonim] = useState(false);
+
+  const [imgName, setImgName] = useState('');
+  const [img, setImg] = useState<any>('');
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -60,9 +63,7 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
             style={styles.panduanGroup}
             onPress={async () => {
               console.log('Opening file uploader...');
-              await DocumentPicker.getDocumentAsync().then((result) => {
-                console.log(result);
-              });
+              await takePhotoAsync();
             }}>
             <Feather name="file-plus" size={20} color="#FFFFFF" />
             <Entypo name="dot-single" size={15} color="#FF0000" style={styles.badgeIcon} />
@@ -86,6 +87,28 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
       </ScrollView>
     </SafeAreaView>
   );
+
+  async function takePhotoAsync() {
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+    });
+
+    if (result.cancelled) {
+      return;
+    }
+
+    // ImagePicker saves the taken photo to disk and returns a local URI to it
+    let localUri = result.uri;
+    let filename = localUri.split('/').pop() as string;
+    setImgName(filename.substring(0, 20) + '...');
+
+    // Infer the type of the image
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    let photo = { uri: localUri, name: filename, type };
+    setImg(photo);
+  }
 
   function RadioButton(props: any) {
     let isSelected = props.radioId == props.selected ? true : false;

@@ -59,9 +59,9 @@ export type StoreState = {
 export type WakafLoc = {
   id: number;
   img: string;
-  harga: number | null;
-  luas: number | null;
-  initiator: string | null;
+  harga: number;
+  luas: number;
+  initiator: string;
   latlng: { latitude: number; longitude: number };
   address: { main: string; detail: string };
 };
@@ -74,6 +74,7 @@ export type Patungan = {
   luas: number;
   harga: number;
   owner: string;
+  img: string;
 };
 
 export type Wakaf = {
@@ -95,7 +96,7 @@ export type Wakaf = {
 };
 
 export type TopPatungan = {
-  id: number;
-  address: { main: string; detail: string };
+  lokasi: string;
+  image: string;
   deskripsi: string;
 };
