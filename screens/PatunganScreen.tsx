@@ -19,13 +19,13 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
   const sortLuasPatungan = async (type: any) => {
     setLuas(type);
     patungan.sort((a, b) => {
-      return type == 'asc' ? a.luas - b.luas : b.luas - a.luas;
+      return type == 'asc' ? b.luas - a.luas : a.luas - b.luas;
     });
   };
   const sortHargaPatungan = async (type: any) => {
     setHarga(type);
     patungan.sort((a, b) => {
-      return type == 'asc' ? a.harga - b.harga : b.harga - a.harga;
+      return type == 'asc' ? b.harga - a.harga : a.harga - b.harga;
     });
   };
   const formatRupiah = (nominal: number) => {
@@ -65,6 +65,7 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         let arr = response.data as [];
         arr.forEach((wakaf: any) => {
           wakafList.push({
+            id: wakaf.id,
             progress: Math.floor(wakaf.payments_count / wakaf.luas),
             current: formatRupiah(wakaf.payments_count * wakaf.harga),
             lokasi: {
@@ -138,7 +139,7 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
             style={styles.patunganLinker}
             onPress={() => {
               console.log('Navigating to Detail Lahan...');
-              navigation.navigate('DetailLahan');
+              navigation.navigate('DetailLahan', { id: item.id } as any);
             }}>
             <Image source={require('../assets/icons/linker.png')} />
           </TouchableOpacity>

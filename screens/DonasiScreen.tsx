@@ -237,8 +237,8 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
   }
 
   async function takePhotoAsync() {
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
     });
 
     if (result.cancelled) {

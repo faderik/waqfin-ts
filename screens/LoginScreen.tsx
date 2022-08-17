@@ -19,10 +19,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'>) {
   const [showPwd, setShowPwd] = useState(false);
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-  const [email, setEmail] = useState(constants.email);
-  const [password, setPassword] = useState(constants.pwd);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState(constants.email);
+  // const [password, setPassword] = useState(constants.pwd);
 
   const { signIn } = useContext(AuthContext);
 

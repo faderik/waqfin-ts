@@ -44,6 +44,7 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
         arr.forEach((wakaf: any) => {
           if (wakaf.payments_count >= 2) {
             wakafList.push({
+              id: wakaf.id,
               deskripsi: wakaf.deskripsi,
               image:
                 wakaf.images[0] ??
@@ -219,7 +220,7 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
             style={styles.topExploreBtn}
             onPress={() => {
               console.log('Navigating to Detail Lahan...');
-              navigation.navigate('DetailLahan');
+              navigation.navigate('DetailLahan', { id: item.id } as any);
             }}>
             <Text style={styles.topExploreText}>Explore Now</Text>
           </TouchableOpacity>

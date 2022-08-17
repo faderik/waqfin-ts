@@ -67,6 +67,7 @@ export type WakafLoc = {
 };
 
 export type Patungan = {
+  id: number;
   progress: number;
   wakif: number;
   current: string;
@@ -80,22 +81,17 @@ export type Patungan = {
 export type Wakaf = {
   id: number;
   namaDonatur: string;
-  alamatDonatur: string;
-  emailDonatur: string;
-  telpDonatur: string;
 
   deskripsi: string;
   lokasi: string;
   luas: number;
   harga: number;
-  keterangan: string;
-  lat: number;
-  lng: number;
   type: string;
-  images: any;
+  // images: any;
 };
 
 export type TopPatungan = {
+  id: number;
   lokasi: string;
   image: string;
   deskripsi: string;

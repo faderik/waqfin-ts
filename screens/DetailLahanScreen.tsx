@@ -10,12 +10,17 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
 import Layout from '../constants/Layout';
-import { RootStackScreenProps } from '../types';
+import { RootStackScreenProps, Wakaf } from '../types';
+import { host } from '../constants';
 
-export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'DetailLahan'>) {
+export default function DetailLahanScreen({
+  navigation,
+  route,
+}: RootStackScreenProps<'DetailLahan'>) {
   const [imgLahanList, setImgLahanList] = useState<string[]>([
     'https://placeimg.com/300/300/nature',
     'https://placeimg.com/300/300/nature',
@@ -23,6 +28,7 @@ export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'
     'https://placeimg.com/300/300/nature',
   ]);
   const [activeImg, setActiveImg] = useState(0);
+  const [wakaf, setWakaf] = useState<Wakaf>();
 
   useEffect(() => {
     navigation.setOptions({
@@ -35,7 +41,52 @@ export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'
       headerTintColor: '#000000',
       headerStyle: { backgroundColor: 'transparent' },
     });
+    getDetailLahan();
   }, []);
+
+  const getDetailLahan = async () => {
+    const { id } = route.params as any;
+    console.log('ID: ', id);
+
+    let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
+
+    fetch(host + '/wakaf/' + id, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + userToken,
+      },
+    })
+      .then((response) => response.json())
+      .then(async (response) => {
+        if (response.code != 200) {
+          console.log('ERR| ', response.message);
+        }
+
+        // ! TODO: PENTING MENGGANTI INI KARENA API BELUM READY
+        let wakaf0 = response.data[id];
+
+        let wakaf: Wakaf = {
+          id: wakaf0.id,
+          deskripsi: wakaf0.deskripsi,
+          harga: wakaf0.harga,
+          lokasi: wakaf0.lokasi,
+          luas: wakaf0.luas,
+          namaDonatur: wakaf0.nama_donatur,
+          type: wakaf0.type,
+        };
+
+        setWakaf(wakaf);
+        if (wakaf0.images == []) setImgLahanList(wakaf0.images);
+        else
+          setImgLahanList([
+            'https://placehold.jp/30/bbbbbb/000000/400x180.png?text=Picture+Not+Found',
+          ]);
+
+        console.log('DATA WAKAF IS READY');
+      });
+  };
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -72,14 +123,7 @@ export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'
           />
         </View>
         {/* Deskripsi */}
-        <Text style={styles.description}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse turpis ante
-          pellentesque scelerisque venenatis. At vel pellentesque purus sit orci etiam nunc urna.
-          Nisl, nec amet velit ut consequat egestas bibendum arcu amet. Neque pharetra semper sed
-          est ut porttitor. Turpis in morbi elit mus mus ac. Pellentesque aenean ornare quis
-          donec.Nunc dapibus diam auctor donec ut. Cursus cursus diam odio nulla volutpat nec,
-          bibendum orci, duis. Odio ut.
-        </Text>
+        <Text style={styles.description}>{wakaf?.deskripsi}</Text>
         {/* Detail */}
         <View style={styles.detail}>
           <View style={styles.detailPatungan}>
@@ -90,11 +134,8 @@ export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'
               />
             </View>
             <View style={styles.lokasi}>
-              <Text style={styles.detailTitleText}>Keputih, Sukolilo</Text>
-              <Text style={styles.lokasiDetail}>
-                Jl. Kampus UMK, Kayuapu Kulon, Gondangmanis, Kec. Bae, Kabupaten Kudus, Jawa Tengah
-                59327
-              </Text>
+              <Text style={styles.detailTitleText}>Alamat</Text>
+              <Text style={styles.lokasiDetail}>{wakaf?.lokasi}</Text>
             </View>
           </View>
           <View style={styles.detailPatungan}>
@@ -104,7 +145,7 @@ export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'
                 style={styles.detailPatunganIcon}
               />
             </View>
-            <Text style={styles.detailTitleText}>590 M2</Text>
+            <Text style={styles.detailTitleText}>{wakaf?.luas} M2</Text>
           </View>
           <View style={styles.detailPatungan}>
             <View style={styles.detailLeft}>
@@ -113,7 +154,7 @@ export default function DetailLahanScreen({ navigation }: RootStackScreenProps<'
                 style={styles.detailPatunganIcon}
               />
             </View>
-            <Text style={styles.detailTitleText}>Bpk. Parman Solekan</Text>
+            <Text style={styles.detailTitleText}>{wakaf?.namaDonatur}</Text>
           </View>
         </View>
         {/* Button */}

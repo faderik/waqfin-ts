@@ -89,7 +89,7 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
   );
 
   async function takePhotoAsync() {
-    let result = await ImagePicker.launchCameraAsync({
+    let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
     });
 
