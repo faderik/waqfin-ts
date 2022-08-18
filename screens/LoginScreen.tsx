@@ -12,10 +12,12 @@ import { useContext, useState } from 'react';
 import { Entypo } from '@expo/vector-icons';
 
 import { Text, View } from '../components/Themed';
-import { RootStackScreenProps } from '../types';
+import { RootStackScreenProps, StoreState } from '../types';
 import { AuthContext } from '../context';
 import * as constants from '../constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import LoadingScreen from '../components/LoadingScreen';
+import { useSelector } from 'react-redux';
 
 export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'>) {
   const [showPwd, setShowPwd] = useState(false);
@@ -25,6 +27,7 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
   // const [password, setPassword] = useState(constants.pwd);
 
   const { signIn } = useContext(AuthContext);
+  const isLoading = useSelector((state: StoreState) => state.isLoading);
 
   return (
     <ImageBackground
@@ -116,6 +119,7 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
           </View>
         </View>
       </SafeAreaView>
+      {isLoading && <LoadingScreen background="#aeaeae90" color="blue" />}
     </ImageBackground>
   );
 }

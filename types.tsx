@@ -54,6 +54,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 export type StoreState = {
   userToken: string | null;
   wakafList: Wakaf[];
+  isLoading: boolean;
 };
 
 export type WakafLoc = {

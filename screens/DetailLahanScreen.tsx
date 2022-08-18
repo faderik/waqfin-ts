@@ -14,8 +14,10 @@ import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
 import Layout from '../constants/Layout';
-import { RootStackScreenProps, Wakaf } from '../types';
+import { RootStackScreenProps, StoreState, Wakaf } from '../types';
 import { host } from '../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function DetailLahanScreen({
   navigation,
@@ -25,7 +27,12 @@ export default function DetailLahanScreen({
   const [activeImg, setActiveImg] = useState(0);
   const [wakaf, setWakaf] = useState<Wakaf>();
 
-  useEffect(() => {
+  const isLoading = useSelector((state: StoreState) => state.isLoading);
+  const dispatch = useDispatch();
+
+  const initScreen = async () => {
+    dispatch({ type: 'SET_LOADING_BEGIN' });
+
     navigation.setOptions({
       headerTitle: '',
       headerTitleStyle: {
@@ -36,7 +43,12 @@ export default function DetailLahanScreen({
       headerTintColor: '#000000',
       headerStyle: { backgroundColor: 'transparent' },
     });
+
     getDetailLahan();
+  };
+
+  useEffect(() => {
+    initScreen();
   }, []);
 
   const getDetailLahan = async () => {
@@ -74,87 +86,93 @@ export default function DetailLahanScreen({
         };
 
         setWakaf(wakaf);
-        if (wakafRes.images != []) setImgLahanList(wakafRes.images);
-        else
+
+        if (wakafRes.images[0]) {
+          setImgLahanList(wakafRes.images);
+        } else
           setImgLahanList([
             'https://placehold.jp/30/bbbbbb/000000/400x180.png?text=Picture+Not+Found',
           ]);
 
         console.log('DATA WAKAF IS READY');
       });
+
+    dispatch({ type: 'SET_LOADING_END' });
   };
 
+  if (isLoading) return <LoadingScreen background="#FFF" color="blue" />;
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        style={{ flex: 1 }}>
-        <View
-          style={{
-            alignItems: 'center',
-            backgroundColor: 'transparent',
-          }}>
-          <Carousel
-            layout="default"
-            // layoutCardOffset={10}
-            data={imgLahanList}
-            sliderWidth={Layout.window.width}
-            itemWidth={Layout.window.width - 30 * 2}
-            renderItem={_imgLahanRenderItem}
-            onSnapToItem={(index: React.SetStateAction<number>) => setActiveImg(index)}
-          />
-          <Pagination
-            dotsLength={imgLahanList.length}
-            activeDotIndex={activeImg}
-            dotStyle={{
-              width: 5,
-              height: 5,
-              borderRadius: 5,
-              backgroundColor: '#8D8C8C',
-              marginHorizontal: -40,
-            }}
-            inactiveDotScale={0.8}
-            containerStyle={{ marginVertical: -20 }}
-          />
-        </View>
-        {/* Deskripsi */}
-        <Text style={styles.description}>{wakaf?.deskripsi}</Text>
-        {/* Detail */}
-        <View style={styles.detail}>
-          <View style={styles.detailPatungan}>
-            <View style={styles.detailLeft}>
-              <Image
-                source={require('../assets/icons/lokasi.png')}
-                style={styles.detailPatunganIcon}
-              />
+    <>
+      <SafeAreaView style={styles.wrapper}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          style={{ flex: 1 }}>
+          <View
+            style={{
+              alignItems: 'center',
+              backgroundColor: 'transparent',
+            }}>
+            <Carousel
+              layout="default"
+              // layoutCardOffset={10}
+              data={imgLahanList}
+              sliderWidth={Layout.window.width}
+              itemWidth={Layout.window.width - 30 * 2}
+              renderItem={_imgLahanRenderItem}
+              onSnapToItem={(index: React.SetStateAction<number>) => setActiveImg(index)}
+            />
+            <Pagination
+              dotsLength={imgLahanList.length}
+              activeDotIndex={activeImg}
+              dotStyle={{
+                width: 5,
+                height: 5,
+                borderRadius: 5,
+                backgroundColor: '#8D8C8C',
+                marginHorizontal: -40,
+              }}
+              inactiveDotScale={0.8}
+              containerStyle={{ marginVertical: -20 }}
+            />
+          </View>
+          {/* Deskripsi */}
+          <Text style={styles.description}>{wakaf?.deskripsi}</Text>
+          {/* Detail */}
+          <View style={styles.detail}>
+            <View style={styles.detailPatungan}>
+              <View style={styles.detailLeft}>
+                <Image
+                  source={require('../assets/icons/lokasi.png')}
+                  style={styles.detailPatunganIcon}
+                />
+              </View>
+              <View style={styles.lokasi}>
+                <Text style={styles.detailTitleText}>Alamat</Text>
+                <Text style={styles.lokasiDetail}>{wakaf?.lokasi}</Text>
+              </View>
             </View>
-            <View style={styles.lokasi}>
-              <Text style={styles.detailTitleText}>Alamat</Text>
-              <Text style={styles.lokasiDetail}>{wakaf?.lokasi}</Text>
+            <View style={styles.detailPatungan}>
+              <View style={styles.detailLeft}>
+                <Image
+                  source={require('../assets/icons/luas.png')}
+                  style={styles.detailPatunganIcon}
+                />
+              </View>
+              <Text style={styles.detailTitleText}>{wakaf?.luas} M2</Text>
+            </View>
+            <View style={styles.detailPatungan}>
+              <View style={styles.detailLeft}>
+                <Image
+                  source={require('../assets/icons/owner.png')}
+                  style={styles.detailPatunganIcon}
+                />
+              </View>
+              <Text style={styles.detailTitleText}>{wakaf?.namaDonatur}</Text>
             </View>
           </View>
-          <View style={styles.detailPatungan}>
-            <View style={styles.detailLeft}>
-              <Image
-                source={require('../assets/icons/luas.png')}
-                style={styles.detailPatunganIcon}
-              />
-            </View>
-            <Text style={styles.detailTitleText}>{wakaf?.luas} M2</Text>
-          </View>
-          <View style={styles.detailPatungan}>
-            <View style={styles.detailLeft}>
-              <Image
-                source={require('../assets/icons/owner.png')}
-                style={styles.detailPatunganIcon}
-              />
-            </View>
-            <Text style={styles.detailTitleText}>{wakaf?.namaDonatur}</Text>
-          </View>
-        </View>
-        {/* Button */}
-        {/* <TouchableOpacity
+          {/* Button */}
+          {/* <TouchableOpacity
           style={styles.publishBtn}
           onPress={() => {
             console.log('Publishing...');
@@ -162,8 +180,10 @@ export default function DetailLahanScreen({
           }}>
           <Text style={styles.publishText}>Publish</Text>
         </TouchableOpacity> */}
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+      {/* {isLoading && <LoadingScreen background="#00000090" color="blue" />} */}
+    </>
   );
 
   function _imgLahanRenderItem({ item, index }: { item: string; index: number }) {

@@ -4,6 +4,7 @@ import { StoreState } from '../types';
 let storeState: StoreState = {
   userToken: null,
   wakafList: [],
+  isLoading: false,
 };
 
 const reducer = (state = storeState, action: PayloadAction<StoreState>) => {
@@ -27,6 +28,16 @@ const reducer = (state = storeState, action: PayloadAction<StoreState>) => {
       return {
         ...state,
         wakafList: action.payload.wakafList,
+      };
+    case 'SET_LOADING_BEGIN':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'SET_LOADING_END':
+      return {
+        ...state,
+        isLoading: false,
       };
   }
 

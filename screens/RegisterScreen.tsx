@@ -11,10 +11,12 @@ import { useContext, useState } from 'react';
 import { FontAwesome, Entypo } from '@expo/vector-icons';
 
 import { Text, View } from '../components/Themed';
-import { RootStackScreenProps } from '../types';
+import { RootStackScreenProps, StoreState } from '../types';
 import { AuthContext } from '../context';
 import * as constants from '../constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function RegisterScreen({ navigation }: RootStackScreenProps<'Register'>) {
   const [showPwd, setShowPwd] = useState(false);
@@ -26,6 +28,7 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const { signUp } = useContext(AuthContext);
+  const isLoading = useSelector((state: StoreState) => state.isLoading);
 
   return (
     <ImageBackground
@@ -131,6 +134,7 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
           </View>
         </View>
       </SafeAreaView>
+      {isLoading && <LoadingScreen background="#aeaeae90" color="blue" />}
     </ImageBackground>
   );
 }

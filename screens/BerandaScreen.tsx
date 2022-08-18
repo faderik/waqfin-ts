@@ -4,9 +4,11 @@ import { FontAwesome, Entypo } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps, TopPatungan } from '../types';
+import { RootTabScreenProps, StoreState, TopPatungan } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { host } from '../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import LoadingScreen from '../components/LoadingScreen';
 
 function formatRupiah(nominal: number) {
   const format = nominal.toString().split('').reverse().join('');
@@ -20,9 +22,14 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
   const [topPatungan, setTopPatungan] = useState<TopPatungan[]>([]);
   const balance = Math.floor(Math.random() * 1234567890);
 
+  const isLoading = useSelector((state: StoreState) => state.isLoading);
+  const dispatch = useDispatch();
+
   let wakafList: TopPatungan[] = [];
 
   const getAllWakaf = async () => {
+    dispatch({ type: 'SET_LOADING_BEGIN' });
+
     let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
 
     fetch(host + '/wakaf', {
@@ -57,6 +64,8 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
         console.log('DATA WAKAF LIST READY');
         setTopPatungan(wakafList);
       });
+
+    dispatch({ type: 'SET_LOADING_END' });
   };
 
   useEffect(() => {
@@ -64,132 +73,125 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
   }, []);
 
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <View style={styles.header}>
-        <View style={styles.headerText}>
-          <Text style={styles.title}>Let's</Text>
-          <Text style={styles.subtitle}>Share Happiness!</Text>
+    <>
+      <SafeAreaView style={styles.wrapper}>
+        <View style={styles.header}>
+          <View style={styles.headerText}>
+            <Text style={styles.title}>Let's</Text>
+            <Text style={styles.subtitle}>Share Happiness!</Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              console.log('Navigating to Profile...');
+              navigation.navigate('Profile');
+            }}>
+            <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => {
-            console.log('Navigating to Profile...');
-            navigation.navigate('Profile');
-          }}>
-          <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
-        </TouchableOpacity>
-      </View>
-      <ScrollView style={{ marginTop: 20 }} showsVerticalScrollIndicator={false}>
-        <View style={styles.balanceBox}>
-          {/* <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1}}> */}
-          {/* <FontAwesome
-              size={20}
-              style={{ color: '#8C959B' }}
-              name="qrcode"
-              onPress={() => {
-                console.log('Opening QR Scanner');
-              }}
+        <ScrollView style={{ marginTop: 20 }} showsVerticalScrollIndicator={false}>
+          <View style={styles.balanceBox}>
+            <View style={{ flexDirection: 'row' }}>
+              <Entypo size={20} style={{ color: '#8CA068' }} name="wallet" />
+              <Text style={styles.balanceText}>{formatRupiah(balance)}</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.addBtn}>
+                <FontAwesome size={10} style={{ color: '#50B8E7' }} name="bank" />
+                <Text style={styles.addText}>Transfer</Text>
+              </View>
+              <View style={styles.addBtn}>
+                <FontAwesome size={10} style={{ color: '#50B8E7' }} name="plus" />
+                <Text style={styles.addText}>Top Up</Text>
+              </View>
+            </View>
+            {/* </ScrollView> */}
+          </View>
+          <View style={styles.searchSection}>
+            <Image
+              source={require('../assets/images/logo-notext.png')}
+              style={{ width: 40, height: 40, marginRight: 10 }}
+              resizeMode="contain"
             />
-            <View style={styles.line} /> */}
-          <View style={{ flexDirection: 'row' }}>
-            <Entypo size={20} style={{ color: '#8CA068' }} name="wallet" />
-            <Text style={styles.balanceText}>{formatRupiah(balance)}</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={styles.addBtn}>
-              <FontAwesome size={10} style={{ color: '#50B8E7' }} name="bank" />
-              <Text style={styles.addText}>Transfer</Text>
-            </View>
-            <View style={styles.addBtn}>
-              <FontAwesome size={10} style={{ color: '#50B8E7' }} name="plus" />
-              <Text style={styles.addText}>Top Up</Text>
+            <View style={styles.formSearch}>
+              <TextInput style={styles.textInput} placeholder="Cari lahan wakaf" />
+              <FontAwesome name={'search'} size={12} style={styles.searchIcon} />
             </View>
           </View>
-          {/* </ScrollView> */}
-        </View>
-        <View style={styles.searchSection}>
-          <Image
-            source={require('../assets/images/logo-notext.png')}
-            style={{ width: 40, height: 40, marginRight: 10 }}
-            resizeMode="contain"
-          />
-          <View style={styles.formSearch}>
-            <TextInput style={styles.textInput} placeholder="Cari lahan wakaf" />
-            <FontAwesome name={'search'} size={12} style={styles.searchIcon} />
-          </View>
-        </View>
 
-        {/* Dibawah Search Box */}
-        <View style={styles.exploreBox}>
-          <Image
-            source={require('../assets/images/patungan-img.png')}
-            style={styles.exploreImg}
-            resizeMode="contain"
-          />
-          <View style={styles.exploreRight}>
-            <Text style={styles.exploreTitle}>Patungan Wakaf</Text>
-            <Text style={styles.exploreDesc}>
-              Dengan uang 100.000 pun kamu bisa bersedakah wakaf.
-            </Text>
-            <TouchableOpacity
-              style={styles.exploreBtn}
-              onPress={() => {
-                console.log('Exploring Patungan...');
-                navigation.navigate('Patungan');
-              }}>
-              <Text style={styles.exploreText}>Explore Now</Text>
-            </TouchableOpacity>
+          {/* Dibawah Search Box */}
+          <View style={styles.exploreBox}>
+            <Image
+              source={require('../assets/images/patungan-img.png')}
+              style={styles.exploreImg}
+              resizeMode="contain"
+            />
+            <View style={styles.exploreRight}>
+              <Text style={styles.exploreTitle}>Patungan Wakaf</Text>
+              <Text style={styles.exploreDesc}>
+                Dengan uang 100.000 pun kamu bisa bersedakah wakaf.
+              </Text>
+              <TouchableOpacity
+                style={styles.exploreBtn}
+                onPress={() => {
+                  console.log('Exploring Patungan...');
+                  navigation.navigate('Patungan');
+                }}>
+                <Text style={styles.exploreText}>Explore Now</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View style={styles.exploreBox}>
-          <Image
-            source={require('../assets/images/donasi-img.png')}
-            style={styles.exploreImg}
-            resizeMode="contain"
-          />
-          <View style={styles.exploreRight}>
-            <Text style={styles.exploreTitle}>Donasi Wakaf</Text>
-            <Text style={styles.exploreDesc}>
-              Sisihkan harta tanahmu untuk melihat mereka tersenyum.
-            </Text>
-            <TouchableOpacity
-              style={styles.exploreBtn}
-              onPress={() => {
-                console.log('Exploring Donasi...');
-                navigation.navigate('Donasi');
-              }}>
-              <Text style={styles.exploreText}>Explore Now</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.topSection}>
-          <View style={styles.topHeader}>
-            <Text style={styles.topTitle}>Top Patungan</Text>
-            <TouchableOpacity
-              style={{ flexDirection: 'row', alignItems: 'center' }}
-              onPress={() => {
-                navigation.navigate('Patungan');
-              }}>
-              <Text style={styles.seeAllText}>See all</Text>
-              <FontAwesome
-                name={'arrow-right'}
-                size={10}
-                style={{ marginLeft: 5, color: '#FFFFFF', marginBottom: 2 }}
-              />
-            </TouchableOpacity>
+          <View style={styles.exploreBox}>
+            <Image
+              source={require('../assets/images/donasi-img.png')}
+              style={styles.exploreImg}
+              resizeMode="contain"
+            />
+            <View style={styles.exploreRight}>
+              <Text style={styles.exploreTitle}>Donasi Wakaf</Text>
+              <Text style={styles.exploreDesc}>
+                Sisihkan harta tanahmu untuk melihat mereka tersenyum.
+              </Text>
+              <TouchableOpacity
+                style={styles.exploreBtn}
+                onPress={() => {
+                  console.log('Exploring Donasi...');
+                  navigation.navigate('Donasi');
+                }}>
+                <Text style={styles.exploreText}>Explore Now</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
-          <FlatList
-            data={topPatungan}
-            renderItem={_topPatunganRenderItem}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            horizontal={true}
-            style={{ marginBottom: 100 }}
-          />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          <View style={styles.topSection}>
+            <View style={styles.topHeader}>
+              <Text style={styles.topTitle}>Top Patungan</Text>
+              <TouchableOpacity
+                style={{ flexDirection: 'row', alignItems: 'center' }}
+                onPress={() => {
+                  navigation.navigate('Patungan');
+                }}>
+                <Text style={styles.seeAllText}>See all</Text>
+                <FontAwesome
+                  name={'arrow-right'}
+                  size={10}
+                  style={{ marginLeft: 5, color: '#FFFFFF', marginBottom: 2 }}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <FlatList
+              data={topPatungan}
+              renderItem={_topPatunganRenderItem}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              horizontal={true}
+              style={{ marginBottom: 100 }}
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+      {isLoading && <LoadingScreen background="#18095090" color="#FFF" />}
+    </>
   );
 
   function _topPatunganRenderItem({ item, index }: { item: TopPatungan; index: number }) {

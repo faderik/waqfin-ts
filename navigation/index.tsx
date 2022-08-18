@@ -8,7 +8,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Platform, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  ColorSchemeName,
+  Platform,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import { useMemo } from 'react';
@@ -44,6 +52,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   const authContext = useMemo(
     () => ({
       signIn: async (email: string, password: string) => {
+        dispatch({ type: 'SET_LOADING_BEGIN' });
         return fetch(host + '/login', {
           method: 'POST',
           headers: {
@@ -57,6 +66,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
           .then(async (response) => {
             if (response.code != 200) {
               console.log('ERR| ', response.message);
+              dispatch({ type: 'SET_LOADING_END' });
               return response;
             } else {
               console.log('TOKEN| ', response.data.token);
@@ -71,15 +81,18 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 
             // Persist the token using `SecureStore`
             await SecureStore.setItemAsync('USERTOKEN', userToken);
+            dispatch({ type: 'SET_LOADING_END' });
 
             return response;
           })
           .catch((err) => {
-            // Add exception handler HERE
+            dispatch({ type: 'SET_LOADING_END' });
+            Alert.alert('Error', 'Something went wrong');
             console.error(err);
           });
       },
       signOut: async () => {
+        dispatch({ type: 'SET_LOADING_BEGIN' });
         let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
 
         dispatch({ type: 'SIGN_OUT' });
@@ -102,16 +115,21 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
           .then((response) => response.json())
           .then(async (response) => {
             if (response.code != 200) {
-              console.log('ERR| ', response.message);
+              Alert.alert('Error', response.message);
+
+              dispatch({ type: 'SET_LOADING_END' });
               return response;
             } else {
               console.log('OUT| ', response.message);
             }
 
+            dispatch({ type: 'SET_LOADING_END' });
             return response;
           });
       },
       signUp: async (name: string, email: string, password: string, confirmPassword: string) => {
+        dispatch({ type: 'SET_LOADING_BEGIN' });
+
         return fetch(host + '/register', {
           method: 'POST',
           headers: {
@@ -125,6 +143,8 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
           .then(async (response) => {
             if (response.code != 200) {
               console.log('ERR| ', response.message);
+
+              dispatch({ type: 'SET_LOADING_END' });
               return response;
             } else {
               console.log('TOKEN| ', response.data.token);
@@ -140,10 +160,12 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
             // Persist the token using `SecureStore`
             await SecureStore.setItemAsync('USERTOKEN', userToken);
 
+            dispatch({ type: 'SET_LOADING_END' });
             return response;
           })
           .catch((err) => {
-            // Add exception handler HERE
+            dispatch({ type: 'SET_LOADING_END' });
+            Alert.alert('Error', 'Something went wrong');
             console.error(err);
           });
       },

@@ -6,14 +6,21 @@ import * as SecureStore from 'expo-secure-store';
 import { Text, View } from '../components/Themed';
 import { host } from '../constants';
 import { AuthContext } from '../context';
-import { RootStackScreenProps } from '../types';
+import { RootStackScreenProps, StoreState } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function ProfileScreen({ navigation }: RootStackScreenProps<'Profile'>) {
   const { signOut } = useContext(AuthContext);
   const [profile, setProfile] = useState<any>({});
 
+  const isLoading = useSelector((state: StoreState) => state.isLoading);
+  const dispatch = useDispatch();
+
   const getProfile = async () => {
+    dispatch({ type: 'SET_LOADING_BEGIN' });
+
     let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
 
     fetch(host + '/profile', {
@@ -35,6 +42,7 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
         setProfile(response.data);
         return response;
       });
+    dispatch({ type: 'SET_LOADING_END' });
   };
 
   useEffect(() => {
@@ -53,51 +61,54 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
   }, []);
 
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        style={{ flex: 1 }}>
-        <Text style={styles.title}>My Profile</Text>
+    <>
+      <SafeAreaView style={styles.wrapper}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          style={{ flex: 1 }}>
+          <Text style={styles.title}>My Profile</Text>
 
-        <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
-        <View style={styles.profileBox}>
-          <Text style={styles.nameText}>{profile.name}</Text>
-          <Text style={styles.alamatText}>{profile.alamat ?? 'Alamat Belum Diatur'}</Text>
-        </View>
+          <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
+          <View style={styles.profileBox}>
+            <Text style={styles.nameText}>{profile.name}</Text>
+            <Text style={styles.alamatText}>{profile.alamat ?? 'Alamat Belum Diatur'}</Text>
+          </View>
 
-        {/* Buttons */}
-        <TouchableOpacity
-          style={styles.linkBtn}
-          onPress={() => {
-            console.log('Navigating to EditProfile');
-            // navigation.replace('EditProfile');
-          }}>
-          <Text style={styles.linkText}>Edit Profile</Text>
-          <Entypo name="chevron-right" size={10} color={'#FFF'} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.linkBtn}
-          onPress={() => {
-            console.log('Navigating to Notifications');
-            // navigation.replace('Notifications');
-          }}>
-          <Text style={styles.linkText}>Notifications</Text>
-          <Entypo name="chevron-right" size={10} color={'#FFF'} />
-        </TouchableOpacity>
+          {/* Buttons */}
+          <TouchableOpacity
+            style={styles.linkBtn}
+            onPress={() => {
+              console.log('Navigating to EditProfile');
+              // navigation.replace('EditProfile');
+            }}>
+            <Text style={styles.linkText}>Edit Profile</Text>
+            <Entypo name="chevron-right" size={10} color={'#FFF'} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.linkBtn}
+            onPress={() => {
+              console.log('Navigating to Notifications');
+              // navigation.replace('Notifications');
+            }}>
+            <Text style={styles.linkText}>Notifications</Text>
+            <Entypo name="chevron-right" size={10} color={'#FFF'} />
+          </TouchableOpacity>
 
-        {/* Logout */}
-        <TouchableOpacity
-          style={styles.logoutBtn}
-          onPress={async () => {
-            console.log('Loging out...');
-            let res = await signOut();
-            navigation.replace('Login');
-          }}>
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
+          {/* Logout */}
+          <TouchableOpacity
+            style={styles.logoutBtn}
+            onPress={async () => {
+              console.log('Loging out...');
+              let res = await signOut();
+              navigation.replace('Login');
+            }}>
+            <Text style={styles.logoutText}>Logout</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </SafeAreaView>
+      {isLoading && <LoadingScreen background="#aeaeae90" color="blue" />}
+    </>
   );
 }
 

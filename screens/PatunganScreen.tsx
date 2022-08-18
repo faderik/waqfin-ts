@@ -3,10 +3,12 @@ import { FontAwesome, Entypo, Feather, FontAwesome5 } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
-import { Patungan, RootTabScreenProps, Wakaf } from '../types';
+import { Patungan, RootTabScreenProps, StoreState, Wakaf } from '../types';
 import { ReactNode, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { host } from '../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patungan'>) {
   const [patungan, setPatungan] = useState<Patungan[]>([]);
@@ -15,6 +17,9 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
 
   const [harga, setHarga] = useState<'asc' | 'desc' | ''>('');
   const [luas, setLuas] = useState<'asc' | 'desc' | ''>('');
+
+  const isLoading = useSelector((state: StoreState) => state.isLoading);
+  const dispatch = useDispatch();
 
   const sortLuasPatungan = async (type: any) => {
     setLuas(type);
@@ -45,6 +50,7 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
     }
   };
   const getAllWakaf = async () => {
+    dispatch({ type: 'SET_LOADING_BEGIN' });
     let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
 
     fetch(host + '/wakaf', {
@@ -84,6 +90,7 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
 
         console.log('DATA WAKAF LIST READY');
         setPatungan(wakafList);
+        dispatch({ type: 'SET_LOADING_END' });
       });
   };
 
@@ -92,36 +99,39 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
   }, []);
 
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <Text style={styles.title}>Bersama peduli sesama</Text>
-      {/* Option Box */}
-      <View style={styles.optionBox}>
-        <TouchableOpacity
-          style={styles.optionItem}
-          onPress={() => {
-            harga != 'asc' ? sortHargaPatungan('asc') : sortHargaPatungan('desc');
-          }}>
-          <Text style={styles.optionText}>Harga</Text>
-          <ArrowIcon type={harga} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.optionItem}
-          onPress={() => {
-            luas != 'asc' ? sortLuasPatungan('asc') : sortLuasPatungan('desc');
-          }}>
-          <Text style={styles.optionText}>Luas Tanah</Text>
-          <ArrowIcon type={luas} />
-        </TouchableOpacity>
-      </View>
-      {/* List Patungan */}
-      <FlatList
-        data={patungan}
-        renderItem={_patunganRenderItem}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-      />
-      {/* </ScrollView> */}
-    </SafeAreaView>
+    <>
+      <SafeAreaView style={styles.wrapper}>
+        <Text style={styles.title}>Bersama peduli sesama</Text>
+        {/* Option Box */}
+        <View style={styles.optionBox}>
+          <TouchableOpacity
+            style={styles.optionItem}
+            onPress={() => {
+              harga != 'asc' ? sortHargaPatungan('asc') : sortHargaPatungan('desc');
+            }}>
+            <Text style={styles.optionText}>Harga</Text>
+            <ArrowIcon type={harga} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.optionItem}
+            onPress={() => {
+              luas != 'asc' ? sortLuasPatungan('asc') : sortLuasPatungan('desc');
+            }}>
+            <Text style={styles.optionText}>Luas Tanah</Text>
+            <ArrowIcon type={luas} />
+          </TouchableOpacity>
+        </View>
+        {/* List Patungan */}
+        <FlatList
+          data={patungan}
+          renderItem={_patunganRenderItem}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+        />
+        {/* </ScrollView> */}
+      </SafeAreaView>
+      {isLoading && <LoadingScreen background="#18095090" color="#FFF" />}
+    </>
   );
 
   function _patunganRenderItem({ item, index }: { item: Patungan; index: number }) {

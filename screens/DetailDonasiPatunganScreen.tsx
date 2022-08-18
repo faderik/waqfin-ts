@@ -6,7 +6,9 @@ import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
 import { host } from '../constants';
-import { RootStackScreenProps, Wakaf } from '../types';
+import { RootStackScreenProps, StoreState, Wakaf } from '../types';
+import { useDispatch, useSelector } from 'react-redux';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function DetailDonasiPatunganScreen({
   navigation,
@@ -15,6 +17,9 @@ export default function DetailDonasiPatunganScreen({
   const [pembayaran, setPembayaran] = useState('');
   const [jumlahDonasi, setJumlahDonasi] = useState('Rp.0');
   const [wakaf, setWakaf] = useState<Wakaf>();
+
+  const isLoading = useSelector((state: StoreState) => state.isLoading);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     navigation.setOptions({
@@ -32,6 +37,8 @@ export default function DetailDonasiPatunganScreen({
   }, []);
 
   const getDetailLahan = async () => {
+    dispatch({ type: 'SET_LOADING_BEGIN' });
+
     const { id } = route.params as any;
     console.log('ID: ', id);
 
@@ -70,54 +77,59 @@ export default function DetailDonasiPatunganScreen({
         console.log('DATA WAKAF IS READY');
         setWakaf(wakaf);
       });
+    dispatch({ type: 'SET_LOADING_END' });
   };
 
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <ScrollView
-        style={{ flex: 1, width: '100%', height: '100%' }}
-        showsVerticalScrollIndicator={false}>
-        {/* Sumary */}
-        <View style={styles.sumaryBox}>
-          <Image source={{ uri: wakaf?.images }} style={styles.sumaryImg} />
+    <>
+      <SafeAreaView style={styles.wrapper}>
+        <ScrollView
+          style={{ flex: 1, width: '100%', height: '100%' }}
+          showsVerticalScrollIndicator={false}>
+          {/* Sumary */}
+          <View style={styles.sumaryBox}>
+            <Image source={{ uri: wakaf?.images }} style={styles.sumaryImg} />
 
-          <View style={styles.detailRight}>
-            <View style={styles.detailItem}>
-              <FontAwesome
-                name="user-circle-o"
-                size={15}
-                color="#FFF"
-                style={{ ...styles.detailIcon, marginHorizontal: 3 }}
-              />
-              <Text style={styles.lokasiMain}>{wakaf?.namaDonatur}</Text>
-            </View>
-            <View style={styles.detailItem}>
-              <Entypo name="location-pin" size={20} color="#FFF" style={styles.detailIcon} />
-              <Text style={styles.lokasiDetail}>{wakaf?.lokasi}</Text>
+            <View style={styles.detailRight}>
+              <View style={styles.detailItem}>
+                <FontAwesome
+                  name="user-circle-o"
+                  size={15}
+                  color="#FFF"
+                  style={{ ...styles.detailIcon, marginHorizontal: 3 }}
+                />
+                <Text style={styles.lokasiMain}>{wakaf?.namaDonatur}</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <Entypo name="location-pin" size={20} color="#FFF" style={styles.detailIcon} />
+                <Text style={styles.lokasiDetail}>{wakaf?.lokasi}</Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        <View style={{ backgroundColor: 'transparent', paddingHorizontal: 20, paddingBottom: 100 }}>
-          {/* Pilih Jumlah */}
-          <Text style={styles.legendText}>Pilih Jumlah</Text>
-          <PilihJumlah />
+          <View
+            style={{ backgroundColor: 'transparent', paddingHorizontal: 20, paddingBottom: 100 }}>
+            {/* Pilih Jumlah */}
+            <Text style={styles.legendText}>Pilih Jumlah</Text>
+            <PilihJumlah />
 
-          {/* OR */}
-          <Text style={styles.orText}>OR</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter price manually"
-            keyboardType="decimal-pad"
-            value={jumlahDonasi}
-            onChangeText={(text) => setJumlahDonasi(text)}
-          />
-          {/* Pilih Pembayaran */}
-          <Text style={styles.legendText}>Pilih Pembayaran</Text>
-          <PilihPembayaran />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+            {/* OR */}
+            <Text style={styles.orText}>OR</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter price manually"
+              keyboardType="decimal-pad"
+              value={jumlahDonasi}
+              onChangeText={(text) => setJumlahDonasi(text)}
+            />
+            {/* Pilih Pembayaran */}
+            <Text style={styles.legendText}>Pilih Pembayaran</Text>
+            <PilihPembayaran />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+      {isLoading && <LoadingScreen background="#aeaeae90" color="blue" />}
+    </>
   );
 
   function PilihJumlah(props: any) {
@@ -327,6 +339,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'column',
     marginLeft: 10,
+    flex: 1,
+    // width: '70%',
   },
   detailItem: {
     flexDirection: 'row',

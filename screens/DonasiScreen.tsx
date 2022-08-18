@@ -11,11 +11,13 @@ import { FontAwesome, Entypo, Feather } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps, Wakaf } from '../types';
+import { RootTabScreenProps, StoreState, Wakaf } from '../types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { host } from '../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'>) {
   const [typeDonasi, setTypeDonasi] = useState<'crowdfunding' | 'mandiri'>('crowdfunding');
@@ -47,158 +49,176 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
   const [imgName, setImgName] = useState('');
   const [image, setImage] = useState<any>(null);
 
+  const isLoading = useSelector((state: StoreState) => state.isLoading);
+  const dispatch = useDispatch();
+
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        style={{ flex: 1 }}>
-        <Text style={styles.title}>Sisihkan hartamu untuk wakaf</Text>
-        {/* Profil Donatur */}
-        <Text style={styles.legendText}>Profil Donatur</Text>
-        <View style={styles.form}>
-          <View style={styles.label}>
-            <Text style={styles.textLabel}>Nama Donatur</Text>
-            <Entypo size={7} color="#FC2323" name="star" />
-          </View>
-          <TextInput style={styles.textInput} value={nama} onChangeText={(text) => setNama(text)} />
-        </View>
-        <View style={styles.form}>
-          <View style={styles.label}>
-            <Text style={styles.textLabel}>Alamat</Text>
-            <Entypo size={7} color="#FC2323" name="star" />
-          </View>
-          <TextInput
-            style={styles.textInput}
-            value={alamat}
-            onChangeText={(text) => setAlamat(text)}
-          />
-        </View>
-        <View style={styles.form}>
-          <View style={styles.label}>
-            <Text style={styles.textLabel}>Email</Text>
-            <Entypo size={7} color="#FC2323" name="star" />
-          </View>
-          <TextInput
-            style={styles.textInput}
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
-        </View>
-        <View style={styles.form}>
-          <View style={styles.label}>
-            <Text style={styles.textLabel}>Telepon/Hp</Text>
-            <Entypo size={7} color="#FC2323" name="star" />
-          </View>
-          <TextInput style={styles.textInput} value={telp} onChangeText={(text) => setTelp(text)} />
-        </View>
-
-        {/* Tipe Donasi */}
-        <View style={{ ...styles.form, marginTop: 10 }}>
-          <View style={styles.label}>
-            <Text style={styles.textLabel}>Tipe Donasi</Text>
-            <Entypo size={7} color="#FC2323" name="star" />
-          </View>
-          <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
-            <View
-              style={{
-                marginRight: 10,
-                backgroundColor: 'transparent',
-                flexDirection: 'row',
-              }}>
-              <RadioButton radioId={'crowdfunding'} selected={typeDonasi} />
-              <Text style={{ fontSize: 12, color: '#FFF' }}>Crowdfunding</Text>
+    <>
+      <SafeAreaView style={styles.wrapper}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          style={{ flex: 1 }}>
+          <Text style={styles.title}>Sisihkan hartamu untuk wakaf</Text>
+          {/* Profil Donatur */}
+          <Text style={styles.legendText}>Profil Donatur</Text>
+          <View style={styles.form}>
+            <View style={styles.label}>
+              <Text style={styles.textLabel}>Nama Donatur</Text>
+              <Entypo size={7} color="#FC2323" name="star" />
             </View>
-            <View
-              style={{
-                marginRight: 10,
-                backgroundColor: 'transparent',
-                flexDirection: 'row',
-              }}>
-              <RadioButton radioId={'mandiri'} selected={typeDonasi} />
-              <Text style={{ fontSize: 12, color: '#FFF' }}>Mandiri</Text>
+            <TextInput
+              style={styles.textInput}
+              value={nama}
+              onChangeText={(text) => setNama(text)}
+            />
+          </View>
+          <View style={styles.form}>
+            <View style={styles.label}>
+              <Text style={styles.textLabel}>Alamat</Text>
+              <Entypo size={7} color="#FC2323" name="star" />
+            </View>
+            <TextInput
+              style={styles.textInput}
+              value={alamat}
+              onChangeText={(text) => setAlamat(text)}
+            />
+          </View>
+          <View style={styles.form}>
+            <View style={styles.label}>
+              <Text style={styles.textLabel}>Email</Text>
+              <Entypo size={7} color="#FC2323" name="star" />
+            </View>
+            <TextInput
+              style={styles.textInput}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+            />
+          </View>
+          <View style={styles.form}>
+            <View style={styles.label}>
+              <Text style={styles.textLabel}>Telepon/Hp</Text>
+              <Entypo size={7} color="#FC2323" name="star" />
+            </View>
+            <TextInput
+              style={styles.textInput}
+              value={telp}
+              onChangeText={(text) => setTelp(text)}
+            />
+          </View>
+
+          {/* Tipe Donasi */}
+          <View style={{ ...styles.form, marginTop: 10 }}>
+            <View style={styles.label}>
+              <Text style={styles.textLabel}>Tipe Donasi</Text>
+              <Entypo size={7} color="#FC2323" name="star" />
+            </View>
+            <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
+              <View
+                style={{
+                  marginRight: 10,
+                  backgroundColor: 'transparent',
+                  flexDirection: 'row',
+                }}>
+                <RadioButton radioId={'crowdfunding'} selected={typeDonasi} />
+                <Text style={{ fontSize: 12, color: '#FFF' }}>Crowdfunding</Text>
+              </View>
+              <View
+                style={{
+                  marginRight: 10,
+                  backgroundColor: 'transparent',
+                  flexDirection: 'row',
+                }}>
+                <RadioButton radioId={'mandiri'} selected={typeDonasi} />
+                <Text style={{ fontSize: 12, color: '#FFF' }}>Mandiri</Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        {/* Detail Wakaf */}
-        <Text style={styles.legendText}>Detail Wakaf</Text>
-        <View style={styles.form}>
-          <View style={styles.label}>
-            <Text style={styles.textLabel}>Deskripsi</Text>
-            <Entypo size={7} color="#FC2323" name="star" />
+          {/* Detail Wakaf */}
+          <Text style={styles.legendText}>Detail Wakaf</Text>
+          <View style={styles.form}>
+            <View style={styles.label}>
+              <Text style={styles.textLabel}>Deskripsi</Text>
+              <Entypo size={7} color="#FC2323" name="star" />
+            </View>
+            <TextInput
+              style={styles.textInput}
+              value={desc}
+              onChangeText={(text) => setDesc(text)}
+            />
           </View>
-          <TextInput style={styles.textInput} value={desc} onChangeText={(text) => setDesc(text)} />
-        </View>
-        <View style={styles.form}>
-          <View style={styles.label}>
-            <Text style={styles.textLabel}>Lokasi Lahan</Text>
-            <Entypo size={7} color="#FC2323" name="star" />
+          <View style={styles.form}>
+            <View style={styles.label}>
+              <Text style={styles.textLabel}>Lokasi Lahan</Text>
+              <Entypo size={7} color="#FC2323" name="star" />
+            </View>
+            <TextInput style={styles.textInput} value={loc} onChangeText={(text) => setLoc(text)} />
           </View>
-          <TextInput style={styles.textInput} value={loc} onChangeText={(text) => setLoc(text)} />
-        </View>
-        <View style={styles.form}>
-          <View style={styles.label}>
-            <Text style={styles.textLabel}>Luas Lahan</Text>
-            <Entypo size={7} color="#FC2323" name="star" />
+          <View style={styles.form}>
+            <View style={styles.label}>
+              <Text style={styles.textLabel}>Luas Lahan</Text>
+              <Entypo size={7} color="#FC2323" name="star" />
+            </View>
+            <TextInput
+              style={styles.textInput}
+              keyboardType={'numeric'}
+              value={luas}
+              onChangeText={(text) => setLuas(text)}
+            />
           </View>
-          <TextInput
-            style={styles.textInput}
-            keyboardType={'numeric'}
-            value={luas}
-            onChangeText={(text) => setLuas(text)}
-          />
-        </View>
-        <View style={styles.form}>
-          <View style={styles.label}>
-            <Text style={styles.textLabel}>Harga/m2</Text>
-            <Entypo size={7} color="#FC2323" name="star" />
+          <View style={styles.form}>
+            <View style={styles.label}>
+              <Text style={styles.textLabel}>Harga/m2</Text>
+              <Entypo size={7} color="#FC2323" name="star" />
+            </View>
+            <TextInput
+              style={styles.textInput}
+              keyboardType={'numeric'}
+              value={harga}
+              onChangeText={(text) => setHarga(text)}
+            />
           </View>
-          <TextInput
-            style={styles.textInput}
-            keyboardType={'numeric'}
-            value={harga}
-            onChangeText={(text) => setHarga(text)}
-          />
-        </View>
-        <View style={styles.form}>
-          <View style={styles.label}>
-            <Text style={styles.textLabel}>Keterangan</Text>
+          <View style={styles.form}>
+            <View style={styles.label}>
+              <Text style={styles.textLabel}>Keterangan</Text>
+            </View>
+            <TextInput style={styles.textInput} value={ket} onChangeText={(text) => setKet(text)} />
           </View>
-          <TextInput style={styles.textInput} value={ket} onChangeText={(text) => setKet(text)} />
-        </View>
-        {/* Buttons */}
-        <View style={styles.buttons}>
-          {/* Insert PIctures */}
-          <TouchableOpacity
-            style={styles.insertPictureGroup}
-            onPress={async () => {
-              await takePhotoAsync();
-            }}>
-            <Feather name="file-plus" size={20} color="#FFFFFF" />
-            <Entypo name="dot-single" size={15} color="#FF0000" style={styles.badgeIcon} />
-            <Text style={styles.uploadText}>{imgName ? imgName : 'Upload Lampiran'}</Text>
-          </TouchableOpacity>
-          {/* Donate */}
-          <TouchableOpacity
-            style={styles.donateBtn}
-            onPress={async () => {
-              console.log('Donating...');
-              await submitRequest();
-            }}>
-            <Image source={require('../assets/icons/donate.png')} style={styles.donateIcon} />
-            <Text style={styles.donateText}>Donate</Text>
-          </TouchableOpacity>
-        </View>
-        {/* Show Additional Information */}
-        <Text style={styles.infoTitle}>[+] Tampilkan informasi tambahan</Text>
-        <Text style={styles.infoDesc}>
-          Sesuai dengan peraturan perpajakan di Indonesia, untuk mendapatkan manfaat sebagai
-          pengurang Penghasilan Kena Pajak (PKP) sesuai keputusan Dirjen Pajak No. PER-11/PJ/2017,
-          kami memelurkan informasi tambahan mengenai profil diri Anda.
-        </Text>
-      </ScrollView>
-    </SafeAreaView>
+          {/* Buttons */}
+          <View style={styles.buttons}>
+            {/* Insert PIctures */}
+            <TouchableOpacity
+              style={styles.insertPictureGroup}
+              onPress={async () => {
+                await takePhotoAsync();
+              }}>
+              <Feather name="file-plus" size={20} color="#FFFFFF" />
+              <Entypo name="dot-single" size={15} color="#FF0000" style={styles.badgeIcon} />
+              <Text style={styles.uploadText}>{imgName ? imgName : 'Upload Lampiran'}</Text>
+            </TouchableOpacity>
+            {/* Donate */}
+            <TouchableOpacity
+              style={styles.donateBtn}
+              onPress={async () => {
+                console.log('Donating...');
+                await submitRequest();
+              }}>
+              <Image source={require('../assets/icons/donate.png')} style={styles.donateIcon} />
+              <Text style={styles.donateText}>Donate</Text>
+            </TouchableOpacity>
+          </View>
+          {/* Show Additional Information */}
+          <Text style={styles.infoTitle}>[+] Tampilkan informasi tambahan</Text>
+          <Text style={styles.infoDesc}>
+            Sesuai dengan peraturan perpajakan di Indonesia, untuk mendapatkan manfaat sebagai
+            pengurang Penghasilan Kena Pajak (PKP) sesuai keputusan Dirjen Pajak No. PER-11/PJ/2017,
+            kami memelurkan informasi tambahan mengenai profil diri Anda.
+          </Text>
+        </ScrollView>
+      </SafeAreaView>
+      {isLoading && <LoadingScreen background="#18095090" color="#FFF" />}
+    </>
   );
 
   function RadioButton(props: any) {
@@ -268,6 +288,7 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
   }
 
   async function submitRequest() {
+    dispatch({ type: 'SET_LOADING_BEGIN' });
     const formData = new FormData();
 
     formData.append('images[]', image);
@@ -296,8 +317,11 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
       },
       redirect: 'follow',
     })
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then(async (response) => {
+        console.log('TEXT', response);
         if (response.code != 200) {
           console.log('Errorr');
           Alert.alert('Error', response.message);
@@ -310,6 +334,8 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
       .catch((error) => {
         console.log('Err:', error);
       });
+
+    dispatch({ type: 'SET_LOADING_END' });
   }
 }
 
