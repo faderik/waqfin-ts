@@ -333,6 +333,7 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
       })
       .catch((error) => {
         console.log('Err:', error);
+        Alert.alert('Error', error);
       });
 
     dispatch({ type: 'SET_LOADING_END' });

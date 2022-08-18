@@ -71,10 +71,17 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         let arr = response.data as [];
         arr.forEach((wakaf: any) => {
           if (wakaf.type == 'crowdfunding') {
+            let curr: string, progress: number;
+
+            curr = wakaf.payments_sum_amount ? wakaf.payments_sum_amount.split('.')[0] : '0';
+            progress = Math.floor((parseInt(curr) / (wakaf.luas * wakaf.harga)) * 100);
+
+            console.log('Progress: ', progress, parseInt(curr), wakaf.luas * wakaf.harga);
+
             wakafList.push({
               id: wakaf.id,
-              progress: Math.floor(wakaf.payments_count / wakaf.luas),
-              current: formatRupiah(wakaf.payments_count * wakaf.harga),
+              progress: progress,
+              current: formatRupiah(parseInt(curr)),
               lokasi: {
                 main: 'Alamat',
                 detail: wakaf.lokasi,
