@@ -87,7 +87,7 @@ export type Wakaf = {
   luas: number;
   harga: number;
   type: string;
-  // images: any;
+  images: any | null;
 };
 
 export type TopPatungan = {

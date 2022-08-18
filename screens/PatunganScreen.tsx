@@ -64,20 +64,22 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         // console.log('WAKAFLIST| ', response.data);
         let arr = response.data as [];
         arr.forEach((wakaf: any) => {
-          wakafList.push({
-            id: wakaf.id,
-            progress: Math.floor(wakaf.payments_count / wakaf.luas),
-            current: formatRupiah(wakaf.payments_count * wakaf.harga),
-            lokasi: {
-              main: 'Alamat',
-              detail: wakaf.lokasi,
-            },
-            luas: wakaf.luas,
-            harga: wakaf.harga,
-            owner: wakaf.nama_donatur,
-            wakif: wakaf.payments_count,
-            img: wakaf.images[0] ? wakaf.images[0] : '',
-          });
+          if (wakaf.type == 'crowdfunding') {
+            wakafList.push({
+              id: wakaf.id,
+              progress: Math.floor(wakaf.payments_count / wakaf.luas),
+              current: formatRupiah(wakaf.payments_count * wakaf.harga),
+              lokasi: {
+                main: 'Alamat',
+                detail: wakaf.lokasi,
+              },
+              luas: wakaf.luas,
+              harga: wakaf.harga,
+              owner: wakaf.nama_donatur,
+              wakif: wakaf.payments_count,
+              img: wakaf.images[0] ? wakaf.images[0] : '',
+            });
+          }
         });
 
         console.log('DATA WAKAF LIST READY');
@@ -195,7 +197,7 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
           style={styles.donateBtn}
           onPress={() => {
             console.log('Navigating to Donate page...');
-            navigation.push('DetailDonasiPatungan');
+            navigation.push('DetailDonasiPatungan', { id: item.id } as any);
           }}>
           <Text style={styles.donateText}>Donate</Text>
           <Image source={require('../assets/icons/donate.png')} style={styles.donateIcon} />

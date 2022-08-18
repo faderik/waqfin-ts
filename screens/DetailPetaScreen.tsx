@@ -60,23 +60,25 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
         // console.log('WAKAFLIST| ', response.data);
         let arr = response.data as [];
         arr.forEach((wakaf: any) => {
-          wakafList.push({
-            id: wakaf.id,
-            address: {
-              main: 'Alamat',
-              detail: wakaf.lokasi,
-            },
-            harga: wakaf.harga,
-            img:
-              wakaf.images[0] ??
-              'https://placehold.jp/30/bbbbbb/000000/400x180.png?text=Picture+Not+Found',
-            initiator: wakaf.nama_donatur,
-            latlng: {
-              latitude: parseFloat(wakaf.latitude?.toString() ?? '0'),
-              longitude: parseFloat(wakaf.longitude?.toString() ?? '0'),
-            },
-            luas: wakaf.luas,
-          });
+          if (wakaf.type == 'crowfunding') {
+            wakafList.push({
+              id: wakaf.id,
+              address: {
+                main: 'Alamat',
+                detail: wakaf.lokasi,
+              },
+              harga: wakaf.harga,
+              img:
+                wakaf.images[0] ??
+                'https://placehold.jp/30/bbbbbb/000000/400x180.png?text=Picture+Not+Found',
+              initiator: wakaf.nama_donatur,
+              latlng: {
+                latitude: parseFloat(wakaf.latitude?.toString() ?? '0'),
+                longitude: parseFloat(wakaf.longitude?.toString() ?? '0'),
+              },
+              luas: wakaf.luas,
+            });
+          }
         });
 
         console.log('DATA WAKAF LIST READY');

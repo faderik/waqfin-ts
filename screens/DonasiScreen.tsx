@@ -1,4 +1,12 @@
-import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  ScrollView,
+  FlatList,
+  Alert,
+} from 'react-native';
 import { FontAwesome, Entypo, Feather } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 
@@ -22,6 +30,8 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
   const [luas, setLuas] = useState('');
   const [harga, setHarga] = useState('');
   const [ket, setKet] = useState('--');
+
+  const [error, setError] = useState<any>({});
 
   // const [nama, setNama] = useState('Adi');
   // const [alamat, setAlamat] = useState('Srengat');
@@ -175,7 +185,6 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
             onPress={async () => {
               console.log('Donating...');
               await submitRequest();
-              navigation.navigate('WakafSukses');
             }}>
             <Image source={require('../assets/icons/donate.png')} style={styles.donateIcon} />
             <Text style={styles.donateText}>Donate</Text>
@@ -288,8 +297,15 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
       redirect: 'follow',
     })
       .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
+      .then(async (response) => {
+        if (response.code != 200) {
+          console.log('Errorr');
+          Alert.alert('Error', response.message);
+          return;
+        } else {
+          console.log('Success');
+          navigation.navigate('DetailDonasiPatungan', { id: response.data.id } as any);
+        }
       })
       .catch((error) => {
         console.log('Err:', error);

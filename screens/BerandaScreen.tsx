@@ -42,7 +42,7 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
         // console.log('WAKAFLIST| ', response.data);
         let arr = response.data as [];
         arr.forEach((wakaf: any) => {
-          if (wakaf.payments_count >= 2) {
+          if (wakaf.type == 'crowdfunding' && wakaf.payments_count >= 2) {
             wakafList.push({
               id: wakaf.id,
               deskripsi: wakaf.deskripsi,

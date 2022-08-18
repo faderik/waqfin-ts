@@ -21,12 +21,7 @@ export default function DetailLahanScreen({
   navigation,
   route,
 }: RootStackScreenProps<'DetailLahan'>) {
-  const [imgLahanList, setImgLahanList] = useState<string[]>([
-    'https://placeimg.com/300/300/nature',
-    'https://placeimg.com/300/300/nature',
-    'https://placeimg.com/300/300/nature',
-    'https://placeimg.com/300/300/nature',
-  ]);
+  const [imgLahanList, setImgLahanList] = useState<string[]>([]);
   const [activeImg, setActiveImg] = useState(0);
   const [wakaf, setWakaf] = useState<Wakaf>();
 
@@ -65,20 +60,21 @@ export default function DetailLahanScreen({
         }
 
         // ! TODO: PENTING MENGGANTI INI KARENA API BELUM READY
-        let wakaf0 = response.data[id];
+        let wakafRes = response.data;
 
         let wakaf: Wakaf = {
-          id: wakaf0.id,
-          deskripsi: wakaf0.deskripsi,
-          harga: wakaf0.harga,
-          lokasi: wakaf0.lokasi,
-          luas: wakaf0.luas,
-          namaDonatur: wakaf0.nama_donatur,
-          type: wakaf0.type,
+          id: wakafRes.id,
+          deskripsi: wakafRes.deskripsi,
+          harga: wakafRes.harga,
+          lokasi: wakafRes.lokasi,
+          luas: wakafRes.luas,
+          namaDonatur: wakafRes.nama_donatur,
+          type: wakafRes.type,
+          images: null,
         };
 
         setWakaf(wakaf);
-        if (wakaf0.images == []) setImgLahanList(wakaf0.images);
+        if (wakafRes.images != []) setImgLahanList(wakafRes.images);
         else
           setImgLahanList([
             'https://placehold.jp/30/bbbbbb/000000/400x180.png?text=Picture+Not+Found',
@@ -174,7 +170,7 @@ export default function DetailLahanScreen({
     return (
       <View style={styles.imgItem}>
         {/* <Image source={{ uri: 'https://placeimg.com/150/150/nature' }} style={styles.topItemImg} /> */}
-        <Image source={require('../assets/images/detaillahan.png')} style={styles.imgLahan} />
+        <Image source={{ uri: item, width: 200, height: 150 }} style={styles.imgLahan} />
       </View>
     );
   }

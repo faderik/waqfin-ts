@@ -1,16 +1,20 @@
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as SecureStore from 'expo-secure-store';
 
 import { Text, View } from '../components/Themed';
-import { RootStackScreenProps } from '../types';
+import { host } from '../constants';
+import { RootStackScreenProps, Wakaf } from '../types';
 
 export default function DetailDonasiPatunganScreen({
   navigation,
+  route,
 }: RootStackScreenProps<'DetailDonasiPatungan'>) {
   const [pembayaran, setPembayaran] = useState('');
   const [jumlahDonasi, setJumlahDonasi] = useState('Rp.0');
+  const [wakaf, setWakaf] = useState<Wakaf>();
 
   useEffect(() => {
     navigation.setOptions({
@@ -23,27 +27,78 @@ export default function DetailDonasiPatunganScreen({
       headerTintColor: '#000000',
       headerStyle: { backgroundColor: 'transparent' },
     });
+
+    getDetailLahan();
   }, []);
+
+  const getDetailLahan = async () => {
+    const { id } = route.params as any;
+    console.log('ID: ', id);
+
+    let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
+
+    fetch(host + '/wakaf/' + id, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + userToken,
+      },
+    })
+      .then((response) => response.json())
+      .then(async (response) => {
+        if (response.code != 200) {
+          console.log('ERR| ', response.message);
+        }
+
+        // ! TODO: PENTING MENGGANTI INI KARENA API BELUM READY
+        let wakafRes = response.data;
+
+        let wakaf: Wakaf = {
+          id: wakafRes.id,
+          deskripsi: wakafRes.deskripsi,
+          harga: wakafRes.harga,
+          lokasi: wakafRes.lokasi,
+          luas: wakafRes.luas,
+          namaDonatur: wakafRes.nama_donatur,
+          type: wakafRes.type,
+          images:
+            wakafRes.images[0] ??
+            'https://placehold.jp/30/bbbbbb/000000/400x180.png?text=Picture+Not+Found',
+        };
+
+        console.log('DATA WAKAF IS READY');
+        setWakaf(wakaf);
+      });
+  };
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <ScrollView style={{ flex: 1, width: '100%', height: '100%' }}>
+      <ScrollView
+        style={{ flex: 1, width: '100%', height: '100%' }}
+        showsVerticalScrollIndicator={false}>
         {/* Sumary */}
         <View style={styles.sumaryBox}>
-          <Image
-            source={require('../assets/images/lahan-patungan-1.png')}
-            style={styles.sumaryImg}
-          />
-          <Image source={require('../assets/icons/lokasi.png')} style={styles.lokasiIcon} />
-          <View style={styles.lokasi}>
-            <Text style={styles.lokasiMain}>Bae, Kudus</Text>
-            <Text style={styles.lokasiDetail}>
-              Jl. Kampus UMK, Kayuapu Kulon, Gondangmanis, Kec. Bae, Kabupaten Kudus, Jawa Tengah
-              59327
-            </Text>
+          <Image source={{ uri: wakaf?.images }} style={styles.sumaryImg} />
+
+          <View style={styles.detailRight}>
+            <View style={styles.detailItem}>
+              <FontAwesome
+                name="user-circle-o"
+                size={15}
+                color="#FFF"
+                style={{ ...styles.detailIcon, marginHorizontal: 3 }}
+              />
+              <Text style={styles.lokasiMain}>{wakaf?.namaDonatur}</Text>
+            </View>
+            <View style={styles.detailItem}>
+              <Entypo name="location-pin" size={20} color="#FFF" style={styles.detailIcon} />
+              <Text style={styles.lokasiDetail}>{wakaf?.lokasi}</Text>
+            </View>
           </View>
         </View>
-        <View style={{ backgroundColor: 'transparent', paddingHorizontal: 20 }}>
+
+        <View style={{ backgroundColor: 'transparent', paddingHorizontal: 20, paddingBottom: 100 }}>
           {/* Pilih Jumlah */}
           <Text style={styles.legendText}>Pilih Jumlah</Text>
           <PilihJumlah />
@@ -268,9 +323,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     marginTop: 2,
   },
-  lokasi: {
+  detailRight: {
     backgroundColor: 'transparent',
     flexDirection: 'column',
+    marginLeft: 10,
+  },
+  detailItem: {
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+  },
+  detailIcon: {
+    marginRight: 5,
   },
   lokasiMain: {
     fontFamily: 'poppins-700',
