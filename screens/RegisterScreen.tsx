@@ -109,8 +109,6 @@ export default function RegisterScreen({ navigation }: RootStackScreenProps<'Reg
                 <TouchableOpacity
                   style={styles.createBtn}
                   onPress={async () => {
-                    console.log('Creating account...');
-
                     const res = await signUp(namaLengkap, email, password, confirmPassword);
                     if (res.code == 200) {
                       navigation.replace('Root');

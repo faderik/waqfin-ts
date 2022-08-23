@@ -97,8 +97,6 @@ export default function LoginScreen({ navigation }: RootStackScreenProps<'Login'
                 <TouchableOpacity
                   style={styles.loginBtn}
                   onPress={async () => {
-                    console.log('Logging In...');
-
                     const res = await signIn(email, password);
                     if (res.code == 200) {
                       navigation.replace('Root');

@@ -43,10 +43,9 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
       .then((response) => response.json())
       .then(async (response) => {
         if (response.code != 200) {
-          console.log('ERR| ', response.message);
+          alert(response.message ?? 'Something went wrong');
         }
 
-        // console.log('WAKAFLIST| ', response.data);
         let arr = response.data as [];
         arr.forEach((wakaf: any) => {
           if (wakaf.type == 'crowdfunding' && wakaf.payments_count >= 2) {
@@ -61,7 +60,6 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
           }
         });
 
-        console.log('DATA WAKAF LIST READY');
         setTopPatungan(wakafList);
       });
 
@@ -82,7 +80,6 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
           </View>
           <TouchableOpacity
             onPress={() => {
-              console.log('Navigating to Profile...');
               navigation.navigate('Profile');
             }}>
             <Image source={require('../assets/images/profile.png')} style={styles.profileImg} />
@@ -126,14 +123,13 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
               resizeMode="contain"
             />
             <View style={styles.exploreRight}>
-              <Text style={styles.exploreTitle}>Patungan Wakaf</Text>
+              <Text style={styles.exploreTitle}>Donasi Bersama Wakaf</Text>
               <Text style={styles.exploreDesc}>
                 Dengan uang 100.000 pun kamu bisa bersedakah wakaf.
               </Text>
               <TouchableOpacity
                 style={styles.exploreBtn}
                 onPress={() => {
-                  console.log('Exploring Patungan...');
                   navigation.navigate('Patungan');
                 }}>
                 <Text style={styles.exploreText}>Explore Now</Text>
@@ -154,7 +150,6 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
               <TouchableOpacity
                 style={styles.exploreBtn}
                 onPress={() => {
-                  console.log('Exploring Donasi...');
                   navigation.navigate('Donasi');
                 }}>
                 <Text style={styles.exploreText}>Explore Now</Text>
@@ -164,7 +159,7 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
 
           <View style={styles.topSection}>
             <View style={styles.topHeader}>
-              <Text style={styles.topTitle}>Top Patungan</Text>
+              <Text style={styles.topTitle}>Top Donasi Bersama</Text>
               <TouchableOpacity
                 style={{ flexDirection: 'row', alignItems: 'center' }}
                 onPress={() => {
@@ -221,7 +216,6 @@ export default function BerandaScreen({ navigation }: RootTabScreenProps<'Berand
           <TouchableOpacity
             style={styles.topExploreBtn}
             onPress={() => {
-              console.log('Navigating to Detail Lahan...');
               navigation.navigate('DetailLahan', { id: item.id } as any);
             }}>
             <Text style={styles.topExploreText}>Explore Now</Text>

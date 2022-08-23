@@ -65,11 +65,8 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
           .then((response) => response.json())
           .then(async (response) => {
             if (response.code != 200) {
-              console.log('ERR| ', response.message);
               dispatch({ type: 'SET_LOADING_END' });
               return response;
-            } else {
-              console.log('TOKEN| ', response.data.token);
             }
 
             let userToken = response.data.token;
@@ -119,8 +116,6 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 
               dispatch({ type: 'SET_LOADING_END' });
               return response;
-            } else {
-              console.log('OUT| ', response.message);
             }
 
             dispatch({ type: 'SET_LOADING_END' });
@@ -142,8 +137,6 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
           .then((response) => response.json())
           .then(async (response) => {
             if (response.code != 200) {
-              console.log('ERR| ', response.message);
-
               dispatch({ type: 'SET_LOADING_END' });
               return response;
             } else {
@@ -274,6 +267,8 @@ const DonasiButton = ({ children, onPress }: any) => (
 
 function BottomTabNavigator() {
   const [bottomFontSize, setBottomFontSize] = React.useState(12);
+  const [flag, setFlag] = React.useState(false);
+
   return (
     <BottomTab.Navigator
       initialRouteName="Beranda"
@@ -361,10 +356,11 @@ function BottomTabNavigator() {
                 adjustsFontSizeToFit
                 numberOfLines={1}
                 onLayout={(e) => {
-                  setBottomFontSize((e.nativeEvent.layout.height / 20) * 12);
+                  !flag && setBottomFontSize((e.nativeEvent.layout.height / 20) * 12);
+                  setFlag(true);
                 }}
                 style={{ color: color, fontSize: bottomFontSize, fontFamily: 'poppins-500' }}>
-                Patungan
+                Donasi Bersama
               </Text>
             </View>
           ),

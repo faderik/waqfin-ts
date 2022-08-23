@@ -32,7 +32,6 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
         <TouchableOpacity
           style={styles.panduanGroup}
           onPress={() => {
-            console.log('Navigating to PanduanKasus...');
             navigation.navigate('PanduanKasus');
           }}>
           <Text style={styles.panduanText}>
@@ -62,7 +61,6 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
           <TouchableOpacity
             style={styles.panduanGroup}
             onPress={async () => {
-              console.log('Opening file uploader...');
               await takePhotoAsync();
             }}>
             <Feather name="file-plus" size={20} color="#FFFFFF" />
@@ -76,7 +74,6 @@ export default function PengaduanKasusScreen({ navigation }: RootTabScreenProps<
           <TouchableOpacity
             style={styles.laporBtn}
             onPress={() => {
-              console.log('Reporting...');
               // Add popup alert repoting success
               // navigation.navigate('WakafSukses');
             }}>

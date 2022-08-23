@@ -11,7 +11,6 @@ SplashScreen.preventAutoHideAsync();
 
 export default function GetStartedScreen({ navigation }: RootStackScreenProps<'GetStarted'>) {
   const dispatch = useDispatch();
-  // console.log(Dimensions.get('screen').width, Dimensions.get('screen').height);
 
   const checkTokenAsync = async () => {
     let userToken;

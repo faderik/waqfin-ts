@@ -12,7 +12,6 @@ export default function NotFoundScreen({ navigation }: RootStackScreenProps<'Not
       <TouchableOpacity
         style={styles.homeBtn}
         onPress={() => {
-          console.log('Navigating to Beranda...');
           navigation.replace('Root');
         }}>
         <Text style={styles.homeText}>Back To Home</Text>

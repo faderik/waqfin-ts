@@ -40,7 +40,6 @@ export default function DetailDonasiPatunganScreen({
     dispatch({ type: 'SET_LOADING_BEGIN' });
 
     const { id } = route.params as any;
-    console.log('ID: ', id);
 
     let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
 
@@ -55,7 +54,7 @@ export default function DetailDonasiPatunganScreen({
       .then((response) => response.json())
       .then(async (response) => {
         if (response.code != 200) {
-          console.log('ERR| ', response.message);
+          alert('Something went wrong');
         }
 
         // ! TODO: PENTING MENGGANTI INI KARENA API BELUM READY
@@ -74,7 +73,6 @@ export default function DetailDonasiPatunganScreen({
             'https://placehold.jp/30/bbbbbb/000000/400x180.png?text=Picture+Not+Found',
         };
 
-        console.log('DATA WAKAF IS READY');
         setWakaf(wakaf);
       });
     dispatch({ type: 'SET_LOADING_END' });
@@ -193,16 +191,12 @@ export default function DetailDonasiPatunganScreen({
           let notitik = norp.replace('.', '');
           let intDonasi = parseInt(notitik);
 
-          console.log('Jumlah Donasi:', intDonasi);
-
           if (intDonasi < 50000) {
-            console.log('Minimum donasi adalah Rp.50.000');
             return alert('Minimum donasi adalah Rp.50.000');
           }
 
           if (pembayaran != '') navigation.navigate('WakafSukses');
           else {
-            console.log('Pilih metode pembayaran dulu');
             return alert('Pilih metode pembayaran dulu');
           }
         }}

@@ -33,7 +33,6 @@ export default function WakafSuksesScreen({ navigation }: RootStackScreenProps<'
           <TouchableOpacity
             style={styles.copyBtn}
             onPress={async () => {
-              console.log('Hash: ', hash);
               await Clipboard.setStringAsync(hash);
               alert('Hash code copied to clipboard');
               // Show litle popup succes copied
@@ -45,7 +44,6 @@ export default function WakafSuksesScreen({ navigation }: RootStackScreenProps<'
       <TouchableOpacity
         style={styles.homeBtn}
         onPress={() => {
-          console.log('Navigating to Beranda...');
           navigation.replace('Root');
         }}>
         <Text style={styles.homeText}>Back To Home</Text>

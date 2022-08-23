@@ -34,13 +34,10 @@ export type ViewProps = ThemeProps & DefaultView['props'];
 
 export function Text(props: TextProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  // const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
   let sty: any = style;
   let fsize = 360 / sty.fontSize;
-  // console.log(fsize ? { ...sty, fontSize: fsize } : { ...sty });
 
   return (
-    // <DefaultText style={[{ color: '#000' }, style]} {...otherProps} />
     <DefaultText
       style={[{ color: '#000' }, fsize ? { ...sty, fontSize: width / fsize } : { ...sty }]}
       {...otherProps}
@@ -50,7 +47,6 @@ export function Text(props: TextProps) {
 
 export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  // const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
 
   return <DefaultView style={[{ backgroundColor: '#FFF' }, style]} {...otherProps} />;
 }

@@ -34,11 +34,9 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
       .then((response) => response.json())
       .then(async (response) => {
         if (response.code != 200) {
-          console.log('ERR| ', response.message);
           return response;
         }
 
-        console.log('PROFILE| ', response.data);
         setProfile(response.data);
         return response;
       });
@@ -79,7 +77,6 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
           <TouchableOpacity
             style={styles.linkBtn}
             onPress={() => {
-              console.log('Navigating to EditProfile');
               // navigation.replace('EditProfile');
             }}>
             <Text style={styles.linkText}>Edit Profile</Text>
@@ -88,7 +85,6 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
           <TouchableOpacity
             style={styles.linkBtn}
             onPress={() => {
-              console.log('Navigating to Notifications');
               // navigation.replace('Notifications');
             }}>
             <Text style={styles.linkText}>Notifications</Text>
@@ -99,7 +95,6 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
           <TouchableOpacity
             style={styles.logoutBtn}
             onPress={async () => {
-              console.log('Loging out...');
               let res = await signOut();
               navigation.replace('Login');
             }}>

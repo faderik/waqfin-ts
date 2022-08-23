@@ -64,10 +64,9 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
       .then((response) => response.json())
       .then(async (response) => {
         if (response.code != 200) {
-          console.log('ERR| ', response.message);
+          alert('Something went wrong');
         }
 
-        // console.log('WAKAFLIST| ', response.data);
         let arr = response.data as [];
         arr.forEach((wakaf: any) => {
           if (wakaf.type == 'crowdfunding') {
@@ -75,8 +74,6 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
 
             curr = wakaf.payments_sum_amount ? wakaf.payments_sum_amount.split('.')[0] : '0';
             progress = Math.floor((parseInt(curr) / (wakaf.luas * wakaf.harga)) * 100);
-
-            console.log('Progress: ', progress, parseInt(curr), wakaf.luas * wakaf.harga);
 
             wakafList.push({
               id: wakaf.id,
@@ -95,7 +92,6 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
           }
         });
 
-        console.log('DATA WAKAF LIST READY');
         setPatungan(wakafList);
         dispatch({ type: 'SET_LOADING_END' });
       });
@@ -157,7 +153,6 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
           <TouchableOpacity
             style={styles.patunganLinker}
             onPress={() => {
-              console.log('Navigating to Detail Lahan...');
               navigation.navigate('DetailLahan', { id: item.id } as any);
             }}>
             <Image source={require('../assets/icons/linker.png')} />
@@ -213,7 +208,6 @@ export default function PatunganScreen({ navigation }: RootTabScreenProps<'Patun
         <TouchableOpacity
           style={styles.donateBtn}
           onPress={() => {
-            console.log('Navigating to Donate page...');
             navigation.push('DetailDonasiPatungan', { id: item.id } as any);
           }}>
           <Text style={styles.donateText}>Donate</Text>

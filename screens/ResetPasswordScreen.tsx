@@ -40,7 +40,6 @@ export default function ResetPasswordScreen({ navigation }: RootStackScreenProps
       <TouchableOpacity
         style={styles.sendBtn}
         onPress={() => {
-          console.log('Sending email...');
           navigation.navigate('CheckEmail');
         }}>
         <Text style={styles.sendText}>Send Instructions</Text>

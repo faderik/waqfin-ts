@@ -34,7 +34,6 @@ export default function CheckEmailScreen({ navigation }: RootStackScreenProps<'C
       <TouchableOpacity
         style={styles.openBtn}
         onPress={() => {
-          console.log('Sending email...');
           navigation.push('CreatePassword');
         }}>
         <Text style={styles.openText}>Open email app</Text>
@@ -42,7 +41,6 @@ export default function CheckEmailScreen({ navigation }: RootStackScreenProps<'C
       <TouchableOpacity
         style={styles.link}
         onPress={() => {
-          console.log('Sending email...');
           navigation.navigate('Login');
         }}>
         <Text style={styles.description}>Skip, I’ll confirm later</Text>

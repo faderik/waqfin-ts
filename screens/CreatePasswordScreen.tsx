@@ -74,9 +74,7 @@ export default function CreatePasswordScreen({
       <TouchableOpacity
         style={styles.sendBtn}
         onPress={() => {
-          console.log('Reseting password...');
           navigation.popToTop();
-          // navigation.replace('Login');
         }}>
         <Text style={styles.sendText}>Reset Password</Text>
       </TouchableOpacity>

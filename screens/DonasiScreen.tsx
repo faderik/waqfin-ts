@@ -31,6 +31,7 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
   const [loc, setLoc] = useState('');
   const [luas, setLuas] = useState('');
   const [harga, setHarga] = useState('');
+  const [noTanah, setNoTanah] = useState('');
   const [ket, setKet] = useState('--');
 
   const [error, setError] = useState<any>({});
@@ -181,6 +182,18 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
           </View>
           <View style={styles.form}>
             <View style={styles.label}>
+              <Text style={styles.textLabel}>No. Sertifikat Tanah</Text>
+              <Entypo size={7} color="#FC2323" name="star" />
+            </View>
+            <TextInput
+              style={styles.textInput}
+              keyboardType={'default'}
+              value={noTanah}
+              onChangeText={(text) => setNoTanah(text)}
+            />
+          </View>
+          <View style={styles.form}>
+            <View style={styles.label}>
               <Text style={styles.textLabel}>Keterangan</Text>
             </View>
             <TextInput style={styles.textInput} value={ket} onChangeText={(text) => setKet(text)} />
@@ -201,7 +214,6 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
             <TouchableOpacity
               style={styles.donateBtn}
               onPress={async () => {
-                console.log('Donating...');
                 await submitRequest();
               }}>
               <Image source={require('../assets/icons/donate.png')} style={styles.donateIcon} />
@@ -302,6 +314,7 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
     formData.append('luas', luas);
     formData.append('harga', harga);
     formData.append('keterangan', ket);
+    formData.append('no_tanah', noTanah);
 
     formData.append('type', typeDonasi);
 
@@ -321,19 +334,15 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
         return response.json();
       })
       .then(async (response) => {
-        console.log('TEXT', response);
         if (response.code != 200) {
-          console.log('Errorr');
           Alert.alert('Error', response.message);
           return;
         } else {
-          console.log('Success');
           navigation.navigate('DetailDonasiPatungan', { id: response.data.id } as any);
         }
       })
       .catch((error) => {
-        console.log('Err:', error);
-        Alert.alert('Error', error);
+        alert('Something went wrong');
       });
 
     dispatch({ type: 'SET_LOADING_END' });
@@ -375,6 +384,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'row',
     width: 100,
+    paddingRight: 5,
   },
   textLabel: {
     color: '#FFF',

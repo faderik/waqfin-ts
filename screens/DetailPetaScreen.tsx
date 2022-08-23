@@ -54,10 +54,9 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
       .then((response) => response.json())
       .then(async (response) => {
         if (response.code != 200) {
-          console.log('ERR| ', response.message);
+          alert('Something went wrong');
         }
 
-        // console.log('WAKAFLIST| ', response.data);
         let arr = response.data as [];
         arr.forEach((wakaf: any) => {
           if (wakaf.type == 'crowfunding') {
@@ -81,7 +80,6 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
           }
         });
 
-        console.log('DATA WAKAF LIST READY');
         setMarkers(wakafList);
       });
   };

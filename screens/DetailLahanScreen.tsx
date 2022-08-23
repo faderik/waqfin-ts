@@ -53,7 +53,6 @@ export default function DetailLahanScreen({
 
   const getDetailLahan = async () => {
     const { id } = route.params as any;
-    console.log('ID: ', id);
 
     let userToken = await SecureStore.getItemAsync('USERTOKEN').then(async (token) => token);
 
@@ -68,7 +67,7 @@ export default function DetailLahanScreen({
       .then((response) => response.json())
       .then(async (response) => {
         if (response.code != 200) {
-          console.log('ERR| ', response.message);
+          alert('Something went wrong');
         }
 
         // ! TODO: PENTING MENGGANTI INI KARENA API BELUM READY
@@ -93,8 +92,6 @@ export default function DetailLahanScreen({
           setImgLahanList([
             'https://placehold.jp/30/bbbbbb/000000/400x180.png?text=Picture+Not+Found',
           ]);
-
-        console.log('DATA WAKAF IS READY');
       });
 
     dispatch({ type: 'SET_LOADING_END' });
@@ -171,15 +168,6 @@ export default function DetailLahanScreen({
               <Text style={styles.detailTitleText}>{wakaf?.namaDonatur}</Text>
             </View>
           </View>
-          {/* Button */}
-          {/* <TouchableOpacity
-          style={styles.publishBtn}
-          onPress={() => {
-            console.log('Publishing...');
-            navigation.push('WakafSukses');
-          }}>
-          <Text style={styles.publishText}>Publish</Text>
-        </TouchableOpacity> */}
         </ScrollView>
       </SafeAreaView>
       {/* {isLoading && <LoadingScreen background="#00000090" color="blue" />} */}
