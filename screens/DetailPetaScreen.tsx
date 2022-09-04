@@ -59,7 +59,7 @@ export default function DetailPetaScreen({ navigation }: RootTabScreenProps<'Pet
 
         let arr = response.data as [];
         arr.forEach((wakaf: any) => {
-          if (wakaf.type == 'crowfunding') {
+          if (wakaf.type == 'crowdfunding') {
             wakafList.push({
               id: wakaf.id,
               address: {
