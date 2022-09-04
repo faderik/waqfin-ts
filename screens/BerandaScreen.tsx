@@ -20,7 +20,7 @@ function formatRupiah(nominal: number) {
 
 export default function BerandaScreen({ navigation }: RootTabScreenProps<'Beranda'>) {
   const [topPatungan, setTopPatungan] = useState<TopPatungan[]>([]);
-  const balance = Math.floor(Math.random() * 1234567890);
+  const balance = 0;
 
   const isLoading = useSelector((state: StoreState) => state.isLoading);
   const dispatch = useDispatch();
