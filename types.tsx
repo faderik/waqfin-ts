@@ -28,6 +28,7 @@ export type RootStackParamList = {
   DetailLahan: undefined;
   WakafSukses: undefined;
   Profile: undefined;
+  HistoryWakaf: undefined;
   PanduanKasus: undefined;
   DetailDonasiPatungan: undefined;
   DetailPeta: undefined;
@@ -89,6 +90,11 @@ export type Wakaf = {
   harga: number;
   type: string;
   images: any | null;
+};
+
+export type WakafHistory = Wakaf & {
+  keterangan: string;
+  tglDigunakan: string;
 };
 
 export type TopPatungan = {

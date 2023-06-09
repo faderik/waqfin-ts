@@ -85,9 +85,9 @@ export default function ProfileScreen({ navigation }: RootStackScreenProps<'Prof
           <TouchableOpacity
             style={styles.linkBtn}
             onPress={() => {
-              // navigation.replace('Notifications');
+              navigation.replace('HistoryWakaf');
             }}>
-            <Text style={styles.linkText}>Notifications</Text>
+            <Text style={styles.linkText}>Riwayat Wakaf</Text>
             <Entypo name="chevron-right" size={10} color={'#FFF'} />
           </TouchableOpacity>
 

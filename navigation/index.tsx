@@ -45,6 +45,7 @@ import DetailPetaScreen from '../screens/DetailPetaScreen';
 import { AuthContext } from '../context';
 import { View } from '../components/Themed';
 import { host } from '../constants';
+import HistoryWakafScreen from '../screens/HistoryWakafScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   const dispatch = useDispatch();
@@ -228,6 +229,7 @@ function RootNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: true }} />
+      <Stack.Screen name="HistoryWakaf" component={HistoryWakafScreen} options={{ headerShown: true }} />
       <Stack.Screen
         name="PanduanKasus"
         component={PanduanKasusScreen}

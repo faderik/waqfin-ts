@@ -282,12 +282,12 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
       allowsEditing: false,
     });
 
-    if (result.cancelled) {
+    if (result.canceled) {
       return;
     }
 
     // ImagePicker saves the taken photo to disk and returns a local URI to it
-    let localUri = result.uri;
+    let localUri = result.assets[0].uri;
     let filename = localUri.split('/').pop() as string;
     setImgName(filename.substring(0, 20) + '...');
 
@@ -300,6 +300,12 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
   }
 
   async function submitRequest() {
+
+    // validasi data
+    if(!luas.match("^[0-9]+$")){
+      return alert("Luas lahan harus berupa angka");
+    }
+
     dispatch({ type: 'SET_LOADING_BEGIN' });
     const formData = new FormData();
 
@@ -338,7 +344,7 @@ export default function DonasiScreen({ navigation }: RootTabScreenProps<'Donasi'
           Alert.alert('Error', response.message);
           return;
         } else {
-          navigation.navigate('DetailDonasiPatungan', { id: response.data.id } as any);
+          navigation.navigate('HistoryWakaf');
         }
       })
       .catch((error) => {
